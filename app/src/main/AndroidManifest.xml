@@ -9,15 +9,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HMI.ApplicationProperties"></activity>
+        <service
+            android:name=".Workflows.Startup.Workflow"
+            android:enabled="true"
+            android:exported="false"/>
+        <service
+            android:name=".Workflows.Monitoring.Workflow"
+            android:enabled="true"
+            android:exported="false"/>
+        <service
+            android:name=".Workflows.Alarming.Workflow"
+            android:enabled="true"
+            android:exported="false"/>
+        <activity android:name=".HMI.ApplicationProperties" />
         <activity android:name=".HMI.ContactProperties" />
         <activity android:name=".HMI.Main">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

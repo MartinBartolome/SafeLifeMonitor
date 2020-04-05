@@ -1,10 +1,16 @@
 package schutzengel.com.safelifemonitor.Workflows.Startup;
 
-public class Workflow extends schutzengel.com.safelifemonitor.Workflows.Workflow {
-    public Workflow() {
-    }
+import schutzengel.com.safelifemonitor.Core.Factory.Factory;
 
+public class Workflow extends schutzengel.com.safelifemonitor.Core.Workflows.Workflow {
     @Override
-    protected void running() {
+    protected Boolean running() {
+        Factory factory = Factory.getInstance();
+        factory.create();
+        factory.initialize();
+        factory.startup();
+        EventStartupCompleted event = new EventStartupCompleted();
+        notify(event);
+        return true;
     }
 }

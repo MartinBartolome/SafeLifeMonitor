@@ -7,8 +7,6 @@ public class Factory implements IFactory {
         Communications,
         Database,
         Sensors,
-        Workflows,
-        HMI,
         // Must be last definition
         Maximal
     }
@@ -21,16 +19,11 @@ public class Factory implements IFactory {
         return instance;
     }
 
-    private Factory() {
-    }
-
     public void create() {
         this.factories = new IFactory[Type.Maximal.ordinal()];
         this.factories[Type.Communications.ordinal()] = new schutzengel.com.safelifemonitor.Communications.Factory();
         this.factories[Type.Database.ordinal()] = new schutzengel.com.safelifemonitor.Database.Factory();
-        this.factories[Type.HMI.ordinal()] = new schutzengel.com.safelifemonitor.HMI.Factory();
         this.factories[Type.Sensors.ordinal()] = new schutzengel.com.safelifemonitor.Sensors.Factory();
-        this.factories[Type.Workflows.ordinal()] = new schutzengel.com.safelifemonitor.Workflows.Factory();
         for (IFactory factory : this.factories) {
             factory.create();
         }
@@ -63,15 +56,7 @@ public class Factory implements IFactory {
         return (schutzengel.com.safelifemonitor.Database.Factory)(this.factories[Type.Database.ordinal()]);
     }
 
-    public schutzengel.com.safelifemonitor.HMI.Factory getFactoryHMI() {
-        return (schutzengel.com.safelifemonitor.HMI.Factory)(this.factories[Type.HMI.ordinal()]);
-    }
-
     public schutzengel.com.safelifemonitor.Sensors.Factory getFactorySensors() {
         return (schutzengel.com.safelifemonitor.Sensors.Factory)(this.factories[Type.Sensors.ordinal()]);
-    }
-
-    public schutzengel.com.safelifemonitor.Workflows.Factory getFactoryWorkflows() {
-        return (schutzengel.com.safelifemonitor.Workflows.Factory)(this.factories[Type.Workflows.ordinal()]);
     }
 }

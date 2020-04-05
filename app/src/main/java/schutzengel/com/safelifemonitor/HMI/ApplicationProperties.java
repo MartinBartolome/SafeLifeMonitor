@@ -1,18 +1,11 @@
 package schutzengel.com.safelifemonitor.HMI;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-
-import schutzengel.com.safelifemonitor.Core.Observer.IObserver;
 import schutzengel.com.safelifemonitor.Database.IDatabase;
 import schutzengel.com.safelifemonitor.R;
 
-public class ApplicationProperties extends AppCompatActivity implements IActivity {
-    @Override
-    public void initialize() {
-    }
-
+public class ApplicationProperties extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

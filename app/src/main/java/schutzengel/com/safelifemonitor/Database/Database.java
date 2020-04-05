@@ -1,8 +1,6 @@
 package schutzengel.com.safelifemonitor.Database;
 
 import java.util.ArrayList;
-import schutzengel.com.safelifemonitor.Database.ApplicationProperties;
-import schutzengel.com.safelifemonitor.Database.ContactProperties;
 
 public class Database implements IDatabase {
     private ArrayList<ContactProperties> contactProperties = null;
@@ -32,6 +30,12 @@ public class Database implements IDatabase {
         this.driver.runQuery(sqlCommand.toString());
         // To do...
         return this.applicationProperties;
+    }
+
+    public ContactProperties getContactProperties(String alarmTelephoneNumber)
+    {
+        // To do...
+        return null;
     }
 
     public void set(ContactProperties properties) {
