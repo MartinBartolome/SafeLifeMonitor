@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public interface IDatabase {
     ArrayList<ContactProperties> getContacts();
     ApplicationProperties getApplicationProperties();
-    ContactProperties getContactProperties(String subscriberNumber);
+    ContactProperties getContactProperties(ContactProperties.Priority priority);
     void set(ContactProperties properties);
     void set(ApplicationProperties properties);
 }

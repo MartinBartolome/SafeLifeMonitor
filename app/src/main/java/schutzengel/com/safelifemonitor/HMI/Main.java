@@ -1,8 +1,17 @@
 package schutzengel.com.safelifemonitor.HMI;
 
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+
 import schutzengel.com.safelifemonitor.Core.Definitions;
+import schutzengel.com.safelifemonitor.Database.ContactProperties;
+import schutzengel.com.safelifemonitor.Database.Database;
+import schutzengel.com.safelifemonitor.Database.Drivers.SQLite.Driver;
+import schutzengel.com.safelifemonitor.R;
 import schutzengel.com.safelifemonitor.Workflows.Alarming.EventAlarmConfirmation;
 import schutzengel.com.safelifemonitor.Workflows.EventServerPingState;
 import schutzengel.com.safelifemonitor.Workflows.EventDatabaseException;
@@ -15,6 +24,13 @@ public class Main extends Activity {
     protected void onStart() {
         super.onStart();
         runService(schutzengel.com.safelifemonitor.Workflows.Startup.Workflow.class);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings, menu);
+        return true;
     }
 
     @Override

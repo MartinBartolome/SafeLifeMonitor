@@ -1,6 +1,11 @@
 package schutzengel.com.safelifemonitor.Database;
 
 public class ContactProperties {
+    public static final String tableName = "Contacts";
+    public static final String col_Priority = "Priority";
+    public static final String col_Icon = "Icon";
+    public static final String col_Description = "Description";
+    public static final String col_Telephone = "Telephone";
     private String description = "";
     private String alarmTelephoneNumber = "";
 
@@ -44,12 +49,62 @@ public class ContactProperties {
         this.priority = priority;
     }
 
+    public void setPriority(Integer priority) {
+        switch(priority)
+        {
+            case 0:
+                this.priority = Priority.Prority_1;
+                break;
+            case 1:
+                this.priority = Priority.Prority_2;
+                break;
+            case 2:
+                this.priority = Priority.Prority_3;
+                break;
+            case 3:
+                this.priority = Priority.Prority_4;
+                break;
+            case 4:
+                this.priority = Priority.Prority_5;
+                break;
+            default:
+                this.priority = Priority.Maximal;
+                break;
+
+        }
+    }
+
     public Icon getIcon() {
         return this.icon;
     }
 
     public void setIcon(Icon icon) {
         this.icon = icon;
+    }
+
+    public void setIcon(Integer icon) {
+        switch(icon)
+        {
+            case 0:
+                this.icon = Icon.Schutzengel;
+                break;
+            case 1:
+                this.icon = Icon.Person;
+                break;
+            case 2:
+                this.icon = Icon.Institution;
+                break;
+            case 3:
+                this.icon = Icon.Hospital;
+                break;
+            case 4:
+                this.icon = Icon.Police;
+                break;
+            default:
+                this.icon = Icon.FireFighter;
+                break;
+
+        }
     }
 
     public String getDescription() {

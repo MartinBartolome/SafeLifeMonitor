@@ -15,77 +15,32 @@ public class Database implements IDatabase {
 
     public ArrayList<ContactProperties> getContacts() {
         this.contactProperties.clear();
-        StringBuilder sqlCommand = new StringBuilder();
-        sqlCommand.append("SELECT * FROM ");
-        sqlCommand.append(ContactProperties.getTableName());
-        this.driver.runQuery(sqlCommand.toString());
-//// To do
+        this.contactProperties = this.driver.getAllContacts();
         return this.contactProperties;
     }
 
     public ApplicationProperties getApplicationProperties() {
-        StringBuilder sqlCommand = new StringBuilder();
-        sqlCommand.append("SELECT * FROM ");
-        sqlCommand.append(ApplicationProperties.getTableName());
-        this.driver.runQuery(sqlCommand.toString());
-        // To do...
         return this.applicationProperties;
     }
 
-    public ContactProperties getContactProperties(String alarmTelephoneNumber)
+    public ContactProperties getContactProperties(ContactProperties.Priority priority)
     {
-        // To do...
-        return null;
+        return this.driver.getContact(priority);
     }
 
     public void set(ContactProperties properties) {
-
+        this.driver.insertContact(properties);
     }
 
 
     public void set(ArrayList<ContactProperties> properties) {
-        StringBuilder sqlCommand = new StringBuilder();
-        // Delete all rows
-        sqlCommand.append("DELETE FROM ");
-        sqlCommand.append(ContactProperties.getTableName());
-        this.driver.runCommand(sqlCommand.toString());
-        // Insert rows
-        sqlCommand = new StringBuilder();
-        sqlCommand.append("INSERT INTO ");
-        sqlCommand.append(ContactProperties.getTableName());
-        sqlCommand.append(" VALUES ");
-        boolean firstRow = true;
         for (ContactProperties contactProperties : properties) {
-            if (!firstRow) {
-                sqlCommand.append(",");
-            }
-            firstRow = false;
-            sqlCommand.append("(");
-            sqlCommand.append(contactProperties.getPriority().ordinal());
-            sqlCommand.append(",");
-            sqlCommand.append(contactProperties.getIcon().ordinal());
-            sqlCommand.append(",");
-            sqlCommand.append(contactProperties.getDescription());
-            sqlCommand.append(",");
-            sqlCommand.append(contactProperties.getAlarmTelephoneNumber());
-            sqlCommand.append(")");
+            this.driver.insertContact(contactProperties);
         }
-        this.driver.runCommand(sqlCommand.toString());
     }
 
     public void set(ApplicationProperties properties) {
-        StringBuilder sqlCommand = new StringBuilder();
-        // Delete all rows
-        sqlCommand.append("DELETE FROM ");
-        sqlCommand.append(ApplicationProperties.getTableName());
-        this.driver.runCommand(sqlCommand.toString());
-        // Insert rows
-        sqlCommand = new StringBuilder();
-        sqlCommand.append("INSERT INTO ");
-        sqlCommand.append(ApplicationProperties.getTableName());
-        sqlCommand.append(" VALUES ");
-        // To do
-        this.driver.runCommand(sqlCommand.toString());
+
     }
 }
 

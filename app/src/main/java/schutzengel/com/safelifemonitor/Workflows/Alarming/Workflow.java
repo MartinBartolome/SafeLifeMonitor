@@ -31,9 +31,12 @@ public class Workflow extends schutzengel.com.safelifemonitor.Core.Workflows.Wor
         // Success
         if (isSuccess) {
             // Get contact
-            ContactProperties contactProperties = this.database.getContactProperties(message.getSubscriberNumber());
-            EventAlarmConfirmation event = new EventAlarmConfirmation(contactProperties.getPriority().toString(), message.getContent());
-            notify(event);
+
+            //ANPASSEN
+
+            //ContactProperties contactProperties = this.database.getContactProperties(message.getSubscriberNumber());
+            //EventAlarmConfirmation event = new EventAlarmConfirmation(contactProperties.getPriority().toString(), message.getContent());
+            //notify(event);
             return true;
         }
         return false;
