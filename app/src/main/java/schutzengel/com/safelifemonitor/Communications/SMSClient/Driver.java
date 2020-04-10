@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor.Communications.SMSClient;
+package schutzengel.com.safelifemonitor.Communications.SmsClient;
 
 public abstract class Driver implements IDriver {
     public abstract  void write(Message message);

@@ -1,9 +1,9 @@
-package schutzengel.com.safelifemonitor.Communications.SMSClient;
+package schutzengel.com.safelifemonitor.Communications.SmsClient;
 
-public class SMSClient implements ISMSClient {
+public class SmsClient implements ISmsClient {
     protected IDriver driver = null;
 
-    public SMSClient(IDriver driver) {
+    public SmsClient(IDriver driver) {
         this.driver = driver;
     }
 

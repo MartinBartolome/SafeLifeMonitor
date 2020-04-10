@@ -55,6 +55,7 @@ public abstract class Workflow extends schutzengel.com.safelifemonitor.Core.Thre
     protected void runningThreadLoop() {
         try
         {
+            this.state = State.Running;
             Boolean shallExit = false;
             while ((!shallExit)|| (State.Running == this.state)) {
                 shallExit = running();

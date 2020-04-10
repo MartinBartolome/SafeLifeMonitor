@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor.Communications.SMSClient;
+package schutzengel.com.safelifemonitor.Communications.SmsClient;
 
 import schutzengel.com.safelifemonitor.Core.DateTime.Converter;
 

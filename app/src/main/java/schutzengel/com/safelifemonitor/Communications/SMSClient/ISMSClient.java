@@ -1,6 +1,6 @@
-package schutzengel.com.safelifemonitor.Communications.SMSClient;
+package schutzengel.com.safelifemonitor.Communications.SmsClient;
 
-public interface ISMSClient {
+public interface ISmsClient {
     Message send(String subscriberNumber, String content);
     Message receive();
 }
