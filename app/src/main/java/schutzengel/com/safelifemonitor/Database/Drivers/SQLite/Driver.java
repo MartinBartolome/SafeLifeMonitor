@@ -1,5 +1,6 @@
 package schutzengel.com.safelifemonitor.Database.Drivers.SQLite;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 
 import schutzengel.com.safelifemonitor.Database.ContactProperties;
 import schutzengel.com.safelifemonitor.Database.IDriver;
+import schutzengel.com.safelifemonitor.HMI.Main;
 
 public class Driver extends SQLiteOpenHelper implements IDriver {
     SQLiteDatabase sqLiteDatabase;
@@ -23,8 +25,8 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
     private static final String CREATE_TABLE = "create table " + ContactProperties.tableName + "(id INTEGER PRIMARY KEY AUTOINCREMENT, " + ContactProperties.col_Priority + " INTEGER NOT NULL," + ContactProperties.col_Icon + " INTEGER NOT NULL, " + ContactProperties.col_Description + " TEXT," + ContactProperties.col_Telephone + " TEXT NOT NULL);";
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS "+ ContactProperties.tableName;
 
-    public Driver(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+    public Driver() {
+        super(Main.context, DB_NAME, null, DB_VERSION);
         sqLiteDatabase = this.getWritableDatabase();
     }
 

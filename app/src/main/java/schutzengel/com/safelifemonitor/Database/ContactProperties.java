@@ -1,5 +1,9 @@
 package schutzengel.com.safelifemonitor.Database;
 
+import android.graphics.drawable.Drawable;
+
+import schutzengel.com.safelifemonitor.R;
+
 public class ContactProperties {
     public static final String tableName = "Contacts";
     public static final String col_Priority = "Priority";
@@ -76,6 +80,26 @@ public class ContactProperties {
 
     public Icon getIcon() {
         return this.icon;
+    }
+
+    public int getDrawable() {
+        switch (getIcon())
+        {
+            case Schutzengel:
+                return R.drawable.schutzengel;
+            case Person:
+                return R.drawable.person;
+            case Institution:
+                return R.drawable.person;
+            case Hospital:
+                return R.drawable.hospital;
+            case Police:
+                return R.drawable.police;
+            case FireFighter:
+                return R.drawable.firefighter;
+            default:
+                return 0;
+        }
     }
 
     public void setIcon(Icon icon) {

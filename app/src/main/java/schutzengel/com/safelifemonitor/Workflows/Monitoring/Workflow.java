@@ -14,7 +14,7 @@ public class Workflow extends schutzengel.com.safelifemonitor.Core.Workflows.Wor
     protected void prepare() {
         super.prepare();
         schutzengel.com.safelifemonitor.Core.Factory.Factory factory = schutzengel.com.safelifemonitor.Core.Factory.Factory.getInstance();
-        this.applicationProperties = factory.getFactoryDatabase().getDatabase().getApplicationProperties();
+        this.applicationProperties = factory.getFactoryDatabase().getDatabase().getApplicationProperties(); //führt Thread onPrepare() aus
         this.sensor = factory.getFactorySensors().getSensor();
     }
 

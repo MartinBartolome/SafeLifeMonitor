@@ -9,7 +9,7 @@ public class Factory implements IFactory {
     protected IDatabase database = null;
 
     public void create() {
-        IDriver driver = new Driver(null);
+        IDriver driver = new Driver();
         this.database = new Database(driver);
     }
 

@@ -6,12 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".HMI.ContactProperties">
 
-    <Button
-        android:id="@+id/button2"
+    <ImageView
+        android:id="@+id/ContactImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onWritePersistent"
-        android:text="Button"
-        tools:layout_editor_absoluteX="190dp"
-        tools:layout_editor_absoluteY="438dp" />
+        app:srcCompat="@drawable/firefighter"
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="123dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
