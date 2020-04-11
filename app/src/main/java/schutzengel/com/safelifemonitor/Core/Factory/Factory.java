@@ -21,7 +21,7 @@ public class Factory implements IFactory {
 
     public void create() {
         this.factories = new IFactory[Type.Maximal.ordinal()];
-        this.factories[Type.Communications.ordinal()] = new schutzengel.com.safelifemonitor.Communications.Factory();
+        this.factories[Type.Communications.ordinal()] = new schutzengel.com.safelifemonitor.Communications.SmsClient.Factory();
         this.factories[Type.Database.ordinal()] = new schutzengel.com.safelifemonitor.Database.Factory();
         this.factories[Type.Sensors.ordinal()] = new schutzengel.com.safelifemonitor.Sensors.Factory();
         for (IFactory factory : this.factories) {
@@ -47,9 +47,9 @@ public class Factory implements IFactory {
         }
     }
 
-    public schutzengel.com.safelifemonitor.Communications.Factory getFactoryCommunications()
+    public schutzengel.com.safelifemonitor.Communications.SmsClient.Factory getFactoryCommunications()
     {
-        return (schutzengel.com.safelifemonitor.Communications.Factory)(this.factories[Type.Communications.ordinal()]);
+        return (schutzengel.com.safelifemonitor.Communications.SmsClient.Factory)(this.factories[Type.Communications.ordinal()]);
     }
 
     public schutzengel.com.safelifemonitor.Database.Factory getFactoryDatabase() {

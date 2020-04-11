@@ -1,8 +1,8 @@
-package schutzengel.com.safelifemonitor.Communications.SMSClient.Drivers.Generic;
+package schutzengel.com.safelifemonitor.Communications.SmsClient.Drivers.Generic;
 
-import schutzengel.com.safelifemonitor.Communications.SMSClient.Message;
+import schutzengel.com.safelifemonitor.Communications.SmsClient.Message;
 
-public class Driver extends schutzengel.com.safelifemonitor.Communications.SMSClient.Driver {
+public class Driver extends schutzengel.com.safelifemonitor.Communications.SmsClient.Driver {
     public Driver() {
     }
 
