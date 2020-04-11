@@ -23,6 +23,7 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
 
     // Creating table query
     private static final String CREATE_TABLE = "create table " + ContactProperties.tableName + "(id INTEGER PRIMARY KEY AUTOINCREMENT, " + ContactProperties.col_Priority + " INTEGER NOT NULL," + ContactProperties.col_Icon + " INTEGER NOT NULL, " + ContactProperties.col_Description + " TEXT," + ContactProperties.col_Telephone + " TEXT NOT NULL);";
+
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS "+ ContactProperties.tableName;
 
     public Driver() {
@@ -40,6 +41,12 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
     public void onCreate(SQLiteDatabase db) {
         sqLiteDatabase = db;
         sqLiteDatabase.execSQL(CREATE_TABLE);
+        ContactProperties emptyContact = new ContactProperties();
+        for(int i = 0;i<5;i++)
+        {
+            emptyContact.setPriority(i);
+            insertContact(emptyContact);
+        }
     }
 
     @Override

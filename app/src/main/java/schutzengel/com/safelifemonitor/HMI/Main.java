@@ -50,6 +50,7 @@ public class Main extends Activity {
             case R.id.Settings:
                 Intent settings = new Intent(this, schutzengel.com.safelifemonitor.HMI.ContactProperties.class);
                 this.startActivity(settings);
+                SetContacts();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -83,6 +84,33 @@ public class Main extends Activity {
     }
 
     private void onEvent(EventStartupCompleted event) {
+        SetContacts();
+        runService(schutzengel.com.safelifemonitor.Workflows.Monitoring.Workflow.class);
+    }
+
+    private void onEvent(EventAlarmConfirmation event) {
+        Toast.makeText(getApplicationContext(), event.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    private void onEvent(EventTriggerAlarm event) {
+        setVisible(true);
+        runService(schutzengel.com.safelifemonitor.Workflows.Alarming.Workflow.class);
+    }
+
+    private void onEvent(EventServerPingState event) {
+        Toast.makeText(getApplicationContext(), event.getState().toString(), Toast.LENGTH_LONG).show();
+    }
+
+    private void onEvent(EventDatabaseException event) {
+        Toast.makeText(getApplicationContext(), event.getException().toString(), Toast.LENGTH_LONG).show();
+    }
+
+    private void onEvent(EventSensorException event) {
+        Toast.makeText(getApplicationContext(), event.getException().toString(), Toast.LENGTH_LONG).show();
+    }
+
+    private void SetContacts()
+    {
         ArrayList<ContactProperties> contacts = Factory.getInstance().getFactoryDatabase().getDatabase().getContacts();
         for (ContactProperties contact:contacts) {
             TextView TextViewContact;
@@ -111,27 +139,5 @@ public class Main extends Activity {
             TextViewContact.setText(contact.getDescription());
             TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getDrawable(),0,0,0);
         }
-        runService(schutzengel.com.safelifemonitor.Workflows.Monitoring.Workflow.class);
-    }
-
-    private void onEvent(EventAlarmConfirmation event) {
-        Toast.makeText(getApplicationContext(), event.getMessage(), Toast.LENGTH_LONG).show();
-    }
-
-    private void onEvent(EventTriggerAlarm event) {
-        setVisible(true);
-        runService(schutzengel.com.safelifemonitor.Workflows.Alarming.Workflow.class);
-    }
-
-    private void onEvent(EventServerPingState event) {
-        Toast.makeText(getApplicationContext(), event.getState().toString(), Toast.LENGTH_LONG).show();
-    }
-
-    private void onEvent(EventDatabaseException event) {
-        Toast.makeText(getApplicationContext(), event.getException().toString(), Toast.LENGTH_LONG).show();
-    }
-
-    private void onEvent(EventSensorException event) {
-        Toast.makeText(getApplicationContext(), event.getException().toString(), Toast.LENGTH_LONG).show();
     }
 }

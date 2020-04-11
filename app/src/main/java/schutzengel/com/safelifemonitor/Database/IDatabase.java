@@ -7,5 +7,6 @@ public interface IDatabase {
     ApplicationProperties getApplicationProperties();
     ContactProperties getContactProperties(ContactProperties.Priority priority);
     void set(ContactProperties properties);
+    void set(ArrayList<ContactProperties> properties);
     void set(ApplicationProperties properties);
 }
