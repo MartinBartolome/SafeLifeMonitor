@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor.Workflows;
+package schutzengel.com.safelifemonitor.Workflows.Monitoring;
 
 import android.os.Bundle;
 import android.os.Message;

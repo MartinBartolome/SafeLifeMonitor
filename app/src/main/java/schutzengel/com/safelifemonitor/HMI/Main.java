@@ -4,7 +4,7 @@ import android.os.Message;
 import android.widget.Toast;
 import schutzengel.com.safelifemonitor.Core.Definitions;
 import schutzengel.com.safelifemonitor.Workflows.Alarming.EventAlarmConfirmation;
-import schutzengel.com.safelifemonitor.Workflows.EventServerPingState;
+import schutzengel.com.safelifemonitor.Workflows.Monitoring.EventServerPingState;
 import schutzengel.com.safelifemonitor.Workflows.EventDatabaseException;
 import schutzengel.com.safelifemonitor.Workflows.EventSensorException;
 import schutzengel.com.safelifemonitor.Workflows.Monitoring.EventTriggerAlarm;
