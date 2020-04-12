@@ -17,7 +17,6 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
     SQLiteDatabase sqLiteDatabase;
     // Database Information
     static final String DB_NAME = "SafeLifeMonitor.db";
-
     // database version
     static final int DB_VERSION = 1;
 
@@ -28,7 +27,6 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
 
     public Driver() {
         super(Main.context, DB_NAME, null, DB_VERSION);
-        sqLiteDatabase = this.getWritableDatabase();
     }
 
     public void runCommand(String command) {
@@ -57,27 +55,38 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
 
     @Override
     public void insertContact(ContactProperties contact) {
+        sqLiteDatabase = getWritableDatabase();
         ContentValues contentValue = new ContentValues();
         contentValue.put(ContactProperties.col_Priority,contact.getPriority().ordinal());
         contentValue.put(ContactProperties.col_Icon,contact.getIcon().ordinal());
         contentValue.put(ContactProperties.col_Description,contact.getDescription());
         contentValue.put(ContactProperties.col_Telephone,contact.getAlarmTelephoneNumber());
         sqLiteDatabase.insert(ContactProperties.tableName,null,contentValue);
+
     }
     @Override
     public ArrayList<ContactProperties> getAllContacts()
     {
+        sqLiteDatabase = this.getReadableDatabase();
         ArrayList<ContactProperties> Contacts = new ArrayList<ContactProperties>();
         String[] tableColumns  = new String[]{ContactProperties.col_Priority, ContactProperties.col_Icon, ContactProperties.col_Description, ContactProperties.col_Telephone};
-        Cursor c = sqLiteDatabase.query(ContactProperties.tableName, tableColumns, null, null,
-                null, null, null);
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            ContactProperties contact = new ContactProperties();
-            contact.setPriority(c.getInt(c.getColumnIndex(ContactProperties.col_Priority)));
-            contact.setIcon(c.getInt(c.getColumnIndex(ContactProperties.col_Icon)));
-            contact.setDescription(c.getString(c.getColumnIndex(ContactProperties.col_Description)));
-            contact.setAlarmTelephoneNumber(c.getString(c.getColumnIndex(ContactProperties.col_Telephone)));
-            Contacts.add(contact);
+        try {
+            Cursor c = sqLiteDatabase.query(ContactProperties.tableName, tableColumns, null, null,
+                    null, null, null);
+            if (c != null) {
+                for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                    ContactProperties contact = new ContactProperties();
+                    contact.setPriority(c.getInt(c.getColumnIndex(ContactProperties.col_Priority)));
+                    contact.setIcon(c.getInt(c.getColumnIndex(ContactProperties.col_Icon)));
+                    contact.setDescription(c.getString(c.getColumnIndex(ContactProperties.col_Description)));
+                    contact.setAlarmTelephoneNumber(c.getString(c.getColumnIndex(ContactProperties.col_Telephone)));
+                    Contacts.add(contact);
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            return null;
         }
         return Contacts;
     }
@@ -85,6 +94,7 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
     @Override
     public ContactProperties getContact(ContactProperties.Priority priority)
     {
+        sqLiteDatabase = this.getReadableDatabase();
         String[] tableColumns  = new String[]{ContactProperties.col_Priority, ContactProperties.col_Icon, ContactProperties.col_Description, ContactProperties.col_Telephone};
         Cursor c = sqLiteDatabase.query(ContactProperties.tableName, tableColumns, ContactProperties.col_Priority +"=" + priority.ordinal(), null,
                 null, null, null);

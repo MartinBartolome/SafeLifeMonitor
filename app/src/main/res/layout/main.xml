@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".HMI.Main">
 
+
     <LinearLayout
         android:layout_width="409dp"
         android:layout_height="729dp"
@@ -22,27 +23,16 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/ContactNameMaximal"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/person"
-                android:gravity="center_vertical" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
                 android:id="@+id/ContactName1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/schutzengel"
                 android:drawingCacheQuality="auto"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:paddingLeft="50dp"
+                android:text="Hallo Welt"
+                android:textSize="36sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -55,8 +45,11 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/person"
-                android:gravity="center_vertical" />
+                android:drawableLeft="@drawable/institution"
+                android:gravity="center_vertical"
+                android:paddingLeft="50dp"
+                android:text="Hallo Welt"
+                android:textSize="36sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,7 +63,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/hospital"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:paddingLeft="50dp"
+                android:text="Hallo Welt"
+                android:textSize="36sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -80,11 +76,13 @@
 
             <TextView
                 android:id="@+id/ContactName4"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:drawableLeft="@drawable/police"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:paddingLeft="50dp"
+                android:text="Hallo Welt"
+                android:textSize="36sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -98,12 +96,15 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/firefighter"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:paddingLeft="50dp"
+                android:text="Hallo Welt"
+                android:textSize="36sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="139dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -116,6 +117,7 @@
                 android:focusable="auto"
                 android:focusableInTouchMode="true"
                 android:src="@drawable/alarm" />
+
         </LinearLayout>
 
     </LinearLayout>

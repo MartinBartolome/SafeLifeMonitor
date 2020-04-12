@@ -2,6 +2,8 @@ package schutzengel.com.safelifemonitor.HMI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
@@ -28,6 +32,7 @@ import static schutzengel.com.safelifemonitor.Database.ContactProperties.Priorit
 
 public class Main extends Activity {
     public static Context context;
+    private boolean firstrun = true;
     @Override
     protected void onStart() {
         super.onStart();
@@ -50,7 +55,6 @@ public class Main extends Activity {
             case R.id.Settings:
                 Intent settings = new Intent(this, schutzengel.com.safelifemonitor.HMI.ContactProperties.class);
                 this.startActivity(settings);
-                SetContacts();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -84,7 +88,10 @@ public class Main extends Activity {
     }
 
     private void onEvent(EventStartupCompleted event) {
-        SetContacts();
+        if(firstrun) {
+            SetContacts();
+            firstrun = false;
+        }
         runService(schutzengel.com.safelifemonitor.Workflows.Monitoring.Workflow.class);
     }
 
@@ -112,32 +119,31 @@ public class Main extends Activity {
     private void SetContacts()
     {
         ArrayList<ContactProperties> contacts = Factory.getInstance().getFactoryDatabase().getDatabase().getContacts();
-        for (ContactProperties contact:contacts) {
-            TextView TextViewContact;
-            switch (contact.getPriority()) {
-                case Maximal:
-                    TextViewContact = findViewById(R.id.ContactNameMaximal);
-                    break;
-                case Prority_1:
-                    TextViewContact = findViewById(R.id.ContactName1);
-                    break;
-                case Prority_2:
-                    TextViewContact = findViewById(R.id.ContactName2);
-                    break;
-                case Prority_3:
-                    TextViewContact = findViewById(R.id.ContactName3);
-                    break;
-                case Prority_4:
-                    TextViewContact = findViewById(R.id.ContactName4);
-                    break;
-                case Prority_5:
-                    TextViewContact = findViewById(R.id.ContactName5);
-                    break;
-                default:
-                    continue;
+        if(contacts != null) {
+            for (ContactProperties contact : contacts) {
+                TextView TextViewContact;
+                switch (contact.getPriority()) {
+                    case Prority_1:
+                        TextViewContact = findViewById(R.id.ContactName1);
+                        break;
+                    case Prority_2:
+                        TextViewContact = findViewById(R.id.ContactName2);
+                        break;
+                    case Prority_3:
+                        TextViewContact = findViewById(R.id.ContactName3);
+                        break;
+                    case Prority_4:
+                        TextViewContact = findViewById(R.id.ContactName4);
+                        break;
+                    case Prority_5:
+                        TextViewContact = findViewById(R.id.ContactName5);
+                        break;
+                    default:
+                        continue;
+                }
+                TextViewContact.setText(contact.getDescription());
+                TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getDrawable(), 0, 0, 0);
             }
-            TextViewContact.setText(contact.getDescription());
-            TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getDrawable(),0,0,0);
         }
     }
 }

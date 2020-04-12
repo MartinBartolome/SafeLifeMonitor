@@ -21,11 +21,23 @@ public class ContactProperties extends Activity {
     private ArrayList<schutzengel.com.safelifemonitor.Database.ContactProperties> Contacts = null;
     private int selectedContactindex = 0;
 
+    EditText DescriptionEdit = null;
+    EditText TelephonEdit = null;
+    ImageView IconImage = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_properties);
+
         Contacts = Factory.getInstance().getFactoryDatabase().getDatabase().getContacts();
+        DescriptionEdit = findViewById(R.id.descriptionEdit);
+        TelephonEdit = findViewById(R.id.TelephoneEdit);
+        IconImage = findViewById(R.id.ContactImage);
+        IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
+        DescriptionEdit.setText(Contacts.get(selectedContactindex).getDescription());
+        TelephonEdit.setText(Contacts.get(selectedContactindex).getAlarmTelephoneNumber());
+        IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
     }
 
     public void onWritePersistent(View view)
@@ -49,8 +61,6 @@ public class ContactProperties extends Activity {
 
     private void ChangeImage(int direction)
     {
-        ImageView image = findViewById(R.id.ContactImage);
-
         if(Contacts.get(selectedContactindex).getIcon().ordinal() == 0 && direction == -1)
         {
             Contacts.get(selectedContactindex).setIcon(schutzengel.com.safelifemonitor.Database.ContactProperties.Icon.values().length-1);
@@ -62,15 +72,11 @@ public class ContactProperties extends Activity {
         else {
             Contacts.get(selectedContactindex).setIcon(Contacts.get(selectedContactindex).getIcon().ordinal() + direction);
         }
-        image.setImageResource(Contacts.get(selectedContactindex).getDrawable());
+        IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
     }
 
     public void ChangeContact(View view)
     {
-        EditText DescriptionEdit = findViewById(R.id.descriptionEdit);
-        EditText TelephonEdit = findViewById(R.id.TelephoneEdit);
-        ImageView IconImage = findViewById(R.id.ContactImage);
-
         Contacts.get(selectedContactindex).setAlarmTelephoneNumber(TelephonEdit.getText().toString());
         Contacts.get(selectedContactindex).setDescription(DescriptionEdit.getText().toString());
 
@@ -78,19 +84,19 @@ public class ContactProperties extends Activity {
         switch (view.getId())
         {
             case R.id.ImagePriority1:
-                Priority = 1;
+                Priority = schutzengel.com.safelifemonitor.Database.ContactProperties.Priority.Prority_1.ordinal();
                 break;
             case R.id.ImagePriority2:
-                Priority = 2;
+                Priority = schutzengel.com.safelifemonitor.Database.ContactProperties.Priority.Prority_2.ordinal();
                 break;
             case R.id.ImagePriority3:
-                Priority = 3;
+                Priority = schutzengel.com.safelifemonitor.Database.ContactProperties.Priority.Prority_3.ordinal();
                 break;
             case R.id.ImagePriority4:
-                Priority = 4;
+                Priority = schutzengel.com.safelifemonitor.Database.ContactProperties.Priority.Prority_4.ordinal();
                 break;
             case R.id.ImagePriority5:
-                Priority = 5;
+                Priority = schutzengel.com.safelifemonitor.Database.ContactProperties.Priority.Prority_5.ordinal();
                 break;
         }
 

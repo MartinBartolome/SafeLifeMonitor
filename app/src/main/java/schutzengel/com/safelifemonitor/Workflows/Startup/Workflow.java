@@ -11,6 +11,7 @@ public class Workflow extends schutzengel.com.safelifemonitor.Core.Workflows.Wor
         factory.startup();
         EventStartupCompleted event = new EventStartupCompleted();
         notify(event);
+
         return true;
     }
 }
