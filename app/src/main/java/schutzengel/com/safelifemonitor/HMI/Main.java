@@ -22,7 +22,7 @@ import schutzengel.com.safelifemonitor.Core.Factory.Factory;
 import schutzengel.com.safelifemonitor.Database.ContactProperties;
 import schutzengel.com.safelifemonitor.R;
 import schutzengel.com.safelifemonitor.Workflows.Alarming.EventAlarmConfirmation;
-import schutzengel.com.safelifemonitor.Workflows.EventServerPingState;
+import schutzengel.com.safelifemonitor.Workflows.Monitoring.EventServerPingState;
 import schutzengel.com.safelifemonitor.Workflows.EventDatabaseException;
 import schutzengel.com.safelifemonitor.Workflows.EventSensorException;
 import schutzengel.com.safelifemonitor.Workflows.Monitoring.EventTriggerAlarm;

@@ -25,14 +25,11 @@ public abstract class Activity extends AppCompatActivity {
             this.workflow = null;
             unbindService(this.workflowConnection);
         }
-
         try {
-
             Intent intent = new Intent(this, classType);
             intent.putExtra("Messenger", new Messenger(this.observer));
             bindService(intent, this.workflowConnection, BIND_AUTO_CREATE);
             startService(intent);
-
         } catch (Exception e) {
             String test = e.getMessage();
         }

@@ -3,7 +3,6 @@ package schutzengel.com.safelifemonitor.Workflows.Monitoring;
 import schutzengel.com.safelifemonitor.Database.ApplicationProperties;
 import schutzengel.com.safelifemonitor.Sensors.ISensor;
 import schutzengel.com.safelifemonitor.Workflows.EventSensorException;
-import schutzengel.com.safelifemonitor.Workflows.EventServerPingState;
 
 public class Workflow extends schutzengel.com.safelifemonitor.Core.Workflows.Workflow {
     protected ApplicationProperties applicationProperties = null;

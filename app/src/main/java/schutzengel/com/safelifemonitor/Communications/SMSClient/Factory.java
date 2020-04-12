@@ -4,29 +4,26 @@ import schutzengel.com.safelifemonitor.Communications.SmsClient.Drivers.Generic.
 import schutzengel.com.safelifemonitor.Core.Factory.IFactory;
 
 public class Factory implements IFactory {
-    protected ISmsClient smsClient = null;
-    @Override
+    private ISmsClient smsClient = null;
+
+    public Factory() {
+    }
+
     public void create() {
         IDriver driver = new Driver();
         this.smsClient = new SmsClient(driver);
     }
 
-    @Override
     public void initialize() {
-
     }
 
-    @Override
     public void startup() {
-
     }
 
-    @Override
     public void shutdown() {
-
     }
 
-    public ISmsClient getSmsClient(){
+    public ISmsClient getSmsClient() {
         return this.smsClient;
     }
 }
