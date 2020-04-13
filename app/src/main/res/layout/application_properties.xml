@@ -6,13 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".HMI.ApplicationProperties">
 
-    <Button
-        android:id="@+id/button"
+    <CheckBox
+        android:id="@+id/ActivateMonitoring"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onWritePersistent"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="484dp" />
+        android:text="@string/ApplicationSettingsActivateMonitoring"
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="125dp" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="time"
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="213dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

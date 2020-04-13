@@ -55,7 +55,8 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
 
     @Override
     public void insertContact(ContactProperties contact) {
-        sqLiteDatabase = getWritableDatabase();
+        if(sqLiteDatabase == null || sqLiteDatabase.isReadOnly())
+            sqLiteDatabase = getWritableDatabase();
         ContentValues contentValue = new ContentValues();
         contentValue.put(ContactProperties.col_Priority,contact.getPriority().ordinal());
         contentValue.put(ContactProperties.col_Icon,contact.getIcon().ordinal());

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/Settings"
+        android:id="@+id/ContactSettings"
         android:title="@string/Settings_MenuItem1" />
+    <item
+        android:id="@+id/ApplicationSettings"
+        android:title="@string/Settings_MenuItem2" />
 </menu>

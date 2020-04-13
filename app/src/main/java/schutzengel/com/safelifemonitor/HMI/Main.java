@@ -32,7 +32,7 @@ import static schutzengel.com.safelifemonitor.Database.ContactProperties.Priorit
 
 public class Main extends Activity {
     public static Context context;
-    private boolean firstrun = true;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -52,9 +52,13 @@ public class Main extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.Settings:
-                Intent settings = new Intent(this, schutzengel.com.safelifemonitor.HMI.ContactProperties.class);
-                this.startActivity(settings);
+            case R.id.ContactSettings:
+                Intent ContactSettings = new Intent(this, schutzengel.com.safelifemonitor.HMI.ContactProperties.class);
+                this.startActivity(ContactSettings);
+                return true;
+            case R.id.ApplicationSettings:
+                Intent AppSettings = new Intent(this, schutzengel.com.safelifemonitor.HMI.ApplicationProperties.class);
+                this.startActivity(AppSettings);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -88,10 +92,7 @@ public class Main extends Activity {
     }
 
     private void onEvent(EventStartupCompleted event) {
-        if(firstrun) {
-            SetContacts();
-            firstrun = false;
-        }
+        SetContacts();
         runService(schutzengel.com.safelifemonitor.Workflows.Monitoring.Workflow.class);
     }
 
@@ -142,7 +143,7 @@ public class Main extends Activity {
                         continue;
                 }
                 TextViewContact.setText(contact.getDescription());
-                TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getDrawable(), 0, 0, 0);
+                TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getSmallDrawable(), 0, 0, 0);
             }
         }
     }

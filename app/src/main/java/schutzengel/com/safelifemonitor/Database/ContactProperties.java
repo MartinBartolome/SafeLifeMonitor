@@ -90,13 +90,32 @@ public class ContactProperties {
             case Person:
                 return R.drawable.person;
             case Institution:
-                return R.drawable.person;
+                return R.drawable.institution;
             case Hospital:
                 return R.drawable.hospital;
             case Police:
                 return R.drawable.police;
             case FireFighter:
                 return R.drawable.firefighter;
+            default:
+                return 0;
+        }
+    }
+    public int getSmallDrawable() {
+        switch (getIcon())
+        {
+            case Schutzengel:
+                return R.drawable.schutzengel_32;
+            case Person:
+                return R.drawable.person_32;
+            case Institution:
+                return R.drawable.institution_32;
+            case Hospital:
+                return R.drawable.hospital_32;
+            case Police:
+                return R.drawable.police_32;
+            case FireFighter:
+                return R.drawable.firefighter_32;
             default:
                 return 0;
         }
