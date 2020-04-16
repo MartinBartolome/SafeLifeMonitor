@@ -43,7 +43,8 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
         for(int i = 0;i<5;i++)
         {
             emptyContact.setPriority(i);
-            insertContact(emptyContact);
+            if(getContact(i) == null)
+                insertContact(emptyContact);
         }
     }
 
@@ -93,20 +94,28 @@ public class Driver extends SQLiteOpenHelper implements IDriver {
     }
 
     @Override
-    public ContactProperties getContact(ContactProperties.Priority priority)
+    public ContactProperties getContact(int priority)
     {
-        sqLiteDatabase = this.getReadableDatabase();
-        String[] tableColumns  = new String[]{ContactProperties.col_Priority, ContactProperties.col_Icon, ContactProperties.col_Description, ContactProperties.col_Telephone};
-        Cursor c = sqLiteDatabase.query(ContactProperties.tableName, tableColumns, ContactProperties.col_Priority +"=" + priority.ordinal(), null,
-                null, null, null);
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            ContactProperties contact = new ContactProperties();
-            contact.setPriority(c.getInt(c.getColumnIndex(ContactProperties.col_Priority)));
-            contact.setIcon(c.getInt(c.getColumnIndex(ContactProperties.col_Icon)));
-            contact.setDescription(c.getString(c.getColumnIndex(ContactProperties.col_Description)));
-            contact.setAlarmTelephoneNumber(c.getString(c.getColumnIndex(ContactProperties.col_Telephone)));
-            return contact;
+        try
+        {
+            sqLiteDatabase = this.getReadableDatabase();
+            String[] tableColumns  = new String[]{ContactProperties.col_Priority, ContactProperties.col_Icon, ContactProperties.col_Description, ContactProperties.col_Telephone};
+            Cursor c = sqLiteDatabase.query(ContactProperties.tableName, tableColumns, ContactProperties.col_Priority +"=" + priority, null,
+                    null, null, null);
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                ContactProperties contact = new ContactProperties();
+                contact.setPriority(c.getInt(c.getColumnIndex(ContactProperties.col_Priority)));
+                contact.setIcon(c.getInt(c.getColumnIndex(ContactProperties.col_Icon)));
+                contact.setDescription(c.getString(c.getColumnIndex(ContactProperties.col_Description)));
+                contact.setAlarmTelephoneNumber(c.getString(c.getColumnIndex(ContactProperties.col_Telephone)));
+                return contact;
+            }
         }
+        catch (Exception e)
+        {
+            return null;
+        }
+
         return null;
     }
 }

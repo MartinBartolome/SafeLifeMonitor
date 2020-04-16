@@ -7,5 +7,5 @@ public interface IDriver {
     void runQuery(String command);
     void insertContact(ContactProperties contact);
     ArrayList<ContactProperties> getAllContacts();
-    ContactProperties getContact(ContactProperties.Priority priority);
+    ContactProperties getContact(int priority);
 }

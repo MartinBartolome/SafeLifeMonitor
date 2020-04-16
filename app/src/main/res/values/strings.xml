@@ -9,4 +9,9 @@
     <string name="ContactPropertiesDescription">Anzeige:</string>
     <string name="ContactPropertiesPriority">Priorität:</string>
     <string name="ApplicationSettingsActivateMonitoring">Monitoring aktiv:</string>
+    <string name="ApplicationsettingsFromTime">Von:</string>
+    <string name="ApplicationsettingsToTime">-</string>
+    <string name="ApplicationSettingsWaitingTime">Wartezeit zwischen Notrufen:</string>
+    <string name="SecondShortcut">ss</string>
+    <string name="ApplicationSettingsSensivity">Sensivität Sensor:</string>
 </resources>

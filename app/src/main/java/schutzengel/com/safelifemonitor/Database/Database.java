@@ -25,7 +25,7 @@ public class Database implements IDatabase {
 
     public ContactProperties getContactProperties(ContactProperties.Priority priority)
     {
-        return this.driver.getContact(priority);
+        return this.driver.getContact(priority.ordinal());
     }
 
     public void set(ContactProperties properties) {

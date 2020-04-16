@@ -34,6 +34,7 @@ public class ContactProperties extends Activity {
         DescriptionEdit = findViewById(R.id.descriptionEdit);
         TelephonEdit = findViewById(R.id.TelephoneEdit);
         IconImage = findViewById(R.id.ContactImage);
+
         IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
         DescriptionEdit.setText(Contacts.get(selectedContactindex).getDescription());
         TelephonEdit.setText(Contacts.get(selectedContactindex).getAlarmTelephoneNumber());
