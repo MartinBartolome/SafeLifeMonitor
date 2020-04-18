@@ -92,6 +92,9 @@ public class HauptActivity extends AppCompatActivity {
         checkPermission(Manifest.permission.READ_SMS, SMS_READ_PERMISSION_CODE);
         checkPermission(Manifest.permission.SEND_SMS, SMS_SEND_PERMISSION_CODE);
 
+        Bewegungssensor sensor = new Bewegungssensor();
+        sensor.wurdeBewegt(1234);
+
         SmsClient.bindListener(new SmsClient.SmsListener() {
             @Override
             public void messageReceived(String sender,String messageText) {
