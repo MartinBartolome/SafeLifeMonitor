@@ -36,11 +36,11 @@ public class NotfallKontaktActivity extends AppCompatActivity {
 
     public void onWritePersistent(View view)
     {
-        // Create and populate the properites
-        NotfallKontakt notfallKontakt = new NotfallKontakt();
+        Contacts.get(selectedContactindex).setAlarmTelefonNummer(TelephonEdit.getText().toString());
+        Contacts.get(selectedContactindex).setBeschreibung(DescriptionEdit.getText().toString());
 
-        // Write persistent
-        Datenbank.getInstance().set(notfallKontakt);
+        Datenbank.getInstance().set(Contacts);
+        finish();
     }
 
     public void LeftImage(View view)
@@ -103,15 +103,6 @@ public class NotfallKontaktActivity extends AppCompatActivity {
         DescriptionEdit.setText(Contacts.get(selectedContactindex).getBeschreibung());
         TelephonEdit.setText(Contacts.get(selectedContactindex).getAlarmTelefonNummer());
         IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
-    }
-
-    public void Save(View view)
-    {
-        Contacts.get(selectedContactindex).setAlarmTelefonNummer(TelephonEdit.getText().toString());
-        Contacts.get(selectedContactindex).setBeschreibung(DescriptionEdit.getText().toString());
-
-        Datenbank.getInstance().set(Contacts);
-        finish();
     }
     public void Close(View view)
     {

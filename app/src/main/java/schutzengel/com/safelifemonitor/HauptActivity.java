@@ -1,23 +1,40 @@
 package schutzengel.com.safelifemonitor;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.provider.Telephony;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
 public class HauptActivity extends AppCompatActivity {
+
+    private static final int SMS_SEND_PERMISSION_CODE = 100;
+    private static final int SMS_READ_PERMISSION_CODE = 101;
+    private static final int SMS_RECEIVE_PERMISSION_CODE = 102;
+
     private Intent monitorServiceIntent = null;
     private MonitorService monitorService = null;
     public static Context context;
@@ -70,6 +87,18 @@ public class HauptActivity extends AppCompatActivity {
         context = this;
         setContentView(R.layout.main);
         SetContacts();
+
+        checkPermission(Manifest.permission.RECEIVE_SMS, SMS_RECEIVE_PERMISSION_CODE);
+        checkPermission(Manifest.permission.READ_SMS, SMS_READ_PERMISSION_CODE);
+        checkPermission(Manifest.permission.SEND_SMS, SMS_SEND_PERMISSION_CODE);
+
+        SmsClient.bindListener(new SmsClient.SmsListener() {
+            @Override
+            public void messageReceived(String sender,String messageText) {
+                //So könnte man dann die nachricht auslesen
+            }
+        });
+
         // Start the service
         try {
             this.monitorServiceIntent = new Intent(this, MonitorService.class);
@@ -139,6 +168,56 @@ public class HauptActivity extends AppCompatActivity {
                 }
                 TextViewContact.setText(contact.getBeschreibung());
                 TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getSmallDrawable(), 0, 0, 0);
+            }
+        }
+    }
+    // Function to check and request permission
+    public void checkPermission(String permission, int requestCode)
+    {
+
+        // Checking if permission is not granted
+        if (ContextCompat.checkSelfPermission(HauptActivity.this,permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(HauptActivity.this, new String[] { permission }, requestCode);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,@NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+
+        if (requestCode == SMS_READ_PERMISSION_CODE) {
+            // Checking whether user granted the permission or not.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            }
+            else {
+                Toast.makeText(HauptActivity.this,
+                        "SMS Read Permission Denied",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+        else if (requestCode == SMS_RECEIVE_PERMISSION_CODE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            }
+            else {
+                Toast.makeText(HauptActivity.this,
+                        "SMS RECEIVE Permission Denied",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+        else if (requestCode == SMS_SEND_PERMISSION_CODE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            }
+            else {
+                Toast.makeText(HauptActivity.this,
+                        "SMS SEND Permission Denied",
+                        Toast.LENGTH_SHORT)
+                        .show();
             }
         }
     }
