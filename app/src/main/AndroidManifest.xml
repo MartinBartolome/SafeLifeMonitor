@@ -10,20 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".Workflows.Startup.Workflow"
+            android:name=".MonitorService"
             android:enabled="true"
             android:exported="false"/>
-        <service
-            android:name=".Workflows.Monitoring.Workflow"
-            android:enabled="true"
-            android:exported="false"/>
-        <service
-            android:name=".Workflows.Alarming.Workflow"
-            android:enabled="true"
-            android:exported="false"/>
-        <activity android:name=".HMI.ApplicationProperties" />
-        <activity android:name=".HMI.ContactProperties" />
-        <activity android:name=".HMI.Main">
+        <activity android:name=".ApplikationEinstellungenActivity" />
+        <activity android:name=".NotfallKontaktActivity" />
+        <activity android:name=".HauptActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
