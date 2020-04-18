@@ -1,9 +1,13 @@
 package schutzengel.com.safelifemonitor;
 
+import java.sql.Time;
+import java.util.ArrayList;
+
 public class ApplikationEinstellungen {
     protected int schwellwertBewegungssensor = 0;
     protected int maximaleAnzahlInaktiveBewegungen = 10;
     protected int monitorServiceIntervalInMillisekunden = 1000;
+    ArrayList<Time> Times = new ArrayList<>();
 
     public static String getTableName() {
         return "Application";
@@ -37,5 +41,13 @@ public class ApplikationEinstellungen {
 
     public void setMonitorServiceInterval(int milliseconds) {
         this.monitorServiceIntervalInMillisekunden = milliseconds;
+    }
+    public void setTimes(ArrayList<Time> times)
+    {
+        this.Times = times;
+    }
+    public ArrayList<Time> getTimes()
+    {
+        return Times;
     }
 }

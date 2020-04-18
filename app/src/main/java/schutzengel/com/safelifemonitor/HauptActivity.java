@@ -1,18 +1,26 @@
 package schutzengel.com.safelifemonitor;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
 
 public class HauptActivity extends AppCompatActivity {
     private Intent monitorServiceIntent = null;
     private MonitorService monitorService = null;
+    public static Context context;
 
     private ServiceConnection monitorServiceConnection = new ServiceConnection() {
         @Override
@@ -59,6 +67,8 @@ public class HauptActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        context = this;
+        setContentView(R.layout.main);
         // Start the service
         try {
             this.monitorServiceIntent = new Intent(this, MonitorService.class);
@@ -75,5 +85,61 @@ public class HauptActivity extends AppCompatActivity {
     }
 
     private void onEvent(EreignisAlarmAusloesen event) {
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.ContactSettings:
+                Intent ContactSettings = new Intent(this, schutzengel.com.safelifemonitor.NotfallKontaktActivity.class);
+                this.startActivity(ContactSettings);
+                return true;
+            case R.id.ApplicationSettings:
+                Intent AppSettings = new Intent(this, schutzengel.com.safelifemonitor.ApplikationEinstellungenActivity.class);
+                this.startActivity(AppSettings);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void SetContacts()
+    {
+
+        ArrayList<NotfallKontakt> contacts = Datenbank.getInstance().getAllContacts();
+        if(contacts != null) {
+            for (NotfallKontakt contact : contacts) {
+                TextView TextViewContact;
+                switch (contact.getPrioritaet()) {
+                    case Prioritaet_1:
+                        TextViewContact = findViewById(R.id.ContactName1);
+                        break;
+                    case Prioritaet_2:
+                        TextViewContact = findViewById(R.id.ContactName2);
+                        break;
+                    case Prioritaet_3:
+                        TextViewContact = findViewById(R.id.ContactName3);
+                        break;
+                    case Prioritaet_4:
+                        TextViewContact = findViewById(R.id.ContactName4);
+                        break;
+                    case Prioritaet_5:
+                        TextViewContact = findViewById(R.id.ContactName5);
+                        break;
+                    default:
+                        continue;
+                }
+                TextViewContact.setText(contact.getBeschreibung());
+                //TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getSmallDrawable(), 0, 0, 0);
+            }
+        }
     }
 }
