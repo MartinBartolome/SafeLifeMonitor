@@ -1,9 +1,14 @@
 package schutzengel.com.safelifemonitor.Database;
 
+import java.sql.Time;
+import java.util.ArrayList;
+
 public class ApplicationProperties {
     protected int sensorMeasurementThreshold = 0;
     protected int maximalNumberOfInvalidMeasurements = 10;
     protected int monitoringIntervalInMilliseconds = 1000;
+    ArrayList<Time> Times = new ArrayList<>();
+
 
     public int getReadShortMessagesInterval() {
         return this.readShortMessagesIntervalInMilliseconds;
@@ -49,5 +54,14 @@ public class ApplicationProperties {
 
     public void setMonitoringInterval(int milliseconds) {
         this.monitoringIntervalInMilliseconds = milliseconds;
+    }
+
+    public void setTimes(ArrayList<Time> times)
+    {
+        this.Times = times;
+    }
+    public ArrayList<Time> getTimes()
+    {
+        return Times;
     }
 }
