@@ -23,7 +23,7 @@ public class NotfallKontaktActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_properties);
 
-        Contacts = Datenbank.getInstance().getAllContacts();
+        Contacts = Datenbank.getInstance().getNotfallKontakte();
         DescriptionEdit = findViewById(R.id.descriptionEdit);
         TelephonEdit = findViewById(R.id.TelephoneEdit);
         IconImage = findViewById(R.id.ContactImage);
@@ -107,6 +107,9 @@ public class NotfallKontaktActivity extends AppCompatActivity {
 
     public void Save(View view)
     {
+        Contacts.get(selectedContactindex).setAlarmTelefonNummer(TelephonEdit.getText().toString());
+        Contacts.get(selectedContactindex).setBeschreibung(DescriptionEdit.getText().toString());
+
         Datenbank.getInstance().set(Contacts);
         finish();
     }

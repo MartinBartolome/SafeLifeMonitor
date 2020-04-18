@@ -11,7 +11,7 @@ public class Datenbank extends SQLiteOpenHelper {
     SQLiteDatabase sqLiteDatabase;
     static final String DB_NAME = "SafeLifeMonitor.db";
     static final int DB_VERSION = 1;
-    private static final String CREATE_TABLE = "create table " + NotfallKontakt.tableName + "(id INTEGER PRIMARY KEY AUTOINCREMENT, " + NotfallKontakt.col_Priority + " INTEGER NOT NULL," + NotfallKontakt.col_Icon + " INTEGER NOT NULL, " + NotfallKontakt.col_Description + " TEXT," + NotfallKontakt.col_Telephone + " TEXT NOT NULL);";
+    private static final String CREATE_TABLE = "create table " + NotfallKontakt.tableName + "(" + NotfallKontakt.col_Priority + " INTEGER NOT NULL," + NotfallKontakt.col_Icon + " INTEGER NOT NULL, " + NotfallKontakt.col_Description + " TEXT," + NotfallKontakt.col_Telephone + " TEXT NOT NULL);";
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS "+ NotfallKontakt.tableName;
 
     private static Datenbank instance = null;
@@ -29,15 +29,6 @@ public class Datenbank extends SQLiteOpenHelper {
         this.applikationEinstellungen = new ApplikationEinstellungen();
     }
 
-    public ArrayList<NotfallKontakt> getNotfallKontakte() {
-        StringBuilder sqlCommand = new StringBuilder();
-        sqlCommand.append("SELECT * FROM ");
-        sqlCommand.append(NotfallKontakt.getTableName());
-       // this.driver.runQuery(sqlCommand.toString());
-//// To do
-        return null;
-    }
-
     public ApplikationEinstellungen getApplikationEinstellungen() {
         StringBuilder sqlCommand = new StringBuilder();
         sqlCommand.append("SELECT * FROM ");
@@ -51,40 +42,6 @@ public class Datenbank extends SQLiteOpenHelper {
     {
         // To do...
         return null;
-    }
-
-    public void set(NotfallKontakt notfallKontakt) {
-
-    }
-
-    public void set(ArrayList<NotfallKontakt> notfallKontakte) {
-        StringBuilder sqlCommand = new StringBuilder();
-        // Delete all rows
-        sqlCommand.append("DELETE FROM ");
-        sqlCommand.append(NotfallKontakt.getTableName());
-//        this.driver.runCommand(sqlCommand.toString());
-        // Insert rows
-        sqlCommand = new StringBuilder();
-        sqlCommand.append("INSERT INTO ");
-        sqlCommand.append(NotfallKontakt.getTableName());
-        sqlCommand.append(" VALUES ");
-        boolean firstRow = true;
-        for (NotfallKontakt notfallKontakt : notfallKontakte) {
-            if (!firstRow) {
-                sqlCommand.append(",");
-            }
-            firstRow = false;
-            sqlCommand.append("(");
-            sqlCommand.append(notfallKontakt.getPrioritaet().ordinal());
-            sqlCommand.append(",");
-            sqlCommand.append(notfallKontakt.getIcon().ordinal());
-            sqlCommand.append(",");
-            sqlCommand.append(notfallKontakt.getBeschreibung());
-            sqlCommand.append(",");
-            sqlCommand.append(notfallKontakt.getAlarmTelefonNummer());
-            sqlCommand.append(")");
-        }
-//        this.driver.runCommand(sqlCommand.toString());
     }
 
     public void set(ApplikationEinstellungen applikationEinstellungen) {
@@ -106,12 +63,8 @@ public class Datenbank extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         sqLiteDatabase = db;
         sqLiteDatabase.execSQL(CREATE_TABLE);
-        NotfallKontakt emptyContact = new NotfallKontakt();
-        for(int i = 0;i<5;i++)
-        {
-            emptyContact.setPriority(i);
-            if(getContact(i) == null)
-                insertContact(emptyContact);
+        for (int i = 0; i < 5; i++) {
+            sqLiteDatabase.execSQL("INSERT INTO " + NotfallKontakt.getTableName() + " (" + NotfallKontakt.col_Priority + "," + NotfallKontakt.col_Icon + "," + NotfallKontakt.col_Telephone + ") VALUES(" + i + ",0,0123456789);");
         }
     }
 
@@ -122,7 +75,7 @@ public class Datenbank extends SQLiteOpenHelper {
     }
 
 
-    public void insertContact(NotfallKontakt contact) {
+    public void set(NotfallKontakt contact) {
         if(sqLiteDatabase == null || sqLiteDatabase.isReadOnly())
             sqLiteDatabase = getWritableDatabase();
         ContentValues contentValue = new ContentValues();
@@ -130,10 +83,16 @@ public class Datenbank extends SQLiteOpenHelper {
         contentValue.put(NotfallKontakt.col_Icon,contact.getIcon().ordinal());
         contentValue.put(NotfallKontakt.col_Description,contact.getBeschreibung());
         contentValue.put(NotfallKontakt.col_Telephone,contact.getAlarmTelefonNummer());
-        sqLiteDatabase.insert(NotfallKontakt.tableName,null,contentValue);
-
+        sqLiteDatabase.update(NotfallKontakt.tableName,contentValue,NotfallKontakt.col_Priority +  "= ?",new String[]{ String.valueOf(contact.getPrioritaet().ordinal()) });
     }
-    public ArrayList<NotfallKontakt> getAllContacts()
+
+    public void set(ArrayList<NotfallKontakt> notfallKontakte) {
+        for (NotfallKontakt notfallKontakt : notfallKontakte) {
+            set(notfallKontakt);
+        }
+    }
+
+    public ArrayList<NotfallKontakt> getNotfallKontakte()
     {
         sqLiteDatabase = this.getReadableDatabase();
         ArrayList<NotfallKontakt> Contacts = new ArrayList<NotfallKontakt>();
@@ -159,7 +118,7 @@ public class Datenbank extends SQLiteOpenHelper {
         return Contacts;
     }
 
-    public NotfallKontakt getContact(int priority)
+    public NotfallKontakt getNotfallKontakt(int priority)
     {
         try
         {

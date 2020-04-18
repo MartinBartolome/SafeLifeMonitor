@@ -69,6 +69,7 @@ public class HauptActivity extends AppCompatActivity {
         super.onStart();
         context = this;
         setContentView(R.layout.main);
+        SetContacts();
         // Start the service
         try {
             this.monitorServiceIntent = new Intent(this, MonitorService.class);
@@ -113,8 +114,7 @@ public class HauptActivity extends AppCompatActivity {
 
     private void SetContacts()
     {
-
-        ArrayList<NotfallKontakt> contacts = Datenbank.getInstance().getAllContacts();
+        ArrayList<NotfallKontakt> contacts = Datenbank.getInstance().getNotfallKontakte();
         if(contacts != null) {
             for (NotfallKontakt contact : contacts) {
                 TextView TextViewContact;
@@ -138,7 +138,7 @@ public class HauptActivity extends AppCompatActivity {
                         continue;
                 }
                 TextViewContact.setText(contact.getBeschreibung());
-                //TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getSmallDrawable(), 0, 0, 0);
+                TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getSmallDrawable(), 0, 0, 0);
             }
         }
     }
