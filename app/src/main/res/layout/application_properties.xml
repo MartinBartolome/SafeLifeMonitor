@@ -43,9 +43,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:ems="10"
-                android:focusable="false"
-                android:inputType="time"
-                android:onClick="GetTime" />
+                android:focusable="true"
+                android:inputType="time" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -59,9 +58,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:ems="10"
-                android:focusable="false"
-                android:inputType="time"
-                android:onClick="GetTime" />
+                android:focusable="true"
+                android:inputType="time" />
 
         </LinearLayout>
 
@@ -85,8 +83,7 @@
                 android:clickable="true"
                 android:ems="10"
                 android:focusable="false"
-                android:inputType="time"
-                android:onClick="GetTime" />
+                android:inputType="time" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -101,8 +98,7 @@
                 android:clickable="true"
                 android:ems="10"
                 android:focusable="false"
-                android:inputType="time"
-                android:onClick="GetTime" />
+                android:inputType="time" />
 
         </LinearLayout>
 
@@ -126,8 +122,7 @@
                 android:clickable="true"
                 android:ems="10"
                 android:focusable="false"
-                android:inputType="time"
-                android:onClick="GetTime" />
+                android:inputType="time" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -142,8 +137,7 @@
                 android:clickable="true"
                 android:ems="10"
                 android:focusable="false"
-                android:inputType="time"
-                android:onClick="GetTime" />
+                android:inputType="time" />
         </LinearLayout>
 
         <LinearLayout
@@ -166,8 +160,7 @@
                 android:clickable="true"
                 android:ems="10"
                 android:focusable="false"
-                android:inputType="time"
-                android:onClick="GetTime" />
+                android:inputType="time" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -182,8 +175,7 @@
                 android:clickable="true"
                 android:ems="10"
                 android:focusable="false"
-                android:inputType="time"
-                android:onClick="GetTime" />
+                android:inputType="time" />
 
         </LinearLayout>
 
@@ -244,7 +236,7 @@
                 android:id="@+id/ButtonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="Save"
+                android:onClick="onWritePersistent"
                 android:text="@android:string/ok" />
 
             <Space

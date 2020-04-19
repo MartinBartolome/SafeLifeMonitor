@@ -30,10 +30,6 @@ public class NotfallKontakt {
     }
     private Icon icon = Icon.Schutzengel;
 
-    public static String getTableName() {
-        return "Contacts";
-    }
-
     public enum Field {
         Priority,
         Icon,
