@@ -12,10 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!---<service
+        <service
             android:name=".MonitorService"
             android:enabled="true"
-            android:exported="false"/>-->
+            android:exported="false"/>
         <receiver android:name=".SmsClient"  android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>

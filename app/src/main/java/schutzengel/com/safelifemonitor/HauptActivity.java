@@ -103,14 +103,14 @@ public class HauptActivity extends AppCompatActivity {
         });
 
         // Start the service
-        /*try {
+        try {
             this.monitorServiceIntent = new Intent(this, MonitorService.class);
             this.monitorServiceIntent.putExtra("Messenger", new Messenger(this.observer));
             bindService(this.monitorServiceIntent, this.monitorServiceConnection, BIND_AUTO_CREATE);
             startService(this.monitorServiceIntent);
         } catch (Exception e) {
             String test = e.getMessage();
-        }*/
+        }
     }
 
     private void onEvent(EreignisAlarmAufheben ereignisAlarmAufheben) {
