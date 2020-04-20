@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -19,6 +20,8 @@ public class MonitorService extends Service {
     private Timer timer = null;
     private Messenger messenger = null;
     private IBinder binder = null;
+    private Bewegungssensor bewegungssensor = null;
+    private ApplikationEinstellungen applikationEinstellungen = null;
 
     public class Binder extends android.os.Binder {
         public MonitorService getMonitorService() {
@@ -31,6 +34,8 @@ public class MonitorService extends Service {
         super.onCreate();
         this.binder = new Binder();
         this.timer = new Timer("myTimer");
+        this.bewegungssensor = new Bewegungssensor();
+        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
     }
 
     @Override
@@ -69,8 +74,8 @@ public class MonitorService extends Service {
 
     private Boolean shallReadoutSensor() {
         // Check suspended time
-        ApplikationEinstellungen appsettings = Datenbank.getInstance().getApplikationEinstellungen();
-        ArrayList<String> times = appsettings.getTimes();
+        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
+        ArrayList<String> times = this.applikationEinstellungen.getTimes();
 
         Date CurrentDate = new Date();
         SimpleDateFormat TimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -107,18 +112,19 @@ public class MonitorService extends Service {
     }
 
     private Boolean readoutSensor() {
-        /*
+
         try {
-            if (this.sensor.isMeasuring(this.applikationEinstellungen.getSchwellwertBewegungssensor())) {
+            if (this.bewegungssensor.wurdeBewegt(this.applikationEinstellungen.getSchwellwertBewegungssensor())) {
                 this.numberOfInvalidMeasurements = 0;
             } else {
                 return (this.numberOfInvalidMeasurements++ < this.applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen());
             }
         } catch (Exception exception) {
-            abort(new EventSensorException(EventSensorException.Exception.ReadFailure));
+            // ToDo
+            //abort(new EventSensorException(EventSensorException.Exception.ReadFailure));
         }
 
-         */
+
         return true;
     }
 

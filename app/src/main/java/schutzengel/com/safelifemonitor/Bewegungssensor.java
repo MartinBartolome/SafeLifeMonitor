@@ -17,7 +17,7 @@ public class Bewegungssensor implements SensorEventListener {
         sensorManager.registerListener(this, ACCELEROMETER, SensorManager.SENSOR_DELAY_NORMAL);
 
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
-            // Success! There's a ACCELEROMETER.
+
         } else {
             // Failure! No ACCELEROMETER.
         }

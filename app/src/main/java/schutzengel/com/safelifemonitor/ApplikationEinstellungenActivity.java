@@ -80,7 +80,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker tpView, int hourOfDay, int minute) {
-                SetTime.setText(hourOfDay + ":" + minute);
+                SetTime.setText(String.format ("%02d", hourOfDay) + ":" + String.format ("%02d", minute));
                 timePickerDialog.updateTime(0,0);
             }
         }, 0, 0, true);
