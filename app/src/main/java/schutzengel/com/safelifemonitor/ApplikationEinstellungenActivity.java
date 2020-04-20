@@ -4,6 +4,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -27,6 +28,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
     EditText Time3To;
     EditText Time4From;
     EditText Time4To;
+    SeekBar seekbarSchwellwert;
     View.OnFocusChangeListener onFocusChangeListener;
 
     @Override
@@ -67,12 +69,12 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         Time4To = findViewById(R.id.Time4_to);
         Time4To.setOnFocusChangeListener(onFocusChangeListener);
 
-        
+        seekbarSchwellwert = findViewById(R.id.sensoractivity);
 
         // fill the widghes....
         FillTime(applikationEinstellungen.getTimes());
 
-
+        seekbarSchwellwert.setProgress(applikationEinstellungen.getSchwellwertBewegungssensor());
     }
 
     private void ResetTimePicker()
@@ -102,6 +104,8 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         times.add(Time4To.getText().toString());
 
         applikationEinstellungen.setTimes(times);
+
+        applikationEinstellungen.setSchwellwertBewegungssensor(seekbarSchwellwert.getProgress());
         // Write persistent
         Datenbank.getInstance().set(applikationEinstellungen);
 

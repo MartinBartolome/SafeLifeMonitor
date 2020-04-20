@@ -1,5 +1,6 @@
 package schutzengel.com.safelifemonitor;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Message;
 
@@ -13,6 +14,7 @@ public class EreignisAlarmAufheben extends Ereignis {
     public EreignisAlarmAufheben(Message message) {
         Bundle bundle = message.getData();
         this.text = bundle.getString(Key.Text.toString());
+        EreignisAlarmAusloesen.StopAlarm();
     }
 
     @Override

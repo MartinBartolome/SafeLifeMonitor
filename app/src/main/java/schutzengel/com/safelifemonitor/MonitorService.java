@@ -3,6 +3,7 @@ package schutzengel.com.safelifemonitor;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
@@ -53,10 +54,11 @@ public class MonitorService extends Service {
     }
 
     private void sende(Ereignis ereignis) {
-        try {
+        /*try {
+            return;
             this.messenger.send(ereignis.toMessage());
         } catch (RemoteException e) {
-        }
+        }*/
     }
 
     private class TimerTask extends java.util.TimerTask {
@@ -64,6 +66,10 @@ public class MonitorService extends Service {
             if (shallReadoutSensor()) {
                 if (!readoutSensor()) {
                    sende(new EreignisAlarmAusloesen());
+                }
+                else
+                {
+                    sende(new EreignisAlarmAufheben(new Message()));
                 }
             }
             if (shallPingServer()) {
