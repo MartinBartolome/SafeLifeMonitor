@@ -36,16 +36,11 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         // Read the data
         ApplikationEinstellungen applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
 
-        timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker tpView, int hourOfDay, int minute) {
-                SetTime.setText(hourOfDay + ":" + minute);
-                timePickerDialog.updateTime(0,0);
-            }
-        }, 0, 0, true);
+
         onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                ResetTimePicker();
                 if(hasFocus) {
                     SetTime = (EditText)v;
                     timePickerDialog.show();
@@ -60,16 +55,35 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         Time1To = findViewById(R.id.Time1_to);
         Time1To.setOnFocusChangeListener(onFocusChangeListener);
         Time2From = findViewById(R.id.Time2_from);
+        Time2From.setOnFocusChangeListener(onFocusChangeListener);
         Time2To = findViewById(R.id.Time2_to);
+        Time2To.setOnFocusChangeListener(onFocusChangeListener);
         Time3From = findViewById(R.id.Time3_from);
+        Time3From.setOnFocusChangeListener(onFocusChangeListener);
         Time3To = findViewById(R.id.Time3_to);
+        Time3To.setOnFocusChangeListener(onFocusChangeListener);
         Time4From = findViewById(R.id.Time4_from);
+        Time4From.setOnFocusChangeListener(onFocusChangeListener);
         Time4To = findViewById(R.id.Time4_to);
+        Time4To.setOnFocusChangeListener(onFocusChangeListener);
 
         
 
         // fill the widghes....
         FillTime(applikationEinstellungen.getTimes());
+
+
+    }
+
+    private void ResetTimePicker()
+    {
+        timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker tpView, int hourOfDay, int minute) {
+                SetTime.setText(hourOfDay + ":" + minute);
+                timePickerDialog.updateTime(0,0);
+            }
+        }, 0, 0, true);
     }
 
     public void onWritePersistent(View view)

@@ -118,7 +118,7 @@ public class Datenbank extends SQLiteOpenHelper {
             sqLiteDatabase.execSQL("INSERT INTO " + NotfallKontakt.tableName + " (" + NotfallKontakt.col_Priority + "," + NotfallKontakt.col_Icon + "," + NotfallKontakt.col_Telephone + ") VALUES(" + i + ",0,0123456789);");
         }
         sqLiteDatabase.execSQL(CREATE_TABLE_APPLICATION);
-        sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.tableName + " VALUES (5,10,8,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL )");
+        sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.tableName + " VALUES (5,10,8,'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
     }
 
     @Override

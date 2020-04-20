@@ -7,6 +7,11 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 
 public class MonitorService extends Service {
@@ -51,7 +56,6 @@ public class MonitorService extends Service {
 
     private class TimerTask extends java.util.TimerTask {
         public void run() {
-            Log.d("TimerTask", "Timer expired");
             if (shallReadoutSensor()) {
                 if (!readoutSensor()) {
                    sende(new EreignisAlarmAusloesen());
@@ -65,7 +69,41 @@ public class MonitorService extends Service {
 
     private Boolean shallReadoutSensor() {
         // Check suspended time
-        return true;
+        ApplikationEinstellungen appsettings = Datenbank.getInstance().getApplikationEinstellungen();
+        ArrayList<String> times = appsettings.getTimes();
+
+        Date CurrentDate = new Date();
+        SimpleDateFormat TimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat DateFormat = new SimpleDateFormat("dd/MM/yyyy ");
+
+        try {
+            Date From = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(0));
+            Date To = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(1));
+
+            if(From.before(CurrentDate) && To.after(CurrentDate))
+                return true;
+
+            From = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(2));
+            To = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(3));
+
+            if(From.before(CurrentDate) && To.after(CurrentDate))
+                return true;
+
+            From = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(4));
+            To = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(5));
+
+            if(From.before(CurrentDate) && To.after(CurrentDate))
+                return true;
+
+            From = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(6));
+            To = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(7));
+
+            if(From.before(CurrentDate) && To.after(CurrentDate))
+                return true;
+        } catch (Exception e) {
+        }
+
+        return false;
     }
 
     private Boolean readoutSensor() {
