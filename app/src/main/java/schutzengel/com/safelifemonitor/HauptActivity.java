@@ -1,32 +1,26 @@
 package schutzengel.com.safelifemonitor;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.provider.Telephony;
-import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import java.util.ArrayList;
 
 public class HauptActivity extends AppCompatActivity {
@@ -34,7 +28,6 @@ public class HauptActivity extends AppCompatActivity {
     private static final int SMS_SEND_PERMISSION_CODE = 100;
     private static final int SMS_READ_PERMISSION_CODE = 101;
     private static final int SMS_RECEIVE_PERMISSION_CODE = 102;
-
     private Intent monitorServiceIntent = null;
     private MonitorService monitorService = null;
     public static Context context;
@@ -42,7 +35,7 @@ public class HauptActivity extends AppCompatActivity {
     private ServiceConnection monitorServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            MonitorService.Binder binder = (MonitorService.Binder)(service);
+            MonitorService.Binder binder = (MonitorService.Binder) (service);
             monitorService = binder.getMonitorService();
         }
 
@@ -69,7 +62,7 @@ public class HauptActivity extends AppCompatActivity {
         public void handleMessage(Message message) {
             switch (Ereignis.EventIdentifierMap[message.what]) {
                 case AlarmAufheben:
-                    onEvent(new EreignisAlarmAufheben(message));
+                    onEvent(new EreignisAlarmAufheben());
                     break;
                 case AlarmAusloesen:
                     onEvent(new EreignisAlarmAusloesen());
@@ -81,24 +74,16 @@ public class HauptActivity extends AppCompatActivity {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onStart() {
         super.onStart();
         context = this;
         setContentView(R.layout.main);
         SetContacts();
-
         checkPermission(Manifest.permission.RECEIVE_SMS, SMS_RECEIVE_PERMISSION_CODE);
         checkPermission(Manifest.permission.READ_SMS, SMS_READ_PERMISSION_CODE);
         checkPermission(Manifest.permission.SEND_SMS, SMS_SEND_PERMISSION_CODE);
-
-        SmsClient.bindListener(new SmsClient.SmsListener() {
-            @Override
-            public void messageReceived(String sender,String messageText) {
-                //So könnte man dann die nachricht auslesen
-            }
-        });
-
         // Start the service
         try {
             this.monitorServiceIntent = new Intent(this, MonitorService.class);
@@ -111,7 +96,6 @@ public class HauptActivity extends AppCompatActivity {
     }
 
     private void onEvent(EreignisAlarmAufheben ereignisAlarmAufheben) {
-        Toast.makeText(getApplicationContext(), ereignisAlarmAufheben.getText(), Toast.LENGTH_LONG).show();
     }
 
     private void onEvent(EreignisAlarmAusloesen event) {
@@ -141,10 +125,9 @@ public class HauptActivity extends AppCompatActivity {
         }
     }
 
-    private void SetContacts()
-    {
+    private void SetContacts() {
         ArrayList<NotfallKontakt> contacts = Datenbank.getInstance().getNotfallKontakte();
-        if(contacts != null) {
+        if (contacts != null) {
             for (NotfallKontakt contact : contacts) {
                 TextView TextViewContact;
                 switch (contact.getPrioritaet()) {
@@ -171,21 +154,20 @@ public class HauptActivity extends AppCompatActivity {
             }
         }
     }
+
     // Function to check and request permission
     public void checkPermission(String permission, int requestCode)
     {
-
         // Checking if permission is not granted
-        if (ContextCompat.checkSelfPermission(HauptActivity.this,permission) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(HauptActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(HauptActivity.this, new String[] { permission }, requestCode);
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,@NonNull int[] grantResults)
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
         super.onRequestPermissionsResult(requestCode,permissions,grantResults);
-
         if (requestCode == SMS_READ_PERMISSION_CODE) {
             // Checking whether user granted the permission or not.
             if (grantResults.length > 0

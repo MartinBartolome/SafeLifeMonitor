@@ -5,21 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.TimePicker;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ApplikationEinstellungenActivity extends AppCompatActivity {
-
     EditText SetTime;
     TimePickerDialog timePickerDialog;
-
     EditText Time1From;
     EditText Time1To;
     EditText Time2From;
@@ -72,7 +65,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         seekbarSchwellwert = findViewById(R.id.sensoractivity);
 
         // fill the widghes....
-        FillTime(applikationEinstellungen.getTimes());
+        FillTime(applikationEinstellungen.getZeiten());
 
         seekbarSchwellwert.setProgress(applikationEinstellungen.getSchwellwertBewegungssensor());
     }
@@ -103,7 +96,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         times.add(Time4From.getText().toString());
         times.add(Time4To.getText().toString());
 
-        applikationEinstellungen.setTimes(times);
+        applikationEinstellungen.setZeiten(times);
 
         applikationEinstellungen.setSchwellwertBewegungssensor(seekbarSchwellwert.getProgress());
         // Write persistent

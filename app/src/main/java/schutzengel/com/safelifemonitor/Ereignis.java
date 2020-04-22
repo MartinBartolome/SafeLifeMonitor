@@ -3,7 +3,7 @@
 import android.os.Message;
 
 public abstract  class Ereignis {
-    abstract int getIdentifier();
+    abstract EventIdentifier getIdentifier();
 
     public enum EventIdentifier {
         AlarmAusloesen,
@@ -18,7 +18,7 @@ public abstract  class Ereignis {
     Message toMessage()
     {
         Message message = Message.obtain();
-        message.what = (getIdentifier());
+        message.what = (getIdentifier().ordinal());
         return message;
     }
 }

@@ -5,45 +5,50 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
+
+import static android.hardware.Sensor.TYPE_ACCELEROMETER;
 
 public class Bewegungssensor implements SensorEventListener {
-    Sensor ACCELEROMETER;
+    private Boolean wurdeBewegt = false;
+    private SensorEvent letzteBewegung = null;
+    private long schwellwert = 10000;
 
-    float oldX = 0;
-    float oldY = 0;
-    float oldZ = 0;
-    float newX = 0;
-    float newY = 0;
-    float newZ = 0;
+    public Bewegungssensor(Context context) {
+        SensorManager sensorManager = (SensorManager)(context.getSystemService(Context.SENSOR_SERVICE));
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(TYPE_ACCELEROMETER), sensorManager.SENSOR_DELAY_NORMAL);
+    }
 
-    public Boolean wurdeBewegt(long schwellwert) {
-        SensorManager sensorManager = (SensorManager) HauptActivity.context.getSystemService(Context.SENSOR_SERVICE);
-
-        ACCELEROMETER = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-        sensorManager.registerListener(this, ACCELEROMETER, SensorManager.SENSOR_DELAY_NORMAL);
-
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
-            if(oldX +schwellwert > newX || oldX - schwellwert < newX || oldY +schwellwert > newY || oldY - schwellwert < newY || oldZ +schwellwert > newZ || oldZ - schwellwert < newZ)
-            {
-                oldX = newX;
-                oldY = newY;
-                oldZ = newZ;
-                return true;
-            }
-            else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+    public synchronized Boolean wurdeBewegt(final long schwellwert) {
+        this.schwellwert = schwellwert;
+        Boolean wurdeBewegt = this.wurdeBewegt;
+        this.wurdeBewegt = false;
+        return wurdeBewegt;
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        newX = event.values[0];
-        newY = event.values[1];
-        newZ = event.values[2];
+/*
+        StringBuilder builder = new StringBuilder();
+        builder.append("onSensorChanged: [");
+        builder.append(event.values[0]);
+        builder.append("],[");
+        builder.append(event.values[1]);
+        builder.append("],[");
+        builder.append(event.values[2]);
+        builder.append("]");
+        Log.d("Bewegungssensor", " " +  builder.toString());
+*/
+        try {
+            long letzteBewegungX = (long)(this.letzteBewegung.values[0] * this.schwellwert);
+            long letzteBewegungY = (long)(this.letzteBewegung.values[1] * this.schwellwert);
+            long aktuelleBewegungX = (long)(event.values[0] * this.schwellwert);
+            long aktuelleBewegungY = (long)(event.values[1] * this.schwellwert);
+            this.wurdeBewegt = ((letzteBewegungX != aktuelleBewegungX) || (letzteBewegungY != aktuelleBewegungY));
+        } catch (Exception e) {
+            this.wurdeBewegt = false;
+        }
+        this.letzteBewegung = event;
     }
 
     @Override

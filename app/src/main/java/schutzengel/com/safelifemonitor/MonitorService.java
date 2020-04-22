@@ -2,27 +2,32 @@ package schutzengel.com.safelifemonitor;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.provider.ContactsContract;
 import android.util.Log;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import androidx.annotation.RequiresApi;
 import java.util.Timer;
 
 public class MonitorService extends Service {
-    private int numberOfInvalidMeasurements = 0;
+    public enum Zustand {
+        Undefiniert,
+        Ueberwachen,
+        Alarmieren
+    }
+
+    private int anzahlInaktiveBewegungen = 0;
+    private int tickZaehler = 0;
+    private NotfallKontakt.Prioritaet prioritaetNotfallkontakt = NotfallKontakt.Prioritaet.Prioritaet_1;
     private Timer timer = null;
     private Messenger messenger = null;
     private IBinder binder = null;
     private Bewegungssensor bewegungssensor = null;
     private ApplikationEinstellungen applikationEinstellungen = null;
+    private Zustand zustand = Zustand.Undefiniert;
+    private final int tagInSekunden = 86400;
 
     public class Binder extends android.os.Binder {
         public MonitorService getMonitorService() {
@@ -35,135 +40,158 @@ public class MonitorService extends Service {
         super.onCreate();
         this.binder = new Binder();
         this.timer = new Timer("myTimer");
-        this.bewegungssensor = new Bewegungssensor();
-        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
+        this.bewegungssensor = new Bewegungssensor(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        this.zustand = Zustand.Undefiniert;
         this.messenger = null;
         this.timer.cancel();
         this.timer = null;
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
+        Bundle extras = intent.getExtras();
+        this.messenger = (Messenger)(extras.get("Messenger"));
+        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
+        transitionUeberwachen();
         this.timer.scheduleAtFixedRate(new TimerTask(), 0, Datenbank.getInstance().getApplikationEinstellungen().getMonitorServiceInterval());
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
         return this.binder;
     }
 
+    private void alarmAusloesen() {
+        transitionAlarmieren();
+        EreignisAlarmAusloesen ereignis = new EreignisAlarmAusloesen();
+        sende(ereignis);
+    }
+
+    private void alarmAufheben() {
+        transitionUeberwachen();
+        EreignisAlarmAufheben ereignis = new EreignisAlarmAufheben();
+        sende(ereignis);
+    }
+
     private void sende(Ereignis ereignis) {
-        /*try {
-            return;
+        try {
             this.messenger.send(ereignis.toMessage());
         } catch (RemoteException e) {
-        }*/
+            Log.d("MonitorService", e.getMessage());
+        }
     }
 
     private class TimerTask extends java.util.TimerTask {
+        @RequiresApi(api = Build.VERSION_CODES.O)
         public void run() {
-            if (shallReadoutSensor()) {
-                if (!readoutSensor()) {
-                   sende(new EreignisAlarmAusloesen());
-                }
-                else
-                {
-                    sende(new EreignisAlarmAufheben(new Message()));
-                }
+            Log.d("TimerTask", "Timer expired, State[" + zustand.toString() + "]");
+            switch (zustand) {
+                case Alarmieren:
+                    onAlarmieren();
+                    break;
+                case Ueberwachen:
+                    onUeberwachen();
+                    break;
+                default:
+                    break;
             }
-            if (shallPingServer()) {
-                pingServer();
-            }
+            tickZaehler++;
         }
-    };
-
-    private Boolean shallReadoutSensor() {
-        // Check suspended time
-        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
-        ArrayList<String> times = this.applikationEinstellungen.getTimes();
-
-        Date CurrentDate = new Date();
-        SimpleDateFormat TimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        SimpleDateFormat DateFormat = new SimpleDateFormat("dd/MM/yyyy ");
-
-        try {
-            Date From = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(0));
-            Date To = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(1));
-
-            if(From.before(CurrentDate) && To.after(CurrentDate))
-                return true;
-
-            From = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(2));
-            To = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(3));
-
-            if(From.before(CurrentDate) && To.after(CurrentDate))
-                return true;
-
-            From = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(4));
-            To = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(5));
-
-            if(From.before(CurrentDate) && To.after(CurrentDate))
-                return true;
-
-            From = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(6));
-            To = TimeFormat.parse(DateFormat.format(CurrentDate) + times.get(7));
-
-            if(From.before(CurrentDate) && To.after(CurrentDate))
-                return true;
-        } catch (Exception e) {
-        }
-
-        return false;
     }
 
-    private Boolean readoutSensor() {
+    private void transitionUeberwachen() {
 
-        try {
-            if (this.bewegungssensor.wurdeBewegt(this.applikationEinstellungen.getSchwellwertBewegungssensor())) {
-                this.numberOfInvalidMeasurements = 0;
+        transitionAlarmieren();
+
+
+        this.zustand = Zustand.Ueberwachen;
+        this.anzahlInaktiveBewegungen = 0;
+        this.tickZaehler = 0;
+    }
+
+    private void transitionAlarmieren() {
+        this.zustand = Zustand.Alarmieren;
+        this.tickZaehler = 0;
+        this.prioritaetNotfallkontakt = NotfallKontakt.Prioritaet.Prioritaet_1;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void onUeberwachen() {
+        // Wurde Geraet bewegt?
+        if (this.bewegungssensor.wurdeBewegt(this.applikationEinstellungen.getSchwellwertBewegungssensor())) {
+            this.anzahlInaktiveBewegungen = 0;
+        } else {
+            if (++this.anzahlInaktiveBewegungen >= this.applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen()) {
+                if (istInMoitorZeitraum()) {
+                    alarmAusloesen();
+                }
+            }
+        }
+        if (funktionsPruefungServer()) {
+            alarmAusloesen();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Boolean istInMoitorZeitraum()
+    {
+        if (!this.applikationEinstellungen.istMonitorAktiv()) {
+            return false;
+        }
+        // 30 Sekunden Aufloesung genuegt
+        if (0 == (this.tickZaehler % 30)) {
+            return false;
+        }
+        final long jetzt = DateTime.getEpochTimestamp();
+        final long mitternacht = DateTime.getTodayMidnightEpochTimestamp();
+        return (!istImMonitorZeitraum(mitternacht, jetzt, this.applikationEinstellungen.getSekundenTime1From(), this.applikationEinstellungen.getSekundenTime1To()) ||
+            !istImMonitorZeitraum(mitternacht, jetzt, this.applikationEinstellungen.getSekundenTime2From(), this.applikationEinstellungen.getSekundenTime2To()) ||
+            !istImMonitorZeitraum(mitternacht, jetzt, this.applikationEinstellungen.getSekundenTime3From(), this.applikationEinstellungen.getSekundenTime3To()) ||
+            !istImMonitorZeitraum(mitternacht, jetzt, this.applikationEinstellungen.getSekundenTime4From(), this.applikationEinstellungen.getSekundenTime4To()));
+    }
+
+    private Boolean istImMonitorZeitraum(final long mitternachtInSekunden, final long jetztSekunden, final long zeitraumVonSekunden, final long zeitraumBisSekunden) {
+        int anzahlTage = 1;
+        if (zeitraumVonSekunden <= zeitraumBisSekunden) {
+            anzahlTage = 2;
+        }
+        return ((jetztSekunden >= (mitternachtInSekunden - (anzahlTage * this.tagInSekunden) + zeitraumVonSekunden)) && (jetztSekunden <= (mitternachtInSekunden - this.tagInSekunden + zeitraumBisSekunden)));
+    }
+
+    private void onAlarmieren() {
+        // SMS senden?
+        if ((this.applikationEinstellungen.getIntervallSmsBenachrichtigung() / this.applikationEinstellungen.getMonitorServiceInterval()) == this.tickZaehler) {
+            this.tickZaehler = 0;
+            NotfallKontakt notfallKontakt = Datenbank.getInstance().getNotfallKontakt(this.prioritaetNotfallkontakt);
+            if (null != notfallKontakt) {
+                SmsClient.senden(notfallKontakt.getAlarmTelefonNummer(), applikationEinstellungen.getSmsBenachrichtigungText());
+                this.prioritaetNotfallkontakt = NotfallKontakt.toPriority(this.prioritaetNotfallkontakt.ordinal() + 1);
             } else {
-                return (this.numberOfInvalidMeasurements++ < this.applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen());
+                this.prioritaetNotfallkontakt = NotfallKontakt.Prioritaet.Prioritaet_1;
             }
-        } catch (Exception exception) {
-            // ToDo
-            //abort(new EventSensorException(EventSensorException.Exception.ReadFailure));
+            return;
         }
+        // Wurde Geraet bewegt?
+        if (this.bewegungssensor.wurdeBewegt(this.applikationEinstellungen.getSchwellwertBewegungssensor())) {
+            alarmAufheben();
+            return;
+        }
+        // Wurde SMS Benarchrichtigung empfangen?
+        if (SmsClient.wurdeEmpfangen()) {
+            alarmAufheben();
+            return;
+        }
+    }
 
-
+    private Boolean funktionsPruefungServer() {
+        // #MAIAL 21-APR-2020: Funkktion wird implementiert, sobald Server Teil bereit ist
         return true;
-    }
-
-    private Boolean shallPingServer() {
-        // Check suspended time
-
-        return false;
-    }
-
-    private void pingServer() {
-        /*
-        // To do...
-        EventServerPingState event = new EventServerPingState(EventServerPingState.State.Failed);
-        // notify(event);
-        */
-    }
-
-
-    private Boolean readShortMessages() {
-        /*
-        // To do...
-        Message message = this.smsClient.receive();
-        // Parse content...
-        Boolean isSuccess = false;
-        // Success
-        if (isSuccess) {
-            // Get contact
-            NotfallKontakt notfallKontakt = this.database.getContactProperties(message.getSubscriberNumber());
-            EreignisAlarmAufheben event = new EreignisAlarmAufheben(notfallKontakt.getPrioritaet().toString(), message.getContent());
-            notify(event);
-            return true;
-        }
-        */
-        return false;
     }
 }

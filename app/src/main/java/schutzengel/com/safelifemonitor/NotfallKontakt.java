@@ -44,6 +44,25 @@ public class NotfallKontakt {
     public void setPriorität(Prioritaet prioritaet) {
         this.prioritaet = prioritaet;
     }
+
+    public static Prioritaet toPriority(Integer priority) {
+        switch (priority) {
+            case 0:
+                return Prioritaet.Prioritaet_1;
+            case 1:
+                return Prioritaet.Prioritaet_2;
+            case 2:
+                return Prioritaet.Prioritaet_3;
+            case 3:
+                return Prioritaet.Prioritaet_4;
+            case 4:
+                return Prioritaet.Prioritaet_5;
+            default:
+                break;
+        }
+        return Prioritaet.Maximal;
+    }
+
     public void setPriority(Integer priority) {
         switch(priority)
         {
@@ -156,4 +175,6 @@ public class NotfallKontakt {
     public void setAlarmTelefonNummer(String alarmTelefonNummer) {
         this.alarmTelefonNummer = alarmTelefonNummer;
     }
+
+
 }
