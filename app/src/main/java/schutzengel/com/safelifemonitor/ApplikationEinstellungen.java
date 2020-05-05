@@ -19,9 +19,9 @@ public class ApplikationEinstellungen {
     public static final String col_Time4To = "Time4To";
     public static final String col_UserName = "UserName";
     protected int schwellwertBewegungssensor = 1;
-    protected int maximaleAnzahlInaktiveBewegungen = 5000;
-    protected int monitorServiceIntervalInMillisekunden = 5000;
-    protected int intervallSmsBenachrichtigungInMillisekunden = 300000;
+    protected int maximaleAnzahlInaktiveBewegungen = 1800000; // nach 30 min geht der alarm los
+    protected int monitorServiceIntervalInMillisekunden = 1000; // jede sekunde
+    protected int intervallSmsBenachrichtigungInMillisekunden = 300000; // nach 5 min wird der nächste Kontakt benachrichtigt
     protected  Boolean istMonitorAktiv = true;
     protected ArrayList <String> zeiten = new ArrayList<>();
     protected ArrayList <Integer> zeitenInSekunden = new ArrayList<>();

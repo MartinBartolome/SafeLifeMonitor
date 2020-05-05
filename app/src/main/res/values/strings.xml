@@ -14,4 +14,5 @@
     <string name="SecondShortcut">ss</string>
     <string name="ApplicationSettingsSensivity">Sensivität Sensor:</string>
     <string name="UserName">Benutzername:</string>
+    <string name="MinShort">Minuten</string>
 </resources>

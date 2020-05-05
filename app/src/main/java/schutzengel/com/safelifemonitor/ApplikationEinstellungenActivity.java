@@ -75,7 +75,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         FillTime(applikationEinstellungen.getZeiten());
 
         seekbarSchwellwert.setProgress(applikationEinstellungen.getSchwellwertBewegungssensor());
-        SmsIntervall.setText(Integer.toString(applikationEinstellungen.getIntervallSmsBenachrichtigung()));
+        SmsIntervall.setText(Integer.toString(applikationEinstellungen.getIntervallSmsBenachrichtigung() / 1000 / 60));
         MonitorEnabled.setActivated(applikationEinstellungen.istMonitorAktiv());
         UserName.setText(applikationEinstellungen.getUserName());
     }
@@ -109,7 +109,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         applikationEinstellungen.setZeiten(times);
 
         applikationEinstellungen.setSchwellwertBewegungssensor(seekbarSchwellwert.getProgress());
-        applikationEinstellungen.setIntervallSmsBenachrichtigung(Integer.parseInt(SmsIntervall.getText().toString()));
+        applikationEinstellungen.setIntervallSmsBenachrichtigung(Integer.parseInt(SmsIntervall.getText().toString())*60*1000);
         applikationEinstellungen.setMonitorEnabled(MonitorEnabled.isChecked() ? 1 : 0);
         applikationEinstellungen.setUserName(UserName.getText().toString());
         // Write persistent

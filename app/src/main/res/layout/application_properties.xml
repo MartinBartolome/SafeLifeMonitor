@@ -220,11 +220,17 @@
 
             <EditText
                 android:id="@+id/waittime"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:text="@string/SecondShortcut" />
+
+            <TextView
+                android:id="@+id/textView16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="time"
-                android:text="@string/SecondShortcut" />
+                android:text="@string/MinShort" />
+
         </LinearLayout>
 
         <LinearLayout

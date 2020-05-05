@@ -134,7 +134,7 @@ public class Datenbank extends SQLiteOpenHelper {
             sqLiteDatabase.execSQL("INSERT INTO " + NotfallKontakt.tableName + " VALUES(" + i + ",0,NULL,0123456789);");
         }
         sqLiteDatabase.execSQL(CREATE_TABLE_APPLICATION);
-        sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.tableName + " VALUES (0,'Rüstiger Rentner',1,60,60,'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
+        sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.tableName + " VALUES (0,'Rüstiger Rentner',1," + applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + "," + applikationEinstellungen.getMonitorServiceInterval() + ",'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
     }
 
     @Override
