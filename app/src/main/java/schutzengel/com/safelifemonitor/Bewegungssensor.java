@@ -11,8 +11,9 @@ import static android.hardware.Sensor.TYPE_ACCELEROMETER;
 
 public class Bewegungssensor implements SensorEventListener {
     private Boolean wurdeBewegt = false;
-    private SensorEvent letzteBewegung = null;
     private long schwellwert = 10000;
+    private long letzteBewegungX = 0;
+    private long letzteBewegungY = 0;
 
     public Bewegungssensor(Context context) {
         SensorManager sensorManager = (SensorManager)(context.getSystemService(Context.SENSOR_SERVICE));
@@ -40,15 +41,14 @@ public class Bewegungssensor implements SensorEventListener {
         Log.d("Bewegungssensor", " " +  builder.toString());
 */
         try {
-            long letzteBewegungX = (long)(this.letzteBewegung.values[0] * this.schwellwert);
-            long letzteBewegungY = (long)(this.letzteBewegung.values[1] * this.schwellwert);
             long aktuelleBewegungX = (long)(event.values[0] * this.schwellwert);
             long aktuelleBewegungY = (long)(event.values[1] * this.schwellwert);
             this.wurdeBewegt = ((letzteBewegungX != aktuelleBewegungX) || (letzteBewegungY != aktuelleBewegungY));
+            letzteBewegungX = (long)(event.values[0] * this.schwellwert);
+            letzteBewegungY = (long)(event.values[1] * this.schwellwert);
         } catch (Exception e) {
             this.wurdeBewegt = false;
         }
-        this.letzteBewegung = event;
     }
 
     @Override

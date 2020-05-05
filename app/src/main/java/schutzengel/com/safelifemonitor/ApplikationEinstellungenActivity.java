@@ -3,6 +3,7 @@ package schutzengel.com.safelifemonitor;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TimePicker;
@@ -22,6 +23,9 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
     EditText Time4From;
     EditText Time4To;
     SeekBar seekbarSchwellwert;
+    EditText SmsIntervall;
+    CheckBox MonitorEnabled;
+    EditText UserName;
     View.OnFocusChangeListener onFocusChangeListener;
 
     @Override
@@ -63,11 +67,17 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         Time4To.setOnFocusChangeListener(onFocusChangeListener);
 
         seekbarSchwellwert = findViewById(R.id.sensoractivity);
+        SmsIntervall = findViewById(R.id.waittime);
+        MonitorEnabled = findViewById(R.id.ActivateMonitoring);
+        UserName = findViewById(R.id.UserName);
 
         // fill the widghes....
         FillTime(applikationEinstellungen.getZeiten());
 
         seekbarSchwellwert.setProgress(applikationEinstellungen.getSchwellwertBewegungssensor());
+        SmsIntervall.setText(Integer.toString(applikationEinstellungen.getIntervallSmsBenachrichtigung()));
+        MonitorEnabled.setActivated(applikationEinstellungen.istMonitorAktiv());
+        UserName.setText(applikationEinstellungen.getUserName());
     }
 
     private void ResetTimePicker()
@@ -99,6 +109,9 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         applikationEinstellungen.setZeiten(times);
 
         applikationEinstellungen.setSchwellwertBewegungssensor(seekbarSchwellwert.getProgress());
+        applikationEinstellungen.setIntervallSmsBenachrichtigung(Integer.parseInt(SmsIntervall.getText().toString()));
+        applikationEinstellungen.setMonitorEnabled(MonitorEnabled.isChecked() ? 1 : 0);
+        applikationEinstellungen.setUserName(UserName.getText().toString());
         // Write persistent
         Datenbank.getInstance().set(applikationEinstellungen);
 

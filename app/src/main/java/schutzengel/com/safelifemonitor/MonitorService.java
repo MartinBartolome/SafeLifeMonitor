@@ -107,10 +107,6 @@ public class MonitorService extends Service {
     }
 
     private void transitionUeberwachen() {
-
-        transitionAlarmieren();
-
-
         this.zustand = Zustand.Ueberwachen;
         this.anzahlInaktiveBewegungen = 0;
         this.tickZaehler = 0;
@@ -124,6 +120,7 @@ public class MonitorService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onUeberwachen() {
+        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
         // Wurde Geraet bewegt?
         if (this.bewegungssensor.wurdeBewegt(this.applikationEinstellungen.getSchwellwertBewegungssensor())) {
             this.anzahlInaktiveBewegungen = 0;
@@ -134,7 +131,7 @@ public class MonitorService extends Service {
                 }
             }
         }
-        if (funktionsPruefungServer()) {
+        if (!funktionsPruefungServer()) {
             alarmAusloesen();
         }
     }
@@ -166,6 +163,7 @@ public class MonitorService extends Service {
     }
 
     private void onAlarmieren() {
+        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
         // SMS senden?
         if ((this.applikationEinstellungen.getIntervallSmsBenachrichtigung() / this.applikationEinstellungen.getMonitorServiceInterval()) == this.tickZaehler) {
             this.tickZaehler = 0;
@@ -180,11 +178,13 @@ public class MonitorService extends Service {
         }
         // Wurde Geraet bewegt?
         if (this.bewegungssensor.wurdeBewegt(this.applikationEinstellungen.getSchwellwertBewegungssensor())) {
+            this.anzahlInaktiveBewegungen = 0;
             alarmAufheben();
             return;
         }
         // Wurde SMS Benarchrichtigung empfangen?
         if (SmsClient.wurdeEmpfangen()) {
+            this.anzahlInaktiveBewegungen = 0;
             alarmAufheben();
             return;
         }

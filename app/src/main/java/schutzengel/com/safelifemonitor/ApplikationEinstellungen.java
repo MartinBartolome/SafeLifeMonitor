@@ -18,8 +18,8 @@ public class ApplikationEinstellungen {
     public static final String col_Time3To = "Time3To";
     public static final String col_Time4To = "Time4To";
     public static final String col_UserName = "UserName";
-    protected int schwellwertBewegungssensor = 0;
-    protected int maximaleAnzahlInaktiveBewegungen = 100;
+    protected int schwellwertBewegungssensor = 1;
+    protected int maximaleAnzahlInaktiveBewegungen = 5000;
     protected int monitorServiceIntervalInMillisekunden = 5000;
     protected int intervallSmsBenachrichtigungInMillisekunden = 300000;
     protected  Boolean istMonitorAktiv = true;
@@ -50,6 +50,14 @@ public class ApplikationEinstellungen {
     public void setMonitorServiceInterval(int milliseconds) {
         this.monitorServiceIntervalInMillisekunden = milliseconds;
     }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 	
     public void setZeiten(ArrayList<String> zeiten)
     {
@@ -69,7 +77,16 @@ public class ApplikationEinstellungen {
     }
 
     public Boolean istMonitorAktiv() {
-       return this.istMonitorAktiv;
+        return this.istMonitorAktiv;
+    }
+    public void setMonitorEnabled(int enabled) {
+        if(enabled == 1) {
+            this.istMonitorAktiv = true;
+        }
+        else
+        {
+            this.istMonitorAktiv = false;
+        }
     }
     
     public int getSekundenTime1From() {
@@ -106,6 +123,9 @@ public class ApplikationEinstellungen {
 
     public int getIntervallSmsBenachrichtigung() {
         return intervallSmsBenachrichtigungInMillisekunden;
+    }
+    public void setIntervallSmsBenachrichtigung(int milliseconds) {
+        this.intervallSmsBenachrichtigungInMillisekunden = milliseconds;
     }
 
     public String getSmsBenachrichtigungText() {

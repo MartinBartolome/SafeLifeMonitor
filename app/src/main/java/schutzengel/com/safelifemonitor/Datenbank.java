@@ -10,9 +10,26 @@ public class Datenbank extends SQLiteOpenHelper {
     SQLiteDatabase sqLiteDatabase;
     static final String DB_NAME = "SafeLifeMonitor.db";
     static final int DB_VERSION = 1;
-    private static final String CREATE_TABLE_CONTACT = "create table " + NotfallKontakt.tableName + "(" + NotfallKontakt.col_Priority + " INTEGER NOT NULL," + NotfallKontakt.col_Icon + " INTEGER NOT NULL, " + NotfallKontakt.col_Description + " TEXT," + NotfallKontakt.col_Telephone + " TEXT NOT NULL);";
+    private static final String CREATE_TABLE_CONTACT = "create table " + NotfallKontakt.tableName + "(" +
+            NotfallKontakt.col_Priority + " INTEGER NOT NULL," +
+            NotfallKontakt.col_Icon + " INTEGER NOT NULL, " +
+            NotfallKontakt.col_Description + " TEXT," +
+            NotfallKontakt.col_Telephone + " TEXT NOT NULL);";
     private static final String DROP_TABLE_CONTACT = "DROP TABLE IF EXISTS " + NotfallKontakt.tableName;
-    private static final String CREATE_TABLE_APPLICATION = "create table " + ApplikationEinstellungen.tableName + "(" + ApplikationEinstellungen.col_Schwellwert + " INTEGER NOT NULL," + ApplikationEinstellungen.col_MaxInactive + " INTEGER NOT NULL, " + ApplikationEinstellungen.col_Intervall + " INTEGER NOT NULL, " + ApplikationEinstellungen.col_Time1From + " TEXT, " + ApplikationEinstellungen.col_Time1To + " TEXT, " + ApplikationEinstellungen.col_Time2From + " TEXT, " + ApplikationEinstellungen.col_Time2To + " TEXT, " + ApplikationEinstellungen.col_Time3From + " TEXT, " + ApplikationEinstellungen.col_Time3To + " TEXT, " + ApplikationEinstellungen.col_Time4From + " TEXT, " + ApplikationEinstellungen.col_Time4To + " TEXT );";
+    private static final String CREATE_TABLE_APPLICATION = "create table " + ApplikationEinstellungen.tableName + "(" +
+            ApplikationEinstellungen.col_MonitorEnabled + " INTEGER NOT NULL," +
+            ApplikationEinstellungen.col_UserName + " Text, " +
+            ApplikationEinstellungen.col_Schwellwert + " INTEGER NOT NULL," +
+            ApplikationEinstellungen.col_MaxInactive + " INTEGER NOT NULL, " +
+            ApplikationEinstellungen.col_Intervall + " INTEGER NOT NULL, " +
+            ApplikationEinstellungen.col_Time1From + " TEXT, " +
+            ApplikationEinstellungen.col_Time1To + " TEXT, " +
+            ApplikationEinstellungen.col_Time2From + " TEXT, " +
+            ApplikationEinstellungen.col_Time2To + " TEXT, " +
+            ApplikationEinstellungen.col_Time3From + " TEXT, " +
+            ApplikationEinstellungen.col_Time3To + " TEXT, " +
+            ApplikationEinstellungen.col_Time4From + " TEXT, " +
+            ApplikationEinstellungen.col_Time4To + " TEXT );";
     private static final String DROP_TABLE_APPLICATION = "DROP TABLE IF EXISTS " + ApplikationEinstellungen.tableName;
     private static Datenbank instance = null;
     private ApplikationEinstellungen applikationEinstellungen = null;
@@ -35,6 +52,8 @@ public class Datenbank extends SQLiteOpenHelper {
                 sqLiteDatabase = getReadableDatabase();
             }
             String[] tableColumns = new String[]{
+                    ApplikationEinstellungen.col_MonitorEnabled,
+                    ApplikationEinstellungen.col_UserName,
                     ApplikationEinstellungen.col_Schwellwert,
                     ApplikationEinstellungen.col_MaxInactive,
                     ApplikationEinstellungen.col_Intervall,
@@ -51,6 +70,8 @@ public class Datenbank extends SQLiteOpenHelper {
             Cursor c = sqLiteDatabase.query(ApplikationEinstellungen.tableName, tableColumns, null, null,
                     null, null, null);
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                this.applikationEinstellungen.setMonitorEnabled(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_MonitorEnabled)));
+                this.applikationEinstellungen.setUserName(c.getString(c.getColumnIndex(ApplikationEinstellungen.col_UserName)));
                 this.applikationEinstellungen.setSchwellwertBewegungssensor(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_Schwellwert)));
                 this.applikationEinstellungen.setMaximaleAnzahlInaktiveBewegungen(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_MaxInactive)));
                 this.applikationEinstellungen.setMonitorServiceInterval(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_Intervall)));
@@ -75,6 +96,8 @@ public class Datenbank extends SQLiteOpenHelper {
         if (sqLiteDatabase == null || sqLiteDatabase.isReadOnly())
             sqLiteDatabase = getWritableDatabase();
         ContentValues contentValue = new ContentValues();
+        contentValue.put(ApplikationEinstellungen.col_MonitorEnabled, applikationEinstellungen.istMonitorAktiv());
+        contentValue.put(ApplikationEinstellungen.col_UserName,applikationEinstellungen.getUserName());
         contentValue.put(ApplikationEinstellungen.col_Schwellwert, applikationEinstellungen.getSchwellwertBewegungssensor());
         contentValue.put(ApplikationEinstellungen.col_MaxInactive, applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen());
         contentValue.put(ApplikationEinstellungen.col_Intervall, applikationEinstellungen.getMonitorServiceInterval());
@@ -108,10 +131,10 @@ public class Datenbank extends SQLiteOpenHelper {
         sqLiteDatabase = db;
         sqLiteDatabase.execSQL(CREATE_TABLE_CONTACT);
         for (int i = 0; i < 5; i++) {
-            sqLiteDatabase.execSQL("INSERT INTO " + NotfallKontakt.tableName + " (" + NotfallKontakt.col_Priority + "," + NotfallKontakt.col_Icon + "," + NotfallKontakt.col_Telephone + ") VALUES(" + i + ",0,0123456789);");
+            sqLiteDatabase.execSQL("INSERT INTO " + NotfallKontakt.tableName + " VALUES(" + i + ",0,NULL,0123456789);");
         }
         sqLiteDatabase.execSQL(CREATE_TABLE_APPLICATION);
-        sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.tableName + " VALUES (5,10,8,'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
+        sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.tableName + " VALUES (0,'Rüstiger Rentner',1,60,60,'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
     }
 
     @Override

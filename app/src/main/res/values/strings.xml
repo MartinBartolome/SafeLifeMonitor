@@ -13,4 +13,5 @@
     <string name="ApplicationSettingsWaitingTime">Wartezeit zwischen Notrufen:</string>
     <string name="SecondShortcut">ss</string>
     <string name="ApplicationSettingsSensivity">Sensivität Sensor:</string>
+    <string name="UserName">Benutzername:</string>
 </resources>
