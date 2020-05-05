@@ -17,7 +17,7 @@ public class SmsClient extends BroadcastReceiver {
         {
             wurdeEmpfangen = false;
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(telefonNummer, null, text, null, null);
+            smsManager.sendMultipartTextMessage(telefonNummer, null, smsManager.divideMessage(text), null, null);
         } catch (Exception e) {
             Log.d("SmsClient", e.getMessage());
         }

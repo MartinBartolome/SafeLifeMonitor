@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +32,7 @@ public class HauptActivity extends AppCompatActivity {
     private static final int SMS_SEND_PERMISSION_CODE = 100;
     private static final int SMS_READ_PERMISSION_CODE = 101;
     private static final int SMS_RECEIVE_PERMISSION_CODE = 102;
+    private static final int READ_PHONE_STATE = 103;
     private Intent monitorServiceIntent = null;
     private MonitorService monitorService = null;
     public static Context context;
@@ -220,10 +222,22 @@ public class HauptActivity extends AppCompatActivity {
         else if (requestCode == SMS_SEND_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkPermission(Manifest.permission.READ_PHONE_STATE, READ_PHONE_STATE);
             }
             else {
                 Toast.makeText(HauptActivity.this,
                         "SMS SEND Permission Denied",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+        else if (requestCode == READ_PHONE_STATE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            }
+            else {
+                Toast.makeText(HauptActivity.this,
+                        "READ PHONE STATE Permission Denied",
                         Toast.LENGTH_SHORT)
                         .show();
             }
