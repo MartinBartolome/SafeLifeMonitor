@@ -2,7 +2,6 @@
     <string name="app_name">SafeLifeMonitor</string>
     <string name="Settings_MenuItem2">Einstellungen</string>
     <string name="Settings_MenuItem1">Kontakt-Einstellungen</string>
-    <string name="ContactImageDescription">Profilbild</string>
     <string name="AlarmButtonDescription">Alarm aufheben</string>
     <string name="ButtonClose">Abbrechen</string>
     <string name="ContactPropertiesNumber">Nummer:</string>
@@ -14,4 +13,6 @@
     <string name="ApplicationSettingsWaitingTime">Wartezeit zwischen Notrufen:</string>
     <string name="SecondShortcut">ss</string>
     <string name="ApplicationSettingsSensivity">Sensivität Sensor:</string>
+    <string name="UserName">Benutzername:</string>
+    <string name="MinShort">Minuten</string>
 </resources>

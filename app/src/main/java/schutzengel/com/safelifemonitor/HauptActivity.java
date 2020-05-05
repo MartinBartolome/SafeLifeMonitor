@@ -1,32 +1,30 @@
 package schutzengel.com.safelifemonitor;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.media.MediaPlayer;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.provider.Telephony;
 import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import java.util.ArrayList;
 
 public class HauptActivity extends AppCompatActivity {
@@ -34,16 +32,19 @@ public class HauptActivity extends AppCompatActivity {
     private static final int SMS_SEND_PERMISSION_CODE = 100;
     private static final int SMS_READ_PERMISSION_CODE = 101;
     private static final int SMS_RECEIVE_PERMISSION_CODE = 102;
-
+    private static final int READ_PHONE_STATE = 103;
     private Intent monitorServiceIntent = null;
     private MonitorService monitorService = null;
     public static Context context;
+    private boolean alarmsoundrunning = false;
+    private MediaPlayer mp;
 
     private ServiceConnection monitorServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            MonitorService.Binder binder = (MonitorService.Binder)(service);
+            MonitorService.Binder binder = (MonitorService.Binder) (service);
             monitorService = binder.getMonitorService();
+            checkPermission(Manifest.permission.RECEIVE_SMS, SMS_RECEIVE_PERMISSION_CODE);
         }
 
         @Override
@@ -69,7 +70,7 @@ public class HauptActivity extends AppCompatActivity {
         public void handleMessage(Message message) {
             switch (Ereignis.EventIdentifierMap[message.what]) {
                 case AlarmAufheben:
-                    onEvent(new EreignisAlarmAufheben(message));
+                    onEvent(new EreignisAlarmAufheben());
                     break;
                 case AlarmAusloesen:
                     onEvent(new EreignisAlarmAusloesen());
@@ -81,24 +82,20 @@ public class HauptActivity extends AppCompatActivity {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onStart() {
         super.onStart();
         context = this;
-        setContentView(R.layout.main);
         SetContacts();
+    }
 
-        checkPermission(Manifest.permission.RECEIVE_SMS, SMS_RECEIVE_PERMISSION_CODE);
-        checkPermission(Manifest.permission.READ_SMS, SMS_READ_PERMISSION_CODE);
-        checkPermission(Manifest.permission.SEND_SMS, SMS_SEND_PERMISSION_CODE);
-
-        SmsClient.bindListener(new SmsClient.SmsListener() {
-            @Override
-            public void messageReceived(String sender,String messageText) {
-                //So könnte man dann die nachricht auslesen
-            }
-        });
-
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = this;
+        setContentView(R.layout.main);
         // Start the service
         try {
             this.monitorServiceIntent = new Intent(this, MonitorService.class);
@@ -111,12 +108,25 @@ public class HauptActivity extends AppCompatActivity {
     }
 
     private void onEvent(EreignisAlarmAufheben ereignisAlarmAufheben) {
-        Toast.makeText(getApplicationContext(), ereignisAlarmAufheben.getText(), Toast.LENGTH_LONG).show();
+        if(alarmsoundrunning) {
+            mp.stop();
+            alarmsoundrunning = false;
+        }
     }
 
     private void onEvent(EreignisAlarmAusloesen event) {
+        if(!alarmsoundrunning) {
+            mp = MediaPlayer.create(context, R.raw.alarm);
+            mp.setLooping(true);
+            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                public void onPrepared(MediaPlayer player)
+                {
+                    mp.start();
+                }
+            });
+            alarmsoundrunning = true;
+        }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -141,10 +151,9 @@ public class HauptActivity extends AppCompatActivity {
         }
     }
 
-    private void SetContacts()
-    {
+    private void SetContacts() {
         ArrayList<NotfallKontakt> contacts = Datenbank.getInstance().getNotfallKontakte();
-        if(contacts != null) {
+        if (contacts != null) {
             for (NotfallKontakt contact : contacts) {
                 TextView TextViewContact;
                 switch (contact.getPrioritaet()) {
@@ -171,25 +180,25 @@ public class HauptActivity extends AppCompatActivity {
             }
         }
     }
+
     // Function to check and request permission
     public void checkPermission(String permission, int requestCode)
     {
-
         // Checking if permission is not granted
-        if (ContextCompat.checkSelfPermission(HauptActivity.this,permission) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(monitorService, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(HauptActivity.this, new String[] { permission }, requestCode);
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,@NonNull int[] grantResults)
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
         super.onRequestPermissionsResult(requestCode,permissions,grantResults);
-
         if (requestCode == SMS_READ_PERMISSION_CODE) {
             // Checking whether user granted the permission or not.
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkPermission(Manifest.permission.SEND_SMS, SMS_SEND_PERMISSION_CODE);
             }
             else {
                 Toast.makeText(HauptActivity.this,
@@ -201,6 +210,7 @@ public class HauptActivity extends AppCompatActivity {
         else if (requestCode == SMS_RECEIVE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkPermission(Manifest.permission.READ_SMS, SMS_READ_PERMISSION_CODE);
             }
             else {
                 Toast.makeText(HauptActivity.this,
@@ -212,10 +222,22 @@ public class HauptActivity extends AppCompatActivity {
         else if (requestCode == SMS_SEND_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkPermission(Manifest.permission.READ_PHONE_STATE, READ_PHONE_STATE);
             }
             else {
                 Toast.makeText(HauptActivity.this,
                         "SMS SEND Permission Denied",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+        else if (requestCode == READ_PHONE_STATE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            }
+            else {
+                Toast.makeText(HauptActivity.this,
+                        "READ PHONE STATE Permission Denied",
                         Toast.LENGTH_SHORT)
                         .show();
             }

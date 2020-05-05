@@ -3,23 +3,17 @@ package schutzengel.com.safelifemonitor;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.TimePicker;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ApplikationEinstellungenActivity extends AppCompatActivity {
-
     EditText SetTime;
     TimePickerDialog timePickerDialog;
-
     EditText Time1From;
     EditText Time1To;
     EditText Time2From;
@@ -29,6 +23,9 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
     EditText Time4From;
     EditText Time4To;
     SeekBar seekbarSchwellwert;
+    EditText SmsIntervall;
+    CheckBox MonitorEnabled;
+    EditText UserName;
     View.OnFocusChangeListener onFocusChangeListener;
 
     @Override
@@ -70,11 +67,17 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         Time4To.setOnFocusChangeListener(onFocusChangeListener);
 
         seekbarSchwellwert = findViewById(R.id.sensoractivity);
+        SmsIntervall = findViewById(R.id.waittime);
+        MonitorEnabled = findViewById(R.id.ActivateMonitoring);
+        UserName = findViewById(R.id.UserName);
 
         // fill the widghes....
-        FillTime(applikationEinstellungen.getTimes());
+        FillTime(applikationEinstellungen.getZeiten());
 
         seekbarSchwellwert.setProgress(applikationEinstellungen.getSchwellwertBewegungssensor());
+        SmsIntervall.setText(Integer.toString(applikationEinstellungen.getIntervallSmsBenachrichtigung() / 1000 / 60));
+        MonitorEnabled.setActivated(applikationEinstellungen.istMonitorAktiv());
+        UserName.setText(applikationEinstellungen.getUserName());
     }
 
     private void ResetTimePicker()
@@ -103,9 +106,12 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         times.add(Time4From.getText().toString());
         times.add(Time4To.getText().toString());
 
-        applikationEinstellungen.setTimes(times);
+        applikationEinstellungen.setZeiten(times);
 
         applikationEinstellungen.setSchwellwertBewegungssensor(seekbarSchwellwert.getProgress());
+        applikationEinstellungen.setIntervallSmsBenachrichtigung(Integer.parseInt(SmsIntervall.getText().toString())*60*1000);
+        applikationEinstellungen.setMonitorEnabled(MonitorEnabled.isChecked() ? 1 : 0);
+        applikationEinstellungen.setUserName(UserName.getText().toString());
         // Write persistent
         Datenbank.getInstance().set(applikationEinstellungen);
 

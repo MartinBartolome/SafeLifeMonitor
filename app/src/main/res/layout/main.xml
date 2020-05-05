@@ -8,12 +8,11 @@
 
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -80,17 +79,6 @@
             android:gravity="center_vertical"
             android:paddingLeft="50dp"
             android:textSize="36sp" />
-
-        <ImageView
-            android:id="@+id/AlarmButton"
-            android:layout_width="match_parent"
-            android:layout_height="118dp"
-            android:layout_marginTop="50dp"
-            android:clickable="true"
-            android:contentDescription="@string/AlarmButtonDescription"
-            android:focusable="auto"
-            android:focusableInTouchMode="true"
-            android:src="@drawable/alarm" />
 
     </LinearLayout>
 
