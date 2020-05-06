@@ -41,7 +41,7 @@ public class Datenbank extends SQLiteOpenHelper {
         return instance;
     }
 
-    private Datenbank() {
+    public Datenbank() {
         super(HauptActivity.context, DB_NAME, null, DB_VERSION);
         this.applikationEinstellungen = new ApplikationEinstellungen();
     }
