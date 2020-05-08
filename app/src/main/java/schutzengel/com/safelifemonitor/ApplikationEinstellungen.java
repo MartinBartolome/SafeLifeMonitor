@@ -26,38 +26,83 @@ public class ApplikationEinstellungen {
     protected ArrayList <Integer> zeitenInSekunden = new ArrayList<>();
     protected String benutzerName = "Rüstiger Rentner";
 
+    /**
+     * HOlen des Schwellwerts des Bewegungssensors
+     * @return schwellwert
+     */
     public int getSchwellwertBewegungssensor() {
         return this.schwellwertBewegungssensor;
     }
+
+    /**
+     *  Setzen des Schwellwerts des Bewegungssensors
+     * @param schwellwert
+     */
     public void setSchwellwertBewegungssensor(int schwellwert) {
         this.schwellwertBewegungssensor = schwellwert;
     }
 
+    /**
+     * Holen des Werts für die Maximale Anzahl Inaktiver Bewegungen
+     * @return Maximale Anzahl Inaktiver Bewegungen
+     */
     public int getMaximaleAnzahlInaktiveBewegungen() {
         return this.maximaleAnzahlInaktiveBewegungen;
     }
+
+    /**
+     * Setzen des WErts für die Maximale Anzahl Inaktiver Bewegungen
+     * @param anzahl
+     */
     public void setMaximaleAnzahlInaktiveBewegungen(int anzahl) {
         this.maximaleAnzahlInaktiveBewegungen = anzahl;
     }
 
+    /**
+     * Holen des Werts für den ServiceIntervall in Millisekunden (Standard 1 Sekunde / 1000ms)
+     * @return Monitor Service Intervall
+     */
     public int getMonitorServiceInterval() {
         return this.monitorServiceIntervalInMillisekunden;
     }
+
+    /**
+     * Setzen des Monitor Service Intervalls in Millisekunden
+     * @param millisekunden
+     */
     public void setMonitorServiceInterval(int millisekunden) {
         this.monitorServiceIntervalInMillisekunden = millisekunden;
     }
 
+    /**
+     * Holen des Benutzernamens
+     * @return Benutzername
+     */
     public String getBenutzerName() {
         return this.benutzerName;
     }
+
+    /**
+     * Setzen des Benutzernamens
+     * @param BenutzerName
+     */
     public void setBenutzerName(String BenutzerName) {
         this.benutzerName = BenutzerName;
     }
 
+    /**
+     * Holen der Eingebenenen Überwachungszeiten
+     * @return Überwachungszeiten
+     */
     public ArrayList<String> getZeiten()
     {
         return this.zeiten;
     }
+
+    /**
+     * Setzen der Überwachungszeiten
+     * @param zeiten
+     */
     public void setZeiten(ArrayList<String> zeiten)    {
         this.zeiten = zeiten;
         this.zeitenInSekunden.clear();
@@ -69,11 +114,20 @@ public class ApplikationEinstellungen {
         }
     }
 
+    /**
+     * Holen des Wertes, ob das Überwachen Aktiv ist
+     * @return Monitor Aktiv?
+     */
     public Boolean getMonitorAktiv() {
         return this.istMonitorAktiv;
     }
-    public void setMonitorAktiv(int enabled) {
-        if(enabled == 1) {
+
+    /**
+     * Setzen des Wertes, ob das Überwachen Aktiv ist
+     * @param aktiv
+     */
+    public void setMonitorAktiv(int aktiv) {
+        if(aktiv == 1) {
             this.istMonitorAktiv = true;
         }
         else
@@ -81,39 +135,84 @@ public class ApplikationEinstellungen {
             this.istMonitorAktiv = false;
         }
     }
-    
+
+    /**
+     * Hole Sekunden der Zeit 1 (Von)
+     * @return Sekunden Zeit 1 (Von)
+     */
     public int getSekundenZeit1Von() {
         return this.zeitenInSekunden.get(0);
     }
+    /**
+     * Hole Sekunden der Zeit 1 (Bis)
+     * @return Sekunden Zeit 1 (Bis)
+     */
     public  int getSekundenZeit1Bis() {
         return this.zeitenInSekunden.get(1);
     }
+    /**
+     * Hole Sekunden der Zeit 2 (Von)
+     * @return Sekunden Zeit 2 (Von)
+     */
     public  int getSekundenZeit2Von() {
         return this.zeitenInSekunden.get(2);
     }
+    /**
+     * Hole Sekunden der Zeit 2 (Bis)
+     * @return Sekunden Zeit 2 (Bis)
+     */
     public  int getSekundenZeit2Bis() {
         return this.zeitenInSekunden.get(3);
     }
+    /**
+     * Hole Sekunden der Zeit 3 (Von)
+     * @return Sekunden Zeit 3 (Von)
+     */
     public  int getSekundenZeit3Von() {
         return this.zeitenInSekunden.get(4);
     }
+    /**
+     * Hole Sekunden der Zeit 3 (Bis)
+     * @return Sekunden Zeit 3 (Bis)
+     */
     public  int getSekundenZeit3Bis() {
         return this.zeitenInSekunden.get(5);
     }
+    /**
+     * Hole Sekunden der Zeit 4 (Von)
+     * @return Sekunden Zeit 4 (Von)
+     */
     public  int getSekundenZeit4Von() {
         return this.zeitenInSekunden.get(6);
     }
+    /**
+     * Hole Sekunden der Zeit 4 (Bis)
+     * @return Sekunden Zeit 4 (Bis)
+     */
     public  int getSekundenZeit4Bis() {
         return this.zeitenInSekunden.get(7);
     }
 
+    /**
+     * Holen des Wertes für den Intervall der SMS Benachrichtigungen
+     * @return Intervall der SMS Benachrichtigungen
+     */
     public int getIntervallSmsBenachrichtigung() {
         return intervallSmsBenachrichtigungInMillisekunden;
     }
-    public void setIntervallSmsBenachrichtigung(int milliseconds) {
-        this.intervallSmsBenachrichtigungInMillisekunden = milliseconds;
+
+    /**
+     * Setzen des WErtes für den Intervall der SMS Benachrichtigungen
+     * @param Millisekunden
+     */
+    public void setIntervallSmsBenachrichtigung(int Millisekunden) {
+        this.intervallSmsBenachrichtigungInMillisekunden = Millisekunden;
     }
 
+    /**
+     * Abrufen des Textes, der als SMS verschickt werden Soll
+     * @return SMS Text
+     */
     public String getSmsBenachrichtigungText() {
         StringBuilder Benachrichtigung = new StringBuilder();
         Benachrichtigung.append("SafeLife konnte keine Verbindung zu ");
