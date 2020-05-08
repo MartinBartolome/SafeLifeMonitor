@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -88,6 +89,7 @@ public class HauptActivity extends AppCompatActivity {
         super.onStart();
         context = this;
         SetContacts();
+        Log.i("HauptActivity","wurde gestartet");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -102,8 +104,9 @@ public class HauptActivity extends AppCompatActivity {
             this.monitorServiceIntent.putExtra("Messenger", new Messenger(this.observer));
             bindService(this.monitorServiceIntent, this.monitorServiceConnection, BIND_AUTO_CREATE);
             startService(this.monitorServiceIntent);
+            Log.i("HauptActivity","wurde erstellt");
         } catch (Exception e) {
-            String test = e.getMessage();
+            Log.e("HauptActivity","Fehler beim erstellen. Fehlermeldung: " + e.getMessage());
         }
     }
 
@@ -111,6 +114,7 @@ public class HauptActivity extends AppCompatActivity {
         if(alarmsoundrunning) {
             mp.stop();
             alarmsoundrunning = false;
+            Log.i("HauptActivity","Alarm wurde aufgehoben");
         }
     }
 
@@ -125,6 +129,7 @@ public class HauptActivity extends AppCompatActivity {
                 }
             });
             alarmsoundrunning = true;
+            Log.i("HauptActivity","Alarm wurde ausgelöst");
         }
     }
     @Override
@@ -141,10 +146,12 @@ public class HauptActivity extends AppCompatActivity {
             case R.id.ContactSettings:
                 Intent ContactSettings = new Intent(this, schutzengel.com.safelifemonitor.NotfallKontaktActivity.class);
                 this.startActivity(ContactSettings);
+                Log.i("HauptActivity","Notfall Kontakt Aktivität wurde gestartet");
                 return true;
             case R.id.ApplicationSettings:
                 Intent AppSettings = new Intent(this, schutzengel.com.safelifemonitor.ApplikationEinstellungenActivity.class);
                 this.startActivity(AppSettings);
+                Log.i("HauptActivity","Applikations Einstellungen Aktivität wurde gestartet");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -179,6 +186,7 @@ public class HauptActivity extends AppCompatActivity {
                 TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getSmallDrawable(), 0, 0, 0);
             }
         }
+        Log.i("HauptActivity","Kontakte wurde gesetzt");
     }
 
     // Function to check and request permission
@@ -187,6 +195,7 @@ public class HauptActivity extends AppCompatActivity {
         // Checking if permission is not granted
         if (ContextCompat.checkSelfPermission(monitorService, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(HauptActivity.this, new String[] { permission }, requestCode);
+            Log.d("HauptActivity","Berechtigung " + permission + " mit Code: " + requestCode+ "wurde angefragt");
         }
     }
 
@@ -198,48 +207,40 @@ public class HauptActivity extends AppCompatActivity {
             // Checking whether user granted the permission or not.
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde erteilt!" );
                 checkPermission(Manifest.permission.SEND_SMS, SMS_SEND_PERMISSION_CODE);
             }
             else {
-                Toast.makeText(HauptActivity.this,
-                        "SMS Read Permission Denied",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Log.w("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde nicht erteilt!" );
             }
         }
         else if (requestCode == SMS_RECEIVE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde erteilt!" );
                 checkPermission(Manifest.permission.READ_SMS, SMS_READ_PERMISSION_CODE);
             }
             else {
-                Toast.makeText(HauptActivity.this,
-                        "SMS RECEIVE Permission Denied",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Log.w("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde nicht erteilt!" );
             }
         }
         else if (requestCode == SMS_SEND_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde erteilt!" );
                 checkPermission(Manifest.permission.READ_PHONE_STATE, READ_PHONE_STATE);
             }
             else {
-                Toast.makeText(HauptActivity.this,
-                        "SMS SEND Permission Denied",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Log.w("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde nicht erteilt!" );
             }
         }
         else if (requestCode == READ_PHONE_STATE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde erteilt!" );
             }
             else {
-                Toast.makeText(HauptActivity.this,
-                        "READ PHONE STATE Permission Denied",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Log.w("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde nicht erteilt!" );
             }
         }
     }

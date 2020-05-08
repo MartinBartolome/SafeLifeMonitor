@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class Datenbank extends SQLiteOpenHelper {
@@ -85,56 +87,101 @@ public class Datenbank extends SQLiteOpenHelper {
                 Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time4From))));
                 Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time4To))));
                 this.applikationEinstellungen.setZeiten(Times);
+
+                StringBuilder Einstellungen = new StringBuilder();
+                Einstellungen.append("Monitoring Erlaubt? " + this.applikationEinstellungen.istMonitorAktiv() + System.getProperty("line.separator"));
+                Einstellungen.append("Username: " + this.applikationEinstellungen.getUserName() + System.getProperty("line.separator"));
+                Einstellungen.append("Schwellwert: " + this.applikationEinstellungen.getSchwellwertBewegungssensor() + System.getProperty("line.separator"));
+                Einstellungen.append("Maximale Anzahl Inaktive Bewegungen: " + this.applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + System.getProperty("line.separator"));
+                Einstellungen.append("MonitorServiceInterval: " + this.applikationEinstellungen.getMonitorServiceInterval() + System.getProperty("line.separator"));
+                Einstellungen.append("Zeit1 Von-bis: " + this.applikationEinstellungen.getZeiten().get(0) + "-" + this.applikationEinstellungen.getZeiten().get(1) + System.getProperty("line.separator"));
+                Einstellungen.append("Zeit2 Von-bis: " + this.applikationEinstellungen.getZeiten().get(2) + "-" + this.applikationEinstellungen.getZeiten().get(3) + System.getProperty("line.separator"));
+                Einstellungen.append("Zeit3 Von-bis: " + this.applikationEinstellungen.getZeiten().get(4) + "-" + this.applikationEinstellungen.getZeiten().get(5) + System.getProperty("line.separator"));
+                Einstellungen.append("Zeit4 Von-bis: " + this.applikationEinstellungen.getZeiten().get(6) + "-" + this.applikationEinstellungen.getZeiten().get(7) + System.getProperty("line.separator"));
+
+                Log.d("Datenbank","Lesen von der Datenbank: " + Einstellungen.toString());
             }
         } catch (Exception e) {
+            Log.e("Datenbank","Fehler beim Lesen der Applikationseinstellungen. Fehlermeldung: " + e.getMessage());
             return null;
         }
         return this.applikationEinstellungen;
     }
 
     public void set(ApplikationEinstellungen applikationEinstellungen) {
-        if (sqLiteDatabase == null || sqLiteDatabase.isReadOnly())
-            sqLiteDatabase = getWritableDatabase();
-        ContentValues contentValue = new ContentValues();
-        contentValue.put(ApplikationEinstellungen.col_MonitorEnabled, applikationEinstellungen.istMonitorAktiv());
-        contentValue.put(ApplikationEinstellungen.col_UserName,applikationEinstellungen.getUserName());
-        contentValue.put(ApplikationEinstellungen.col_Schwellwert, applikationEinstellungen.getSchwellwertBewegungssensor());
-        contentValue.put(ApplikationEinstellungen.col_MaxInactive, applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen());
-        contentValue.put(ApplikationEinstellungen.col_Intervall, applikationEinstellungen.getMonitorServiceInterval());
+        try {
 
-        int counter = 0;
-        for (String t : applikationEinstellungen.getZeiten()) {
-            if (counter == 0)
-                contentValue.put(ApplikationEinstellungen.col_Time1From, t);
-            if (counter == 1)
-                contentValue.put(ApplikationEinstellungen.col_Time1To, t);
-            if (counter == 2)
-                contentValue.put(ApplikationEinstellungen.col_Time2From, t);
-            if (counter == 3)
-                contentValue.put(ApplikationEinstellungen.col_Time2To, t);
-            if (counter == 4)
-                contentValue.put(ApplikationEinstellungen.col_Time3From, t);
-            if (counter == 5)
-                contentValue.put(ApplikationEinstellungen.col_Time3To, t);
-            if (counter == 6)
-                contentValue.put(ApplikationEinstellungen.col_Time4From, t);
-            if (counter == 7)
-                contentValue.put(ApplikationEinstellungen.col_Time4To, t);
-            counter++;
+            if (sqLiteDatabase == null || sqLiteDatabase.isReadOnly())
+                sqLiteDatabase = getWritableDatabase();
+            ContentValues contentValue = new ContentValues();
+            contentValue.put(ApplikationEinstellungen.col_MonitorEnabled, applikationEinstellungen.istMonitorAktiv());
+            contentValue.put(ApplikationEinstellungen.col_UserName, applikationEinstellungen.getUserName());
+            contentValue.put(ApplikationEinstellungen.col_Schwellwert, applikationEinstellungen.getSchwellwertBewegungssensor());
+            contentValue.put(ApplikationEinstellungen.col_MaxInactive, applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen());
+            contentValue.put(ApplikationEinstellungen.col_Intervall, applikationEinstellungen.getMonitorServiceInterval());
+
+            int counter = 0;
+            for (String t : applikationEinstellungen.getZeiten()) {
+                if (counter == 0)
+                    contentValue.put(ApplikationEinstellungen.col_Time1From, t);
+                if (counter == 1)
+                    contentValue.put(ApplikationEinstellungen.col_Time1To, t);
+                if (counter == 2)
+                    contentValue.put(ApplikationEinstellungen.col_Time2From, t);
+                if (counter == 3)
+                    contentValue.put(ApplikationEinstellungen.col_Time2To, t);
+                if (counter == 4)
+                    contentValue.put(ApplikationEinstellungen.col_Time3From, t);
+                if (counter == 5)
+                    contentValue.put(ApplikationEinstellungen.col_Time3To, t);
+                if (counter == 6)
+                    contentValue.put(ApplikationEinstellungen.col_Time4From, t);
+                if (counter == 7)
+                    contentValue.put(ApplikationEinstellungen.col_Time4To, t);
+                counter++;
+            }
+            sqLiteDatabase.update(ApplikationEinstellungen.tableName, contentValue, null, null);
+            this.applikationEinstellungen = applikationEinstellungen;
+
+            StringBuilder Einstellungen = new StringBuilder();
+            Einstellungen.append("Monitoring Erlaubt? " + this.applikationEinstellungen.istMonitorAktiv() + System.getProperty("line.separator"));
+            Einstellungen.append("Username: " + this.applikationEinstellungen.getUserName() + System.getProperty("line.separator"));
+            Einstellungen.append("Schwellwert: " + this.applikationEinstellungen.getSchwellwertBewegungssensor() + System.getProperty("line.separator"));
+            Einstellungen.append("Maximale Anzahl Inaktive Bewegungen: " + this.applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + System.getProperty("line.separator"));
+            Einstellungen.append("MonitorServiceInterval: " + this.applikationEinstellungen.getMonitorServiceInterval() + System.getProperty("line.separator"));
+            Einstellungen.append("Zeit1 Von-bis: " + this.applikationEinstellungen.getZeiten().get(0) + "-" + this.applikationEinstellungen.getZeiten().get(1) + System.getProperty("line.separator"));
+            Einstellungen.append("Zeit2 Von-bis: " + this.applikationEinstellungen.getZeiten().get(2) + "-" + this.applikationEinstellungen.getZeiten().get(3) + System.getProperty("line.separator"));
+            Einstellungen.append("Zeit3 Von-bis: " + this.applikationEinstellungen.getZeiten().get(4) + "-" + this.applikationEinstellungen.getZeiten().get(5) + System.getProperty("line.separator"));
+            Einstellungen.append("Zeit4 Von-bis: " + this.applikationEinstellungen.getZeiten().get(6) + "-" + this.applikationEinstellungen.getZeiten().get(7) + System.getProperty("line.separator"));
+
+            Log.d("Datenbank","Schreiben in die Datenbank: " + Einstellungen.toString());
+
         }
-        sqLiteDatabase.update(ApplikationEinstellungen.tableName, contentValue, null, null);
-        this.applikationEinstellungen = applikationEinstellungen;
+        catch (Exception e)
+        {
+            Log.e("Datenbank","Fehler beim schreiben in die Datenbank. Fehlermeldung: " + e.getMessage());
+        }
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        sqLiteDatabase = db;
-        sqLiteDatabase.execSQL(CREATE_TABLE_CONTACT);
-        for (int i = 0; i < 5; i++) {
-            sqLiteDatabase.execSQL("INSERT INTO " + NotfallKontakt.tableName + " VALUES(" + i + ",0,NULL,0123456789);");
+        try {
+            sqLiteDatabase = db;
+            sqLiteDatabase.execSQL(CREATE_TABLE_CONTACT);
+            Log.i("Datenbank","Tabelle Kontakt erstellt");
+            for (int i = 0; i < 5; i++) {
+                sqLiteDatabase.execSQL("INSERT INTO " + NotfallKontakt.tableName + " VALUES(" + i + ",0,NULL,0123456789);");
+                Log.i("Datenbank","Dummy Kontakt erstellt");
+            }
+            sqLiteDatabase.execSQL(CREATE_TABLE_APPLICATION);
+            Log.i("Datenbank","Applikationsdatenbank erstellt");
+            sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.tableName + " VALUES (0,'Rüstiger Rentner',1," + applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + "," + applikationEinstellungen.getMonitorServiceInterval() + ",'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
+            Log.i("Datenbank","Eintrag eingefügt");
         }
-        sqLiteDatabase.execSQL(CREATE_TABLE_APPLICATION);
-        sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.tableName + " VALUES (0,'Rüstiger Rentner',1," + applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + "," + applikationEinstellungen.getMonitorServiceInterval() + ",'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
+        catch (Exception e)
+        {
+            Log.e("Datenbank","Fehler beim Erstellen der Datenbanken. Fehlermeldung:" + e.getMessage());
+        }
     }
 
     @Override
@@ -142,18 +189,31 @@ public class Datenbank extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE_CONTACT);
         db.execSQL(DROP_TABLE_APPLICATION);
         onCreate(db);
+        Log.i("Datenbank","Upgrade der Datenbank");
     }
 
 
     public void set(NotfallKontakt contact) {
-        if (sqLiteDatabase == null || sqLiteDatabase.isReadOnly())
-            sqLiteDatabase = getWritableDatabase();
-        ContentValues contentValue = new ContentValues();
-        contentValue.put(NotfallKontakt.col_Priority, contact.getPrioritaet().ordinal());
-        contentValue.put(NotfallKontakt.col_Icon, contact.getIcon().ordinal());
-        contentValue.put(NotfallKontakt.col_Description, contact.getBeschreibung());
-        contentValue.put(NotfallKontakt.col_Telephone, contact.getAlarmTelefonNummer());
-        sqLiteDatabase.update(NotfallKontakt.tableName, contentValue, NotfallKontakt.col_Priority + "= ?", new String[]{String.valueOf(contact.getPrioritaet().ordinal())});
+        try {
+            if (sqLiteDatabase == null || sqLiteDatabase.isReadOnly())
+                sqLiteDatabase = getWritableDatabase();
+            ContentValues contentValue = new ContentValues();
+            contentValue.put(NotfallKontakt.col_Priority, contact.getPrioritaet().ordinal());
+            contentValue.put(NotfallKontakt.col_Icon, contact.getIcon().ordinal());
+            contentValue.put(NotfallKontakt.col_Description, contact.getBeschreibung());
+            contentValue.put(NotfallKontakt.col_Telephone, contact.getAlarmTelefonNummer());
+            sqLiteDatabase.update(NotfallKontakt.tableName, contentValue, NotfallKontakt.col_Priority + "= ?", new String[]{String.valueOf(contact.getPrioritaet().ordinal())});
+            StringBuilder kontaktstring = new StringBuilder();
+            kontaktstring.append("Priorität " + contact.getPrioritaet() + System.getProperty("line.separator"));
+            kontaktstring.append("Icon " + contact.getIcon() + System.getProperty("line.separator"));
+            kontaktstring.append("Beschreibung " + contact.getBeschreibung() + System.getProperty("line.separator"));
+            kontaktstring.append("Telefonnummer " + contact.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+            Log.d("Datenbank", "Kontakt aktualisiert: " + kontaktstring.toString());
+        }
+        catch (Exception e)
+        {
+            Log.e("Datenbank","Kontakt konnte nicht aktualisiert werden. Fehlermeldung: " + e.getMessage());
+        }
     }
 
     public void set(ArrayList<NotfallKontakt> notfallKontakte) {
@@ -177,10 +237,19 @@ public class Datenbank extends SQLiteOpenHelper {
                     contact.setIcon(c.getInt(c.getColumnIndex(NotfallKontakt.col_Icon)));
                     contact.setBeschreibung(c.getString(c.getColumnIndex(NotfallKontakt.col_Description)));
                     contact.setAlarmTelefonNummer(c.getString(c.getColumnIndex(NotfallKontakt.col_Telephone)));
+
+                    StringBuilder kontaktstring = new StringBuilder();
+                    kontaktstring.append("Priorität " + contact.getPrioritaet() + System.getProperty("line.separator"));
+                    kontaktstring.append("Icon " + contact.getIcon() + System.getProperty("line.separator"));
+                    kontaktstring.append("Beschreibung " + contact.getBeschreibung() + System.getProperty("line.separator"));
+                    kontaktstring.append("Telefonnummer " + contact.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+                    Log.d("Datenbank","Kontakt geladen: " + kontaktstring.toString());
+
                     Contacts.add(contact);
                 }
             }
         } catch (Exception e) {
+            Log.e("Datenbank","Fehler beim Laden der Notfallkontakte. Fehlermeldung: " +e.getMessage());
             return null;
         }
         return Contacts;
@@ -199,9 +268,18 @@ public class Datenbank extends SQLiteOpenHelper {
                 contact.setIcon(c.getInt(c.getColumnIndex(NotfallKontakt.col_Icon)));
                 contact.setBeschreibung(c.getString(c.getColumnIndex(NotfallKontakt.col_Description)));
                 contact.setAlarmTelefonNummer(c.getString(c.getColumnIndex(NotfallKontakt.col_Telephone)));
+
+                StringBuilder kontaktstring = new StringBuilder();
+                kontaktstring.append("Priorität " + contact.getPrioritaet() + System.getProperty("line.separator"));
+                kontaktstring.append("Icon " + contact.getIcon() + System.getProperty("line.separator"));
+                kontaktstring.append("Beschreibung " + contact.getBeschreibung() + System.getProperty("line.separator"));
+                kontaktstring.append("Telefonnummer " + contact.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+                Log.d("Datenbank","Einzelner Notfallkontakt geladen: " + kontaktstring.toString());
+
                 return contact;
             }
         } catch (Exception e) {
+            Log.e("Datenbank","Fehler beim Laden eines Notfallkontakts. Fehlermeldung: " +e.getMessage());
             return null;
         }
 

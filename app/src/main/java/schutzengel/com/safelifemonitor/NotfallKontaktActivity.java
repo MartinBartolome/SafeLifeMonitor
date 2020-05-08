@@ -1,6 +1,7 @@
 package schutzengel.com.safelifemonitor;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,55 +55,61 @@ public class NotfallKontaktActivity extends AppCompatActivity {
 
     private void ChangeImage(int direction)
     {
-        if(Contacts.get(selectedContactindex).getIcon().ordinal() == 0 && direction == -1)
+        try {
+            if (Contacts.get(selectedContactindex).getIcon().ordinal() == 0 && direction == -1) {
+                Contacts.get(selectedContactindex).setIcon(NotfallKontakt.Icon.values().length - 1);
+            } else if (Contacts.get(selectedContactindex).getIcon().ordinal() == NotfallKontakt.Icon.values().length - 1 && direction == 1) {
+                Contacts.get(selectedContactindex).setIcon(0);
+            } else {
+                Contacts.get(selectedContactindex).setIcon(Contacts.get(selectedContactindex).getIcon().ordinal() + direction);
+            }
+            IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
+        }
+        catch (Exception e)
         {
-            Contacts.get(selectedContactindex).setIcon(NotfallKontakt.Icon.values().length-1);
+            Log.e("NotfallKontaktActivity","Bild konnte nicht geändert werden. Fehlermeldung: " + e.getMessage());
         }
-        else if (Contacts.get(selectedContactindex).getIcon().ordinal() == NotfallKontakt.Icon.values().length-1 && direction == 1)
-        {
-            Contacts.get(selectedContactindex).setIcon(0);
-        }
-        else {
-            Contacts.get(selectedContactindex).setIcon(Contacts.get(selectedContactindex).getIcon().ordinal() + direction);
-        }
-        IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
     }
 
     public void ChangeContact(View view)
     {
-        Contacts.get(selectedContactindex).setAlarmTelefonNummer(TelephonEdit.getText().toString());
-        Contacts.get(selectedContactindex).setBeschreibung(DescriptionEdit.getText().toString());
+        try {
+            Contacts.get(selectedContactindex).setAlarmTelefonNummer(TelephonEdit.getText().toString());
+            Contacts.get(selectedContactindex).setBeschreibung(DescriptionEdit.getText().toString());
 
-        int Priority = 0;
-        switch (view.getId())
-        {
-            case R.id.ImagePriority1:
-                Priority = NotfallKontakt.Prioritaet.Prioritaet_1.ordinal();
-                break;
-            case R.id.ImagePriority2:
-                Priority = NotfallKontakt.Prioritaet.Prioritaet_2.ordinal();
-                break;
-            case R.id.ImagePriority3:
-                Priority = NotfallKontakt.Prioritaet.Prioritaet_3.ordinal();
-                break;
-            case R.id.ImagePriority4:
-                Priority = NotfallKontakt.Prioritaet.Prioritaet_4.ordinal();
-                break;
-            case R.id.ImagePriority5:
-                Priority = NotfallKontakt.Prioritaet.Prioritaet_5.ordinal();
-                break;
-        }
-
-        for (NotfallKontakt c:Contacts) {
-            if(c.getPrioritaet().ordinal() == Priority)
-            {
-                selectedContactindex = Contacts.indexOf(c);
+            int Priority = 0;
+            switch (view.getId()) {
+                case R.id.ImagePriority1:
+                    Priority = NotfallKontakt.Prioritaet.Prioritaet_1.ordinal();
+                    break;
+                case R.id.ImagePriority2:
+                    Priority = NotfallKontakt.Prioritaet.Prioritaet_2.ordinal();
+                    break;
+                case R.id.ImagePriority3:
+                    Priority = NotfallKontakt.Prioritaet.Prioritaet_3.ordinal();
+                    break;
+                case R.id.ImagePriority4:
+                    Priority = NotfallKontakt.Prioritaet.Prioritaet_4.ordinal();
+                    break;
+                case R.id.ImagePriority5:
+                    Priority = NotfallKontakt.Prioritaet.Prioritaet_5.ordinal();
+                    break;
             }
-        }
 
-        DescriptionEdit.setText(Contacts.get(selectedContactindex).getBeschreibung());
-        TelephonEdit.setText(Contacts.get(selectedContactindex).getAlarmTelefonNummer());
-        IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
+            for (NotfallKontakt c : Contacts) {
+                if (c.getPrioritaet().ordinal() == Priority) {
+                    selectedContactindex = Contacts.indexOf(c);
+                }
+            }
+
+            DescriptionEdit.setText(Contacts.get(selectedContactindex).getBeschreibung());
+            TelephonEdit.setText(Contacts.get(selectedContactindex).getAlarmTelefonNummer());
+            IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
+        }
+        catch (Exception e)
+        {
+            Log.e("NotfallKontaktActivity","Kontakt konnte nicht geändert werden. Fehlermeldung: " + e.getMessage());
+        }
     }
     public void Close(View view)
     {

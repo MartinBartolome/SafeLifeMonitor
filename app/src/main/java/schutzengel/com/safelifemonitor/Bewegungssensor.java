@@ -18,12 +18,14 @@ public class Bewegungssensor implements SensorEventListener {
     public Bewegungssensor(Context context) {
         SensorManager sensorManager = (SensorManager)(context.getSystemService(Context.SENSOR_SERVICE));
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(TYPE_ACCELEROMETER), sensorManager.SENSOR_DELAY_NORMAL);
+        Log.i("Bewegungssensor","Sensor Listener wurde registriert");
     }
 
     public synchronized Boolean wurdeBewegt(final long schwellwert) {
         this.schwellwert = schwellwert;
         Boolean wurdeBewegt = this.wurdeBewegt;
         this.wurdeBewegt = false;
+        Log.d("Bewegungssensor","Bewegung wurde abgefragt. Wurde Bewegt?" + wurdeBewegt);
         return wurdeBewegt;
     }
 
@@ -48,6 +50,7 @@ public class Bewegungssensor implements SensorEventListener {
             letzteBewegungY = (long)(event.values[1] * this.schwellwert);
         } catch (Exception e) {
             this.wurdeBewegt = false;
+            Log.e("Bewegungssensor","Berechnung der Bewegung konnte nicht durchgeführt werden. Fehlermeldung: " + e.getMessage());
         }
     }
 

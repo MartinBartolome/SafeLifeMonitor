@@ -71,9 +71,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         MonitorEnabled = findViewById(R.id.ActivateMonitoring);
         UserName = findViewById(R.id.UserName);
 
-        // fill the widghes....
         FillTime(applikationEinstellungen.getZeiten());
-
         seekbarSchwellwert.setProgress(applikationEinstellungen.getSchwellwertBewegungssensor());
         SmsIntervall.setText(Integer.toString(applikationEinstellungen.getIntervallSmsBenachrichtigung() / 1000 / 60));
         MonitorEnabled.setActivated(applikationEinstellungen.istMonitorAktiv());
