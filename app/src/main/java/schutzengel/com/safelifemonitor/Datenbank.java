@@ -18,21 +18,21 @@ public class Datenbank extends SQLiteOpenHelper {
             NotfallKontakt.col_Description + " TEXT," +
             NotfallKontakt.col_Telephone + " TEXT NOT NULL);";
     private static final String DROP_TABLE_CONTACT = "DROP TABLE IF EXISTS " + NotfallKontakt.tableName;
-    private static final String CREATE_TABLE_APPLICATION = "create table " + ApplikationEinstellungen.tableName + "(" +
+    private static final String CREATE_TABLE_APPLICATION = "create table " + ApplikationEinstellungen.TabellenName + "(" +
             ApplikationEinstellungen.col_MonitorEnabled + " INTEGER NOT NULL," +
-            ApplikationEinstellungen.col_UserName + " Text, " +
+            ApplikationEinstellungen.col_BenutzerName + " Text, " +
             ApplikationEinstellungen.col_Schwellwert + " INTEGER NOT NULL," +
             ApplikationEinstellungen.col_MaxInactive + " INTEGER NOT NULL, " +
             ApplikationEinstellungen.col_Intervall + " INTEGER NOT NULL, " +
-            ApplikationEinstellungen.col_Time1From + " TEXT, " +
-            ApplikationEinstellungen.col_Time1To + " TEXT, " +
-            ApplikationEinstellungen.col_Time2From + " TEXT, " +
-            ApplikationEinstellungen.col_Time2To + " TEXT, " +
-            ApplikationEinstellungen.col_Time3From + " TEXT, " +
-            ApplikationEinstellungen.col_Time3To + " TEXT, " +
-            ApplikationEinstellungen.col_Time4From + " TEXT, " +
-            ApplikationEinstellungen.col_Time4To + " TEXT );";
-    private static final String DROP_TABLE_APPLICATION = "DROP TABLE IF EXISTS " + ApplikationEinstellungen.tableName;
+            ApplikationEinstellungen.col_Zeit1Von + " TEXT, " +
+            ApplikationEinstellungen.col_Zeit1Bis + " TEXT, " +
+            ApplikationEinstellungen.col_Zeit2Von + " TEXT, " +
+            ApplikationEinstellungen.col_Zeit2Bis + " TEXT, " +
+            ApplikationEinstellungen.col_Zeit3Von + " TEXT, " +
+            ApplikationEinstellungen.col_Zeit3Bis + " TEXT, " +
+            ApplikationEinstellungen.col_Zeit4Von + " TEXT, " +
+            ApplikationEinstellungen.col_Zeit4Bis + " TEXT );";
+    private static final String DROP_TABLE_APPLICATION = "DROP TABLE IF EXISTS " + ApplikationEinstellungen.TabellenName;
     private static Datenbank instance = null;
     private ApplikationEinstellungen applikationEinstellungen = null;
 
@@ -55,37 +55,37 @@ public class Datenbank extends SQLiteOpenHelper {
             }
             String[] tableColumns = new String[]{
                     ApplikationEinstellungen.col_MonitorEnabled,
-                    ApplikationEinstellungen.col_UserName,
+                    ApplikationEinstellungen.col_BenutzerName,
                     ApplikationEinstellungen.col_Schwellwert,
                     ApplikationEinstellungen.col_MaxInactive,
                     ApplikationEinstellungen.col_Intervall,
-                    ApplikationEinstellungen.col_Time1From,
-                    ApplikationEinstellungen.col_Time1To,
-                    ApplikationEinstellungen.col_Time2From,
-                    ApplikationEinstellungen.col_Time2To,
-                    ApplikationEinstellungen.col_Time3From,
-                    ApplikationEinstellungen.col_Time3To,
-                    ApplikationEinstellungen.col_Time4From,
-                    ApplikationEinstellungen.col_Time4To
+                    ApplikationEinstellungen.col_Zeit1Von,
+                    ApplikationEinstellungen.col_Zeit1Bis,
+                    ApplikationEinstellungen.col_Zeit2Von,
+                    ApplikationEinstellungen.col_Zeit2Bis,
+                    ApplikationEinstellungen.col_Zeit3Von,
+                    ApplikationEinstellungen.col_Zeit3Bis,
+                    ApplikationEinstellungen.col_Zeit4Von,
+                    ApplikationEinstellungen.col_Zeit4Bis
             };
 
-            Cursor c = sqLiteDatabase.query(ApplikationEinstellungen.tableName, tableColumns, null, null,
+            Cursor c = sqLiteDatabase.query(ApplikationEinstellungen.TabellenName, tableColumns, null, null,
                     null, null, null);
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 this.applikationEinstellungen.setMonitorEnabled(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_MonitorEnabled)));
-                this.applikationEinstellungen.setUserName(c.getString(c.getColumnIndex(ApplikationEinstellungen.col_UserName)));
+                this.applikationEinstellungen.setUserName(c.getString(c.getColumnIndex(ApplikationEinstellungen.col_BenutzerName)));
                 this.applikationEinstellungen.setSchwellwertBewegungssensor(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_Schwellwert)));
                 this.applikationEinstellungen.setMaximaleAnzahlInaktiveBewegungen(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_MaxInactive)));
                 this.applikationEinstellungen.setMonitorServiceInterval(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_Intervall)));
                 ArrayList<String> Times = new ArrayList<>();
-                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time1From))));
-                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time1To))));
-                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time2From))));
-                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time2To))));
-                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time3From))));
-                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time3To))));
-                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time4From))));
-                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Time4To))));
+                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit1Von))));
+                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit1Bis))));
+                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit2Von))));
+                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit2Bis))));
+                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit3Von))));
+                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit3Bis))));
+                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit4Von))));
+                Times.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit4Bis))));
                 this.applikationEinstellungen.setZeiten(Times);
 
                 StringBuilder Einstellungen = new StringBuilder();
@@ -115,7 +115,7 @@ public class Datenbank extends SQLiteOpenHelper {
                 sqLiteDatabase = getWritableDatabase();
             ContentValues contentValue = new ContentValues();
             contentValue.put(ApplikationEinstellungen.col_MonitorEnabled, applikationEinstellungen.istMonitorAktiv());
-            contentValue.put(ApplikationEinstellungen.col_UserName, applikationEinstellungen.getUserName());
+            contentValue.put(ApplikationEinstellungen.col_BenutzerName, applikationEinstellungen.getUserName());
             contentValue.put(ApplikationEinstellungen.col_Schwellwert, applikationEinstellungen.getSchwellwertBewegungssensor());
             contentValue.put(ApplikationEinstellungen.col_MaxInactive, applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen());
             contentValue.put(ApplikationEinstellungen.col_Intervall, applikationEinstellungen.getMonitorServiceInterval());
@@ -123,24 +123,24 @@ public class Datenbank extends SQLiteOpenHelper {
             int counter = 0;
             for (String t : applikationEinstellungen.getZeiten()) {
                 if (counter == 0)
-                    contentValue.put(ApplikationEinstellungen.col_Time1From, t);
+                    contentValue.put(ApplikationEinstellungen.col_Zeit1Von, t);
                 if (counter == 1)
-                    contentValue.put(ApplikationEinstellungen.col_Time1To, t);
+                    contentValue.put(ApplikationEinstellungen.col_Zeit1Bis, t);
                 if (counter == 2)
-                    contentValue.put(ApplikationEinstellungen.col_Time2From, t);
+                    contentValue.put(ApplikationEinstellungen.col_Zeit2Von, t);
                 if (counter == 3)
-                    contentValue.put(ApplikationEinstellungen.col_Time2To, t);
+                    contentValue.put(ApplikationEinstellungen.col_Zeit2Bis, t);
                 if (counter == 4)
-                    contentValue.put(ApplikationEinstellungen.col_Time3From, t);
+                    contentValue.put(ApplikationEinstellungen.col_Zeit3Von, t);
                 if (counter == 5)
-                    contentValue.put(ApplikationEinstellungen.col_Time3To, t);
+                    contentValue.put(ApplikationEinstellungen.col_Zeit3Bis, t);
                 if (counter == 6)
-                    contentValue.put(ApplikationEinstellungen.col_Time4From, t);
+                    contentValue.put(ApplikationEinstellungen.col_Zeit4Von, t);
                 if (counter == 7)
-                    contentValue.put(ApplikationEinstellungen.col_Time4To, t);
+                    contentValue.put(ApplikationEinstellungen.col_Zeit4Bis, t);
                 counter++;
             }
-            sqLiteDatabase.update(ApplikationEinstellungen.tableName, contentValue, null, null);
+            sqLiteDatabase.update(ApplikationEinstellungen.TabellenName, contentValue, null, null);
             this.applikationEinstellungen = applikationEinstellungen;
 
             StringBuilder Einstellungen = new StringBuilder();
@@ -175,7 +175,7 @@ public class Datenbank extends SQLiteOpenHelper {
             }
             sqLiteDatabase.execSQL(CREATE_TABLE_APPLICATION);
             Log.i("Datenbank","Applikationsdatenbank erstellt");
-            sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.tableName + " VALUES (0,'Rüstiger Rentner',1," + applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + "," + applikationEinstellungen.getMonitorServiceInterval() + ",'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
+            sqLiteDatabase.execSQL("INSERT INTO " + ApplikationEinstellungen.TabellenName + " VALUES (0,'Rüstiger Rentner',1," + applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + "," + applikationEinstellungen.getMonitorServiceInterval() + ",'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
             Log.i("Datenbank","Eintrag eingefügt");
         }
         catch (Exception e)

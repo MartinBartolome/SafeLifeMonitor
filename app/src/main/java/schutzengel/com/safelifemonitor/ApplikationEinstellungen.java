@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ApplikationEinstellungen {
-    public static final String tableName = "Application";
+    public static final String TabellenName = "AnwendungsEinstellungen";
     public static final String col_Schwellwert= "SchwellwertBewegungssensor";
     public static final String col_MaxInactive = "MaximaleAnzahlInaktiveBewegungen";
     public static final String col_Intervall = "MonitorServiceIntervalInMillisekunden";
     public static final String col_MonitorEnabled = "MonitorEnabled";
-    public static final String col_Time1From = "Time1From";
-    public static final String col_Time2From = "Time2From";
-    public static final String col_Time3From = "Time3From";
-    public static final String col_Time4From = "Time4From";
-    public static final String col_Time1To = "Time1To";
-    public static final String col_Time2To = "Time2To";
-    public static final String col_Time3To = "Time3To";
-    public static final String col_Time4To = "Time4To";
-    public static final String col_UserName = "UserName";
+    public static final String col_Zeit1Von = "Zeit1Von";
+    public static final String col_Zeit2Von = "Zeit2Von";
+    public static final String col_Zeit3Von = "Zeit3Von";
+    public static final String col_Zeit4Von = "Zeit4Von";
+    public static final String col_Zeit1Bis = "Zeit1Bis";
+    public static final String col_Zeit2Bis = "Zeit2Bis";
+    public static final String col_Zeit3Bis = "Zeit3Bis";
+    public static final String col_Zeit4Bis = "Zeit4Bis";
+    public static final String col_BenutzerName = "BenutzerName";
     protected int schwellwertBewegungssensor = 1;
     protected int maximaleAnzahlInaktiveBewegungen = 1800000; // nach 30 min geht der alarm los
     protected int monitorServiceIntervalInMillisekunden = 1000; // jede sekunde
