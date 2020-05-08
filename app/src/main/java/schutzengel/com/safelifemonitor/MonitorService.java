@@ -25,7 +25,7 @@ public class MonitorService extends Service {
     private Messenger messenger = null;
     private IBinder binder = null;
     private Bewegungssensor bewegungssensor = null;
-    private ApplikationEinstellungen applikationEinstellungen = null;
+    private ApplikationEinstellungen applikationsEinstellungen = null;
     private Zustand zustand = Zustand.Undefiniert;
     private final int tagInSekunden = 86400;
 
@@ -57,9 +57,9 @@ public class MonitorService extends Service {
     {
         Bundle extras = intent.getExtras();
         this.messenger = (Messenger)(extras.get("Messenger"));
-        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
+        this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
         transitionUeberwachen();
-        this.timer.scheduleAtFixedRate(new TimerTask(), 0, Datenbank.getInstance().getApplikationEinstellungen().getMonitorServiceInterval());
+        this.timer.scheduleAtFixedRate(new TimerTask(), 0, Datenbank.getInstanz().getApplikationsEinstellungen().getMonitorServiceInterval());
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -122,13 +122,13 @@ public class MonitorService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onUeberwachen() {
-        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
+        this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
         // Wurde Geraet bewegt?
         Log.d("MonitorService","Anzahl der Inaktiven Bewegungen: " + this.anzahlInaktiveBewegungen);
-        if (this.bewegungssensor.wurdeBewegt(this.applikationEinstellungen.getSchwellwertBewegungssensor())) {
+        if (this.bewegungssensor.wurdeBewegt(this.applikationsEinstellungen.getSchwellwertBewegungssensor())) {
             this.anzahlInaktiveBewegungen = 0;
         } else {
-            if (++this.anzahlInaktiveBewegungen >= this.applikationEinstellungen.getMaximaleAnzahlInaktiveBewegungen()) {
+            if (++this.anzahlInaktiveBewegungen >= this.applikationsEinstellungen.getMaximaleAnzahlInaktiveBewegungen()) {
                 if (istInMoitorZeitraum()) {
                     alarmAusloesen();
                 }
@@ -142,7 +142,7 @@ public class MonitorService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Boolean istInMoitorZeitraum()
     {
-        if (!this.applikationEinstellungen.istMonitorAktiv()) {
+        if (!this.applikationsEinstellungen.getMonitorAktiv()) {
             return false;
         }
         // 30 Sekunden Aufloesung genuegt
@@ -151,10 +151,10 @@ public class MonitorService extends Service {
         }
         final long jetzt = DateTime.getEpochTimestamp();
         final long mitternacht = DateTime.getTodayMidnightEpochTimestamp();
-        return (!istImMonitorZeitraum(mitternacht, jetzt, this.applikationEinstellungen.getSekundenTime1From(), this.applikationEinstellungen.getSekundenTime1To()) ||
-            !istImMonitorZeitraum(mitternacht, jetzt, this.applikationEinstellungen.getSekundenTime2From(), this.applikationEinstellungen.getSekundenTime2To()) ||
-            !istImMonitorZeitraum(mitternacht, jetzt, this.applikationEinstellungen.getSekundenTime3From(), this.applikationEinstellungen.getSekundenTime3To()) ||
-            !istImMonitorZeitraum(mitternacht, jetzt, this.applikationEinstellungen.getSekundenTime4From(), this.applikationEinstellungen.getSekundenTime4To()));
+        return (!istImMonitorZeitraum(mitternacht, jetzt, this.applikationsEinstellungen.getSekundenZeit1Von(), this.applikationsEinstellungen.getSekundenZeit1Bis()) ||
+            !istImMonitorZeitraum(mitternacht, jetzt, this.applikationsEinstellungen.getSekundenZeit2Von(), this.applikationsEinstellungen.getSekundenZeit2Bis()) ||
+            !istImMonitorZeitraum(mitternacht, jetzt, this.applikationsEinstellungen.getSekundenZeit3Von(), this.applikationsEinstellungen.getSekundenZeit3Bis()) ||
+            !istImMonitorZeitraum(mitternacht, jetzt, this.applikationsEinstellungen.getSekundenZeit4Von(), this.applikationsEinstellungen.getSekundenZeit4Bis()));
     }
 
     private Boolean istImMonitorZeitraum(final long mitternachtInSekunden, final long jetztSekunden, final long zeitraumVonSekunden, final long zeitraumBisSekunden) {
@@ -166,14 +166,14 @@ public class MonitorService extends Service {
     }
 
     private void onAlarmieren() {
-        this.applikationEinstellungen = Datenbank.getInstance().getApplikationEinstellungen();
+        this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
         // SMS senden?
         Log.d("MonitorService","Aktueller Tick:" + this.tickZaehler);
-        if ((this.applikationEinstellungen.getIntervallSmsBenachrichtigung() / this.applikationEinstellungen.getMonitorServiceInterval()) == this.tickZaehler) {
+        if ((this.applikationsEinstellungen.getIntervallSmsBenachrichtigung() / this.applikationsEinstellungen.getMonitorServiceInterval()) == this.tickZaehler) {
             this.tickZaehler = 0;
-            NotfallKontakt notfallKontakt = Datenbank.getInstance().getNotfallKontakt(this.prioritaetNotfallkontakt);
+            NotfallKontakt notfallKontakt = Datenbank.getInstanz().getNotfallKontakt(this.prioritaetNotfallkontakt);
             if (null != notfallKontakt) {
-                SmsClient.senden(notfallKontakt.getAlarmTelefonNummer(), applikationEinstellungen.getSmsBenachrichtigungText());
+                SmsClient.senden(notfallKontakt.getAlarmTelefonNummer(), applikationsEinstellungen.getSmsBenachrichtigungText());
                 this.prioritaetNotfallkontakt = NotfallKontakt.toPriority(this.prioritaetNotfallkontakt.ordinal() + 1);
             } else {
                 this.prioritaetNotfallkontakt = NotfallKontakt.Prioritaet.Prioritaet_1;
@@ -182,7 +182,7 @@ public class MonitorService extends Service {
         }
         // Wurde Geraet bewegt?
         Log.d("MonitorService","Anzahl der Inaktiven Bewegungen: " + this.anzahlInaktiveBewegungen);
-        if (this.bewegungssensor.wurdeBewegt(this.applikationEinstellungen.getSchwellwertBewegungssensor())) {
+        if (this.bewegungssensor.wurdeBewegt(this.applikationsEinstellungen.getSchwellwertBewegungssensor())) {
             this.anzahlInaktiveBewegungen = 0;
             alarmAufheben();
             return;

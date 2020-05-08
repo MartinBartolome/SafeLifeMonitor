@@ -13,14 +13,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,8 +35,8 @@ public class HauptActivity extends AppCompatActivity {
     private Intent monitorServiceIntent = null;
     private MonitorService monitorService = null;
     public static Context context;
-    private boolean alarmsoundrunning = false;
-    private MediaPlayer mp;
+    private boolean istalarmgestartet = false;
+    private MediaPlayer mediapPlayer;
 
     private ServiceConnection monitorServiceConnection = new ServiceConnection() {
         @Override
@@ -88,7 +86,7 @@ public class HauptActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         context = this;
-        SetContacts();
+        SetzeKontakte();
         Log.i("HauptActivity","wurde gestartet");
     }
 
@@ -111,24 +109,24 @@ public class HauptActivity extends AppCompatActivity {
     }
 
     private void onEvent(EreignisAlarmAufheben ereignisAlarmAufheben) {
-        if(alarmsoundrunning) {
-            mp.stop();
-            alarmsoundrunning = false;
+        if(istalarmgestartet) {
+            mediapPlayer.stop();
+            istalarmgestartet = false;
             Log.i("HauptActivity","Alarm wurde aufgehoben");
         }
     }
 
     private void onEvent(EreignisAlarmAusloesen event) {
-        if(!alarmsoundrunning) {
-            mp = MediaPlayer.create(context, R.raw.alarm);
-            mp.setLooping(true);
-            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        if(!istalarmgestartet) {
+            mediapPlayer = MediaPlayer.create(context, R.raw.alarm);
+            mediapPlayer.setLooping(true);
+            mediapPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 public void onPrepared(MediaPlayer player)
                 {
-                    mp.start();
+                    mediapPlayer.start();
                 }
             });
-            alarmsoundrunning = true;
+            istalarmgestartet = true;
             Log.i("HauptActivity","Alarm wurde ausgelöst");
         }
     }
@@ -143,14 +141,14 @@ public class HauptActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.ContactSettings:
-                Intent ContactSettings = new Intent(this, schutzengel.com.safelifemonitor.NotfallKontaktActivity.class);
-                this.startActivity(ContactSettings);
+            case R.id.Kontakt_Einstellungen:
+                Intent KontaktEinstellungen = new Intent(this, schutzengel.com.safelifemonitor.NotfallKontaktActivity.class);
+                this.startActivity(KontaktEinstellungen);
                 Log.i("HauptActivity","Notfall Kontakt Aktivität wurde gestartet");
                 return true;
-            case R.id.ApplicationSettings:
-                Intent AppSettings = new Intent(this, schutzengel.com.safelifemonitor.ApplikationEinstellungenActivity.class);
-                this.startActivity(AppSettings);
+            case R.id.Applikations_Einstellungen:
+                Intent ApplikationsEinstellungen = new Intent(this, schutzengel.com.safelifemonitor.ApplikationEinstellungenActivity.class);
+                this.startActivity(ApplikationsEinstellungen);
                 Log.i("HauptActivity","Applikations Einstellungen Aktivität wurde gestartet");
                 return true;
             default:
@@ -158,32 +156,32 @@ public class HauptActivity extends AppCompatActivity {
         }
     }
 
-    private void SetContacts() {
-        ArrayList<NotfallKontakt> contacts = Datenbank.getInstance().getNotfallKontakte();
-        if (contacts != null) {
-            for (NotfallKontakt contact : contacts) {
-                TextView TextViewContact;
-                switch (contact.getPrioritaet()) {
+    private void SetzeKontakte() {
+        ArrayList<NotfallKontakt> Kontakte = Datenbank.getInstanz().getNotfallKontakte();
+        if (Kontakte != null) {
+            for (NotfallKontakt kontakt : Kontakte) {
+                TextView TextViewKontakt;
+                switch (kontakt.getPrioritaet()) {
                     case Prioritaet_1:
-                        TextViewContact = findViewById(R.id.ContactName1);
+                        TextViewKontakt = findViewById(R.id.KontaktName1);
                         break;
                     case Prioritaet_2:
-                        TextViewContact = findViewById(R.id.ContactName2);
+                        TextViewKontakt = findViewById(R.id.KontaktName2);
                         break;
                     case Prioritaet_3:
-                        TextViewContact = findViewById(R.id.ContactName3);
+                        TextViewKontakt = findViewById(R.id.KontaktName3);
                         break;
                     case Prioritaet_4:
-                        TextViewContact = findViewById(R.id.ContactName4);
+                        TextViewKontakt = findViewById(R.id.KontaktName4);
                         break;
                     case Prioritaet_5:
-                        TextViewContact = findViewById(R.id.ContactName5);
+                        TextViewKontakt = findViewById(R.id.KontaktName5);
                         break;
                     default:
                         continue;
                 }
-                TextViewContact.setText(contact.getBeschreibung());
-                TextViewContact.setCompoundDrawablesWithIntrinsicBounds(contact.getSmallDrawable(), 0, 0, 0);
+                TextViewKontakt.setText(kontakt.getBeschreibung());
+                TextViewKontakt.setCompoundDrawablesWithIntrinsicBounds(kontakt.getkleinesBild(), 0, 0, 0);
             }
         }
         Log.i("HauptActivity","Kontakte wurde gesetzt");

@@ -1,7 +1,6 @@
 package schutzengel.com.safelifemonitor;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class ApplikationEinstellungen {
     public static final String TabellenName = "AnwendungsEinstellungen";
@@ -25,12 +24,11 @@ public class ApplikationEinstellungen {
     protected  Boolean istMonitorAktiv = true;
     protected ArrayList <String> zeiten = new ArrayList<>();
     protected ArrayList <Integer> zeitenInSekunden = new ArrayList<>();
-    protected String userName = "Rüstiger Rentner";
+    protected String benutzerName = "Rüstiger Rentner";
 
     public int getSchwellwertBewegungssensor() {
         return this.schwellwertBewegungssensor;
     }
-
     public void setSchwellwertBewegungssensor(int schwellwert) {
         this.schwellwertBewegungssensor = schwellwert;
     }
@@ -38,7 +36,6 @@ public class ApplikationEinstellungen {
     public int getMaximaleAnzahlInaktiveBewegungen() {
         return this.maximaleAnzahlInaktiveBewegungen;
     }
-
     public void setMaximaleAnzahlInaktiveBewegungen(int anzahl) {
         this.maximaleAnzahlInaktiveBewegungen = anzahl;
     }
@@ -46,21 +43,22 @@ public class ApplikationEinstellungen {
     public int getMonitorServiceInterval() {
         return this.monitorServiceIntervalInMillisekunden;
     }
-
-    public void setMonitorServiceInterval(int milliseconds) {
-        this.monitorServiceIntervalInMillisekunden = milliseconds;
+    public void setMonitorServiceInterval(int millisekunden) {
+        this.monitorServiceIntervalInMillisekunden = millisekunden;
     }
 
-    public String getUserName() {
-        return this.userName;
+    public String getBenutzerName() {
+        return this.benutzerName;
+    }
+    public void setBenutzerName(String BenutzerName) {
+        this.benutzerName = BenutzerName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-	
-    public void setZeiten(ArrayList<String> zeiten)
+    public ArrayList<String> getZeiten()
     {
+        return this.zeiten;
+    }
+    public void setZeiten(ArrayList<String> zeiten)    {
         this.zeiten = zeiten;
         this.zeitenInSekunden.clear();
         for (String zeit : this.zeiten) {
@@ -71,15 +69,10 @@ public class ApplikationEinstellungen {
         }
     }
 
-    public ArrayList<String> getZeiten()
-    {
-        return this.zeiten;
-    }
-
-    public Boolean istMonitorAktiv() {
+    public Boolean getMonitorAktiv() {
         return this.istMonitorAktiv;
     }
-    public void setMonitorEnabled(int enabled) {
+    public void setMonitorAktiv(int enabled) {
         if(enabled == 1) {
             this.istMonitorAktiv = true;
         }
@@ -89,35 +82,28 @@ public class ApplikationEinstellungen {
         }
     }
     
-    public int getSekundenTime1From() {
+    public int getSekundenZeit1Von() {
         return this.zeitenInSekunden.get(0);
     }
-
-    public  int getSekundenTime1To() {
+    public  int getSekundenZeit1Bis() {
         return this.zeitenInSekunden.get(1);
     }
-
-    public  int getSekundenTime2From() {
+    public  int getSekundenZeit2Von() {
         return this.zeitenInSekunden.get(2);
     }
-
-    public  int getSekundenTime2To() {
+    public  int getSekundenZeit2Bis() {
         return this.zeitenInSekunden.get(3);
     }
-
-    public  int getSekundenTime3From() {
+    public  int getSekundenZeit3Von() {
         return this.zeitenInSekunden.get(4);
     }
-
-    public  int getSekundenTime3To() {
+    public  int getSekundenZeit3Bis() {
         return this.zeitenInSekunden.get(5);
     }
-
-    public  int getSekundenTime4From() {
+    public  int getSekundenZeit4Von() {
         return this.zeitenInSekunden.get(6);
     }
-
-    public  int getSekundenTime4To() {
+    public  int getSekundenZeit4Bis() {
         return this.zeitenInSekunden.get(7);
     }
 
@@ -129,12 +115,12 @@ public class ApplikationEinstellungen {
     }
 
     public String getSmsBenachrichtigungText() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("SafeLife konnte keine Verbindung zu ");
-        builder.append(this.userName);
-        builder.append(" herstellen. Du bist bei SafeLife als sein Notfallkontakt eingetragen. Bitte kümmere dich um ");
-        builder.append(this.userName);
-        builder.append(" . Falls du diese Nachricht siehst, antworte mit 'OK'.");
-        return builder.toString();
+        StringBuilder Benachrichtigung = new StringBuilder();
+        Benachrichtigung.append("SafeLife konnte keine Verbindung zu ");
+        Benachrichtigung.append(this.benutzerName);
+        Benachrichtigung.append(" herstellen. Du bist bei SafeLife als sein Notfallkontakt eingetragen. Bitte kümmere dich um ");
+        Benachrichtigung.append(this.benutzerName);
+        Benachrichtigung.append(" . Falls du diese Nachricht siehst, antworte mit 'OK'.");
+        return Benachrichtigung.toString();
     }
 }

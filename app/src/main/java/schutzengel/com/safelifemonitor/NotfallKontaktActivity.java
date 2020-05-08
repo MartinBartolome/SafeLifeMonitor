@@ -12,35 +12,35 @@ import java.util.ArrayList;
 
 public class NotfallKontaktActivity extends AppCompatActivity {
 
-    private ArrayList<NotfallKontakt> Contacts = null;
-    private int selectedContactindex = 0;
+    private ArrayList<NotfallKontakt> Kontakte = null;
+    private int gewaehlterKontaktIndex = 0;
 
-    EditText DescriptionEdit = null;
-    EditText TelephonEdit = null;
-    ImageView IconImage = null;
+    EditText BeschreibungsEditor = null;
+    EditText TelefonEditor = null;
+    ImageView IconBild = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contact_properties);
+        setContentView(R.layout.kontakt_eigenschaften);
 
-        Contacts = Datenbank.getInstance().getNotfallKontakte();
-        DescriptionEdit = findViewById(R.id.descriptionEdit);
-        TelephonEdit = findViewById(R.id.TelephoneEdit);
-        IconImage = findViewById(R.id.ContactImage);
+        Kontakte = Datenbank.getInstanz().getNotfallKontakte();
+        BeschreibungsEditor = findViewById(R.id.beschreibungseditor);
+        TelefonEditor = findViewById(R.id.telefoneditor);
+        IconBild = findViewById(R.id.kontaktbild);
 
-        IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
-        DescriptionEdit.setText(Contacts.get(selectedContactindex).getBeschreibung());
-        TelephonEdit.setText(Contacts.get(selectedContactindex).getAlarmTelefonNummer());
-        IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
+        IconBild.setImageResource(Kontakte.get(gewaehlterKontaktIndex).getBild());
+        BeschreibungsEditor.setText(Kontakte.get(gewaehlterKontaktIndex).getBeschreibung());
+        TelefonEditor.setText(Kontakte.get(gewaehlterKontaktIndex).getAlarmTelefonNummer());
+        IconBild.setImageResource(Kontakte.get(gewaehlterKontaktIndex).getBild());
     }
 
     public void onWritePersistent(View view)
     {
-        Contacts.get(selectedContactindex).setAlarmTelefonNummer(TelephonEdit.getText().toString());
-        Contacts.get(selectedContactindex).setBeschreibung(DescriptionEdit.getText().toString());
+        Kontakte.get(gewaehlterKontaktIndex).setAlarmTelefonNummer(TelefonEditor.getText().toString());
+        Kontakte.get(gewaehlterKontaktIndex).setBeschreibung(BeschreibungsEditor.getText().toString());
 
-        Datenbank.getInstance().set(Contacts);
+        Datenbank.getInstanz().set(Kontakte);
         finish();
     }
 
@@ -56,14 +56,14 @@ public class NotfallKontaktActivity extends AppCompatActivity {
     private void ChangeImage(int direction)
     {
         try {
-            if (Contacts.get(selectedContactindex).getIcon().ordinal() == 0 && direction == -1) {
-                Contacts.get(selectedContactindex).setIcon(NotfallKontakt.Icon.values().length - 1);
-            } else if (Contacts.get(selectedContactindex).getIcon().ordinal() == NotfallKontakt.Icon.values().length - 1 && direction == 1) {
-                Contacts.get(selectedContactindex).setIcon(0);
+            if (Kontakte.get(gewaehlterKontaktIndex).getIcon().ordinal() == 0 && direction == -1) {
+                Kontakte.get(gewaehlterKontaktIndex).setIcon(NotfallKontakt.Icon.values().length - 1);
+            } else if (Kontakte.get(gewaehlterKontaktIndex).getIcon().ordinal() == NotfallKontakt.Icon.values().length - 1 && direction == 1) {
+                Kontakte.get(gewaehlterKontaktIndex).setIcon(0);
             } else {
-                Contacts.get(selectedContactindex).setIcon(Contacts.get(selectedContactindex).getIcon().ordinal() + direction);
+                Kontakte.get(gewaehlterKontaktIndex).setIcon(Kontakte.get(gewaehlterKontaktIndex).getIcon().ordinal() + direction);
             }
-            IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
+            IconBild.setImageResource(Kontakte.get(gewaehlterKontaktIndex).getBild());
         }
         catch (Exception e)
         {
@@ -74,37 +74,37 @@ public class NotfallKontaktActivity extends AppCompatActivity {
     public void ChangeContact(View view)
     {
         try {
-            Contacts.get(selectedContactindex).setAlarmTelefonNummer(TelephonEdit.getText().toString());
-            Contacts.get(selectedContactindex).setBeschreibung(DescriptionEdit.getText().toString());
+            Kontakte.get(gewaehlterKontaktIndex).setAlarmTelefonNummer(TelefonEditor.getText().toString());
+            Kontakte.get(gewaehlterKontaktIndex).setBeschreibung(BeschreibungsEditor.getText().toString());
 
-            int Priority = 0;
+            int Prioritaet = 0;
             switch (view.getId()) {
-                case R.id.ImagePriority1:
-                    Priority = NotfallKontakt.Prioritaet.Prioritaet_1.ordinal();
+                case R.id.BildPrioritaet1:
+                    Prioritaet = NotfallKontakt.Prioritaet.Prioritaet_1.ordinal();
                     break;
-                case R.id.ImagePriority2:
-                    Priority = NotfallKontakt.Prioritaet.Prioritaet_2.ordinal();
+                case R.id.BildPrioritaet2:
+                    Prioritaet = NotfallKontakt.Prioritaet.Prioritaet_2.ordinal();
                     break;
-                case R.id.ImagePriority3:
-                    Priority = NotfallKontakt.Prioritaet.Prioritaet_3.ordinal();
+                case R.id.BildPrioritaet3:
+                    Prioritaet = NotfallKontakt.Prioritaet.Prioritaet_3.ordinal();
                     break;
-                case R.id.ImagePriority4:
-                    Priority = NotfallKontakt.Prioritaet.Prioritaet_4.ordinal();
+                case R.id.BildPrioritaet4:
+                    Prioritaet = NotfallKontakt.Prioritaet.Prioritaet_4.ordinal();
                     break;
-                case R.id.ImagePriority5:
-                    Priority = NotfallKontakt.Prioritaet.Prioritaet_5.ordinal();
+                case R.id.BildPrioritaet5:
+                    Prioritaet = NotfallKontakt.Prioritaet.Prioritaet_5.ordinal();
                     break;
             }
 
-            for (NotfallKontakt c : Contacts) {
-                if (c.getPrioritaet().ordinal() == Priority) {
-                    selectedContactindex = Contacts.indexOf(c);
+            for (NotfallKontakt k : Kontakte) {
+                if (k.getPrioritaet().ordinal() == Prioritaet) {
+                    gewaehlterKontaktIndex = Kontakte.indexOf(k);
                 }
             }
 
-            DescriptionEdit.setText(Contacts.get(selectedContactindex).getBeschreibung());
-            TelephonEdit.setText(Contacts.get(selectedContactindex).getAlarmTelefonNummer());
-            IconImage.setImageResource(Contacts.get(selectedContactindex).getDrawable());
+            BeschreibungsEditor.setText(Kontakte.get(gewaehlterKontaktIndex).getBeschreibung());
+            TelefonEditor.setText(Kontakte.get(gewaehlterKontaktIndex).getAlarmTelefonNummer());
+            IconBild.setImageResource(Kontakte.get(gewaehlterKontaktIndex).getBild());
         }
         catch (Exception e)
         {

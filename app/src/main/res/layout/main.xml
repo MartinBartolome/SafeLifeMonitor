@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/ContactName1"
+            android:id="@+id/KontaktName1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
@@ -30,7 +30,7 @@
             android:textSize="36sp" />
 
         <TextView
-            android:id="@+id/ContactName2"
+            android:id="@+id/KontaktName2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -43,38 +43,38 @@
             android:textSize="36sp" />
 
         <TextView
-            android:id="@+id/ContactName3"
+            android:id="@+id/KontaktName3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="0"
-            android:drawableLeft="@drawable/hospital_32"
+            android:drawableLeft="@drawable/krankenhaus_32"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:paddingLeft="50dp"
             android:textSize="36sp" />
 
         <TextView
-            android:id="@+id/ContactName4"
+            android:id="@+id/KontaktName4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:drawableLeft="@drawable/police_32"
+            android:drawableLeft="@drawable/polizei_32"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:paddingLeft="50dp"
             android:textSize="36sp" />
 
         <TextView
-            android:id="@+id/ContactName5"
+            android:id="@+id/KontaktName5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="0"
-            android:drawableLeft="@drawable/firefighter_32"
+            android:drawableLeft="@drawable/feuerwehr_32"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:paddingLeft="50dp"

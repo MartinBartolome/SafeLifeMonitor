@@ -44,7 +44,7 @@ public class SmsClient extends BroadcastReceiver {
                     SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
 
                     String sender = smsMessage.getDisplayOriginatingAddress();
-                    for (NotfallKontakt n : Datenbank.getInstance().getNotfallKontakte()) {
+                    for (NotfallKontakt n : Datenbank.getInstanz().getNotfallKontakte()) {
                         if (n.getAlarmTelefonNummer() == sender) {
                             wurdeEmpfangen = true;
                             Log.i("SmsClient", "Sms wurde von " + sender + " empfangen");
