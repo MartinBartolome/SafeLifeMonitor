@@ -36,6 +36,10 @@ public class Datenbank extends SQLiteOpenHelper {
     private static Datenbank instanz = null;
     private ApplikationEinstellungen applikationsEinstellungen = null;
 
+    /**
+     * Laden einer Datenbank Instanz
+     * @return Datenbank Instanz
+     */
     public static Datenbank getInstanz() {
         if (null == instanz) {
             instanz = new Datenbank();
@@ -43,11 +47,18 @@ public class Datenbank extends SQLiteOpenHelper {
         return instanz;
     }
 
+    /**
+     * Konstruktor der Datenbank Klasse
+     */
     public Datenbank() {
         super(HauptActivity.context, DB_NAME, null, DB_VERSION);
         this.applikationsEinstellungen = new ApplikationEinstellungen();
     }
 
+    /**
+     * Laden der Applikationseinstellungen
+     * @return Applikationseinstellungen
+     */
     public ApplikationEinstellungen getApplikationsEinstellungen() {
         try {
             if (sqLiteDatenbank == null) {
@@ -108,6 +119,10 @@ public class Datenbank extends SQLiteOpenHelper {
         return this.applikationsEinstellungen;
     }
 
+    /**
+     * Setzen der Applikationseinstellungen
+     * @param applikationsEinstellungen
+     */
     public void set(ApplikationEinstellungen applikationsEinstellungen) {
         try {
 
@@ -174,6 +189,10 @@ public class Datenbank extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Erstellen der Tabelle für die Kontakte und der Applikationseinstellungen, sowie füllen der Tabellen mit Daten
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
@@ -195,6 +214,12 @@ public class Datenbank extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Bei Upgrade der Datenbank werden die Tabellen gelöscht und neu erstellt
+     * @param db
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(LOESCHE_TABELLE_KONTAKT);
@@ -203,23 +228,26 @@ public class Datenbank extends SQLiteOpenHelper {
         Log.i("Datenbank","Upgrade der Datenbank");
     }
 
-
-    public void set(NotfallKontakt contact) {
+    /**
+     * Updaten eines Kontaktes in der Datenbank anhand der Prioritaet
+     * @param kontakt
+     */
+    public void set(NotfallKontakt kontakt) {
         try {
             if (sqLiteDatenbank == null || sqLiteDatenbank.isReadOnly())
                 sqLiteDatenbank = getWritableDatabase();
             ContentValues contentValue = new ContentValues();
-            contentValue.put(NotfallKontakt.col_Prioritaet, contact.getPrioritaet().ordinal());
-            contentValue.put(NotfallKontakt.col_Icon, contact.getIcon().ordinal());
-            contentValue.put(NotfallKontakt.col_Beschreibung, contact.getBeschreibung());
-            contentValue.put(NotfallKontakt.col_Telefon, contact.getAlarmTelefonNummer());
-            sqLiteDatenbank.update(NotfallKontakt.TabellenName, contentValue, NotfallKontakt.col_Prioritaet + "= ?", new String[]{String.valueOf(contact.getPrioritaet().ordinal())});
+            contentValue.put(NotfallKontakt.col_Prioritaet, kontakt.getPrioritaet().ordinal());
+            contentValue.put(NotfallKontakt.col_Icon, kontakt.getIcon().ordinal());
+            contentValue.put(NotfallKontakt.col_Beschreibung, kontakt.getBeschreibung());
+            contentValue.put(NotfallKontakt.col_Telefon, kontakt.getAlarmTelefonNummer());
+            sqLiteDatenbank.update(NotfallKontakt.TabellenName, contentValue, NotfallKontakt.col_Prioritaet + "= ?", new String[]{String.valueOf(kontakt.getPrioritaet().ordinal())});
 
             StringBuilder kontaktstring = new StringBuilder();
-            kontaktstring.append("Priorität " + contact.getPrioritaet() + System.getProperty("line.separator"));
-            kontaktstring.append("Icon " + contact.getIcon() + System.getProperty("line.separator"));
-            kontaktstring.append("Beschreibung " + contact.getBeschreibung() + System.getProperty("line.separator"));
-            kontaktstring.append("Telefonnummer " + contact.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+            kontaktstring.append("Priorität " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
+            kontaktstring.append("Icon " + kontakt.getIcon() + System.getProperty("line.separator"));
+            kontaktstring.append("Beschreibung " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
+            kontaktstring.append("Telefonnummer " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
             Log.d("Datenbank", "Kontakt aktualisiert: " + kontaktstring.toString());
 
         }
@@ -229,11 +257,20 @@ public class Datenbank extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Setzen aller Kontakte
+     * @param notfallKontakte
+     */
     public void set(ArrayList<NotfallKontakt> notfallKontakte) {
         for (NotfallKontakt notfallKontakt : notfallKontakte) {
             set(notfallKontakt);
         }
     }
+
+    /**
+     * Holen aller Notfallkontakte
+     * @return Notfallkontakte
+     */
 
     public ArrayList<NotfallKontakt> getNotfallKontakte() {
         if (sqLiteDatenbank == null)
@@ -268,6 +305,11 @@ public class Datenbank extends SQLiteOpenHelper {
         return Kontakte;
     }
 
+    /**
+     * Holen eines Notfallkontakts anhand der Prioritaet
+     * @param prioritaet
+     * @return Notfallkontakt
+     */
     public NotfallKontakt getNotfallKontakt(NotfallKontakt.Prioritaet prioritaet) {
         try {
             if (sqLiteDatenbank == null)

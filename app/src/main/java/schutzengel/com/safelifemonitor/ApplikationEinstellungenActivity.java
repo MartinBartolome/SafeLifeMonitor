@@ -28,6 +28,12 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
     EditText BenutzerName;
     View.OnFocusChangeListener onFocusChangeListener;
 
+    /**
+     * Erstellen der Aktivität. Dabei werden Die Applikationseinstellungen geladen und für jeden Zeiteditor wird ein Listener gesetzt, dass bei Fokus ein TimePickerDialog geöffnet wird.
+     * Dies erlaubt eine bequeme selektion der Zeit für den Benutzer.
+     * Anschliessend werden die Einstellungen geladen
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +84,9 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         BenutzerName.setText(applikationsEinstellungen.getBenutzerName());
     }
 
+    /**
+     * Zurücksetzen des TimePickers auf 00:00
+     */
     private void ResetTimePicker()
     {
         ZeitPickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
@@ -89,6 +98,10 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         }, 0, 0, true);
     }
 
+    /**
+     * Zusammenfassen der Einstellungen und schreiben in die Datenbank
+     * @param view
+     */
     public void onWritePersistent(View view)
     {
         // Create and populate the properites
@@ -116,11 +129,19 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Schliessen der Aktivität
+     * @param view
+     */
     public void Close(View view)
     {
         finish();
     }
 
+    /**
+     * Ausfüllen der Zeiten von der ArrayList in die Editoren.
+     * @param Zeiten
+     */
     private void FuelleZeiten(ArrayList<String> Zeiten)
     {
         int Zaehler = 0;
