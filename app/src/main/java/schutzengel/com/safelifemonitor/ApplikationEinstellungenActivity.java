@@ -125,22 +125,33 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
     {
         int Zaehler = 0;
         for (String t: Zeiten) {
-            if(Zaehler == 0)
-                Zeit1Von.setText(t);
-            if(Zaehler == 1)
-                Zeit1Bis.setText(t);
-            if(Zaehler == 2)
-                Zeit2Von.setText(t);
-            if(Zaehler == 3)
-                Zeit2Bis.setText(t);
-            if(Zaehler == 4)
-                Zeit3Von.setText(t);
-            if(Zaehler == 5)
-                Zeit3Bis.setText(t);
-            if(Zaehler == 6)
-                Zeit4Von.setText(t);
-            if(Zaehler == 7)
-                Zeit4Bis.setText(t);
+            switch (Zaehler)
+            {
+                case 0:
+                    Zeit1Von.setText(t);
+                    break;
+                case 1:
+                    Zeit1Bis.setText(t);
+                    break;
+                case 2:
+                    Zeit2Von.setText(t);
+                    break;
+                case 3:
+                    Zeit2Bis.setText(t);
+                    break;
+                case 4:
+                    Zeit3Von.setText(t);
+                    break;
+                case 5:
+                    Zeit3Bis.setText(t);
+                    break;
+                case 6:
+                    Zeit4Von.setText(t);
+                    break;
+                case 7:
+                    Zeit4Bis.setText(t);
+                    break;
+            }
             Zaehler++;
         }
     }

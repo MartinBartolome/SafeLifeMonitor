@@ -122,22 +122,33 @@ public class Datenbank extends SQLiteOpenHelper {
 
             int zaehler = 0;
             for (String t : applikationsEinstellungen.getZeiten()) {
-                if (zaehler == 0)
-                    contentValue.put(ApplikationEinstellungen.col_Zeit1Von, t);
-                if (zaehler == 1)
-                    contentValue.put(ApplikationEinstellungen.col_Zeit1Bis, t);
-                if (zaehler == 2)
-                    contentValue.put(ApplikationEinstellungen.col_Zeit2Von, t);
-                if (zaehler == 3)
-                    contentValue.put(ApplikationEinstellungen.col_Zeit2Bis, t);
-                if (zaehler == 4)
-                    contentValue.put(ApplikationEinstellungen.col_Zeit3Von, t);
-                if (zaehler == 5)
-                    contentValue.put(ApplikationEinstellungen.col_Zeit3Bis, t);
-                if (zaehler == 6)
-                    contentValue.put(ApplikationEinstellungen.col_Zeit4Von, t);
-                if (zaehler == 7)
-                    contentValue.put(ApplikationEinstellungen.col_Zeit4Bis, t);
+                switch(zaehler)
+                {
+                    case 0:
+                        contentValue.put(ApplikationEinstellungen.col_Zeit1Von, t);
+                        break;
+                    case 1:
+                        contentValue.put(ApplikationEinstellungen.col_Zeit1Bis, t);
+                        break;
+                    case 2:
+                        contentValue.put(ApplikationEinstellungen.col_Zeit2Von, t);
+                        break;
+                    case 3:
+                        contentValue.put(ApplikationEinstellungen.col_Zeit2Bis, t);
+                        break;
+                    case 4:
+                        contentValue.put(ApplikationEinstellungen.col_Zeit3Von, t);
+                        break;
+                    case 5:
+                        contentValue.put(ApplikationEinstellungen.col_Zeit3Bis, t);
+                        break;
+                    case 6:
+                        contentValue.put(ApplikationEinstellungen.col_Zeit4Von, t);
+                        break;
+                    case 7:
+                        contentValue.put(ApplikationEinstellungen.col_Zeit4Bis, t);
+                        break;
+                }
                 zaehler++;
             }
             sqLiteDatenbank.update(ApplikationEinstellungen.TabellenName, contentValue, null, null);
