@@ -9,6 +9,8 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 import androidx.annotation.RequiresApi;
+
+import java.util.Calendar;
 import java.util.Timer;
 
 public class MonitorService extends Service {
@@ -166,8 +168,7 @@ public class MonitorService extends Service {
     private void onUeberwachen() {
         this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
 
-        Log.d("MonitorService","istInMonitorZeitraum" +istInMoitorZeitraum());
-
+        Log.d("MonitorService","istInMonitorZeitraum = " +istInMoitorZeitraum());
         // Wurde Geraet bewegt?
         if (this.bewegungssensor.wurdeBewegt(this.applikationsEinstellungen.getSchwellwertBewegungssensor())) {
             this.anzahlInaktiveBewegungen = 0;
