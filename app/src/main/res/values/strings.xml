@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">SafeLifeMonitor</string>
+    <string name="Einstellungen_Applikation">Einstellungen</string>
+    <string name="Einstellungen_Kontakt">Kontakt-Einstellungen</string>
+    <string name="AlarmButtonBeschreibung">Alarm aufheben</string>
+    <string name="ButtonSchliessen">Abbrechen</string>
+    <string name="KontaktEigenschaftenNummer">Nummer:</string>
+    <string name="KontaktEigenschaftenBeschreibung">Anzeige:</string>
+    <string name="KontaktEigenschaftenPrioritaet">Priorität:</string>
+    <string name="ApplikationsEigenschaftenAktiviereUeberwachung">Monitoring aktiv:</string>
+    <string name="ApplikationsEigenschaftenVonZeit">Von:</string>
+    <string name="ApplikationsEigenschaftenBisZeit">-</string>
+    <string name="ApplikationsEigenschaftenWartezeit">Wartezeit zwischen Notrufen:</string>
+    <string name="Sekundenabkuerzung">ss</string>
+    <string name="ApplikationsEigenschaftenSensivitaet">Sensivität Sensor:</string>
+    <string name="BenutzerName">Benutzername:</string>
+    <string name="MinutenAbkuerzung">Minuten</string>
 </resources>
