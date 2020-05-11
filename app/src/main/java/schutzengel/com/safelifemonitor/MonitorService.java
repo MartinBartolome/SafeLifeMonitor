@@ -93,7 +93,6 @@ public class MonitorService extends Service {
         transitionAlarmieren();
         EreignisAlarmAusloesen ereignis = new EreignisAlarmAusloesen();
         sende(ereignis);
-        Log.d("MonitorService","Alarm wurde ausgelöst");
     }
 
     /**
@@ -103,7 +102,6 @@ public class MonitorService extends Service {
         transitionUeberwachen();
         EreignisAlarmAufheben ereignis = new EreignisAlarmAufheben();
         sende(ereignis);
-        Log.d("MonitorService","Alarm wurde aufgehoben");
     }
 
     /**
@@ -124,7 +122,6 @@ public class MonitorService extends Service {
     private class TimerTask extends java.util.TimerTask {
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void run() {
-            Log.d("TimerTask", "Timer abgelaufen, Status [" + zustand.toString() + "]");
             switch (zustand) {
                 case Alarmieren:
                     onAlarmieren();
@@ -146,7 +143,9 @@ public class MonitorService extends Service {
         this.zustand = Zustand.Ueberwachen;
         this.anzahlInaktiveBewegungen = 0;
         this.tickZaehler = 0;
+        Log.d("MonitorService","Zustand = Alarmieren");
     }
+
 
     /**
      * Der Zustand wird auf Alarmieren gesetzt.
@@ -155,6 +154,7 @@ public class MonitorService extends Service {
         this.zustand = Zustand.Alarmieren;
         this.tickZaehler = 0;
         this.prioritaetNotfallkontakt = NotfallKontakt.Prioritaet.Prioritaet_1;
+        Log.d("MonitorService","Zustand = Überwachen");
     }
 
     /**
@@ -165,8 +165,10 @@ public class MonitorService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onUeberwachen() {
         this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
+
+        Log.d("MonitorService","istInMonitorZeitraum" +istInMoitorZeitraum());
+
         // Wurde Geraet bewegt?
-        Log.d("MonitorService","Anzahl der Inaktiven Bewegungen: " + this.anzahlInaktiveBewegungen);
         if (this.bewegungssensor.wurdeBewegt(this.applikationsEinstellungen.getSchwellwertBewegungssensor())) {
             this.anzahlInaktiveBewegungen = 0;
         } else {
@@ -227,7 +229,6 @@ public class MonitorService extends Service {
     private void onAlarmieren() {
         this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
         // SMS senden?
-        Log.d("MonitorService","Aktueller Tick:" + this.tickZaehler);
         if ((this.applikationsEinstellungen.getIntervallSmsBenachrichtigung() / this.applikationsEinstellungen.getMonitorServiceInterval()) == this.tickZaehler) {
             this.tickZaehler = 0;
             NotfallKontakt notfallKontakt = Datenbank.getInstanz().getNotfallKontakt(this.prioritaetNotfallkontakt);
@@ -240,7 +241,6 @@ public class MonitorService extends Service {
             return;
         }
         // Wurde Geraet bewegt?
-        Log.d("MonitorService","Anzahl der Inaktiven Bewegungen: " + this.anzahlInaktiveBewegungen);
         if (this.bewegungssensor.wurdeBewegt(this.applikationsEinstellungen.getSchwellwertBewegungssensor())) {
             this.anzahlInaktiveBewegungen = 0;
             alarmAufheben();

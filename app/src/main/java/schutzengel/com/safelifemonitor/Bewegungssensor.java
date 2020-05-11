@@ -43,17 +43,6 @@ public class Bewegungssensor implements SensorEventListener {
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
-/*
-        StringBuilder builder = new StringBuilder();
-        builder.append("onSensorChanged: [");
-        builder.append(event.values[0]);
-        builder.append("],[");
-        builder.append(event.values[1]);
-        builder.append("],[");
-        builder.append(event.values[2]);
-        builder.append("]");
-        Log.d("Bewegungssensor", " " +  builder.toString());
-*/
         try {
             long aktuelleBewegungX = (long)(event.values[0] * this.schwellwert);
             long aktuelleBewegungY = (long)(event.values[1] * this.schwellwert);

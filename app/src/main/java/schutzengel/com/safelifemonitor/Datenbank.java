@@ -98,19 +98,6 @@ public class Datenbank extends SQLiteOpenHelper {
                 Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit4Von))));
                 Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit4Bis))));
                 this.applikationsEinstellungen.setZeiten(Zeiten);
-
-                StringBuilder Einstellungen = new StringBuilder();
-                Einstellungen.append("Monitoring Erlaubt? " + this.applikationsEinstellungen.getMonitorAktiv() + System.getProperty("line.separator"));
-                Einstellungen.append("Username: " + this.applikationsEinstellungen.getBenutzerName() + System.getProperty("line.separator"));
-                Einstellungen.append("Schwellwert: " + this.applikationsEinstellungen.getSchwellwertBewegungssensor() + System.getProperty("line.separator"));
-                Einstellungen.append("Maximale Anzahl Inaktive Bewegungen: " + this.applikationsEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + System.getProperty("line.separator"));
-                Einstellungen.append("MonitorServiceInterval: " + this.applikationsEinstellungen.getMonitorServiceInterval() + System.getProperty("line.separator"));
-                Einstellungen.append("Zeit1 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(0) + "-" + this.applikationsEinstellungen.getZeiten().get(1) + System.getProperty("line.separator"));
-                Einstellungen.append("Zeit2 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(2) + "-" + this.applikationsEinstellungen.getZeiten().get(3) + System.getProperty("line.separator"));
-                Einstellungen.append("Zeit3 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(4) + "-" + this.applikationsEinstellungen.getZeiten().get(5) + System.getProperty("line.separator"));
-                Einstellungen.append("Zeit4 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(6) + "-" + this.applikationsEinstellungen.getZeiten().get(7) + System.getProperty("line.separator"));
-
-                Log.d("Datenbank","Lesen von der Datenbank: " + Einstellungen.toString());
             }
         } catch (Exception e) {
             Log.e("Datenbank","Fehler beim Lesen der Applikationseinstellungen. Fehlermeldung: " + e.getMessage());
@@ -169,18 +156,12 @@ public class Datenbank extends SQLiteOpenHelper {
             sqLiteDatenbank.update(ApplikationEinstellungen.TabellenName, contentValue, null, null);
             this.applikationsEinstellungen = applikationsEinstellungen;
 
+
             StringBuilder Einstellungen = new StringBuilder();
             Einstellungen.append("Monitoring Erlaubt? " + this.applikationsEinstellungen.getMonitorAktiv() + System.getProperty("line.separator"));
-            Einstellungen.append("Username: " + this.applikationsEinstellungen.getBenutzerName() + System.getProperty("line.separator"));
-            Einstellungen.append("Schwellwert: " + this.applikationsEinstellungen.getSchwellwertBewegungssensor() + System.getProperty("line.separator"));
-            Einstellungen.append("Maximale Anzahl Inaktive Bewegungen: " + this.applikationsEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + System.getProperty("line.separator"));
-            Einstellungen.append("MonitorServiceInterval: " + this.applikationsEinstellungen.getMonitorServiceInterval() + System.getProperty("line.separator"));
             Einstellungen.append("Zeit1 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(0) + "-" + this.applikationsEinstellungen.getZeiten().get(1) + System.getProperty("line.separator"));
-            Einstellungen.append("Zeit2 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(2) + "-" + this.applikationsEinstellungen.getZeiten().get(3) + System.getProperty("line.separator"));
-            Einstellungen.append("Zeit3 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(4) + "-" + this.applikationsEinstellungen.getZeiten().get(5) + System.getProperty("line.separator"));
-            Einstellungen.append("Zeit4 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(6) + "-" + this.applikationsEinstellungen.getZeiten().get(7) + System.getProperty("line.separator"));
 
-            Log.d("Datenbank","Schreiben in die Datenbank: " + Einstellungen.toString());
+            Log.d("Datenbank","Schreiben Datenbank, Applikations-Tabelle: " + Einstellungen.toString());
 
         }
         catch (Exception e)
@@ -243,13 +224,14 @@ public class Datenbank extends SQLiteOpenHelper {
             contentValue.put(NotfallKontakt.col_Telefon, kontakt.getAlarmTelefonNummer());
             sqLiteDatenbank.update(NotfallKontakt.TabellenName, contentValue, NotfallKontakt.col_Prioritaet + "= ?", new String[]{String.valueOf(kontakt.getPrioritaet().ordinal())});
 
-            StringBuilder kontaktstring = new StringBuilder();
-            kontaktstring.append("Priorität " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
-            kontaktstring.append("Icon " + kontakt.getIcon() + System.getProperty("line.separator"));
-            kontaktstring.append("Beschreibung " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
-            kontaktstring.append("Telefonnummer " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
-            Log.d("Datenbank", "Kontakt aktualisiert: " + kontaktstring.toString());
-
+            if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
+                    (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
+                StringBuilder kontaktstring = new StringBuilder();
+                kontaktstring.append("Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
+                kontaktstring.append("Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
+                kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+                Log.d("Datenbank", "Aktualisiere Notfallkontakt, " + kontaktstring.toString());
+            }
         }
         catch (Exception e)
         {
@@ -288,13 +270,14 @@ public class Datenbank extends SQLiteOpenHelper {
                     kontakt.setBeschreibung(c.getString(c.getColumnIndex(NotfallKontakt.col_Beschreibung)));
                     kontakt.setAlarmTelefonNummer(c.getString(c.getColumnIndex(NotfallKontakt.col_Telefon)));
 
-                    StringBuilder kontaktstring = new StringBuilder();
-                    kontaktstring.append("Priorität " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
-                    kontaktstring.append("Icon " + kontakt.getIcon() + System.getProperty("line.separator"));
-                    kontaktstring.append("Beschreibung " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
-                    kontaktstring.append("Telefonnummer " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
-                    Log.d("Datenbank","Kontakt geladen: " + kontaktstring.toString());
-
+                    if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
+                            (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
+                        StringBuilder kontaktstring = new StringBuilder();
+                        kontaktstring.append("Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
+                        kontaktstring.append("Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
+                        kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+                        Log.d("Datenbank", "Notfallkontakt gelesen: " + kontaktstring.toString());
+                    }
                     Kontakte.add(kontakt);
                 }
             }
@@ -324,12 +307,14 @@ public class Datenbank extends SQLiteOpenHelper {
                 kontakt.setBeschreibung(c.getString(c.getColumnIndex(NotfallKontakt.col_Beschreibung)));
                 kontakt.setAlarmTelefonNummer(c.getString(c.getColumnIndex(NotfallKontakt.col_Telefon)));
 
-                StringBuilder kontaktstring = new StringBuilder();
-                kontaktstring.append("Priorität " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
-                kontaktstring.append("Icon " + kontakt.getIcon() + System.getProperty("line.separator"));
-                kontaktstring.append("Beschreibung " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
-                kontaktstring.append("Telefonnummer " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
-                Log.d("Datenbank","Einzelner Notfallkontakt geladen: " + kontaktstring.toString());
+                if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
+                        (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
+                    StringBuilder kontaktstring = new StringBuilder();
+                    kontaktstring.append("Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
+                    kontaktstring.append("Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
+                    kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+                    Log.d("Datenbank", "Notfallkontakt gelesen: " + kontaktstring.toString());
+                }
 
                 return kontakt;
             }

@@ -237,7 +237,6 @@ public class HauptActivity extends AppCompatActivity {
         // Checking if permission is not granted
         if (ContextCompat.checkSelfPermission(monitorService, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(HauptActivity.this, new String[] { permission }, requestCode);
-            Log.d("HauptActivity","Berechtigung " + permission + " mit Code: " + requestCode+ "wurde angefragt");
         }
     }
 
