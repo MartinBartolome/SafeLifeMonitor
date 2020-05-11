@@ -1,11 +1,11 @@
 package schutzengel.com.safelifemonitor;
 
 public class NotfallKontakt {
-    public static final String tableName = "Contacts";
-    public static final String col_Priority = "Priority";
+    public static final String TabellenName = "Kontakte";
+    public static final String col_Prioritaet = "Prioritaet";
     public static final String col_Icon = "Icon";
-    public static final String col_Description = "Description";
-    public static final String col_Telephone = "Telephone";
+    public static final String col_Beschreibung = "Beschreibung";
+    public static final String col_Telefon = "Telefon";
     private String beschreibung = "";
     private String alarmTelefonNummer = "";
 
@@ -24,29 +24,35 @@ public class NotfallKontakt {
         Schutzengel,
         Person,
         Institution,
-        Hospital,
-        Police,
-        FireFighter
+        Krankenhaus,
+        Polizei,
+        Feuerwehr
     }
     private Icon icon = Icon.Schutzengel;
 
-    public enum Field {
-        Priority,
-        Icon,
-        Description,
-        AlarmTelephoneNumber
-    }
-
+    /**
+     * Holen der Priorität
+     * @return Priorität
+     */
     public Prioritaet getPrioritaet() {
         return this.prioritaet;
     }
 
-    public void setPriorität(Prioritaet prioritaet) {
+    /**
+     * Setzen der Priorität
+     * @param prioritaet
+     */
+    public void setPrioritaet(Prioritaet prioritaet) {
         this.prioritaet = prioritaet;
     }
 
-    public static Prioritaet toPriority(Integer priority) {
-        switch (priority) {
+    /**
+     * Integer Wert zu Enum Wert
+     * @param prioritaet
+     * @return Priorität
+     */
+    public static Prioritaet toPriority(Integer prioritaet) {
+        switch (prioritaet) {
             case 0:
                 return Prioritaet.Prioritaet_1;
             case 1:
@@ -63,32 +69,40 @@ public class NotfallKontakt {
         return Prioritaet.Maximal;
     }
 
-    public void setPriority(Integer priority) {
-        switch(priority)
+    /**
+     * Setze die Priorität anhand eines Integer Wertes
+     * @param prioritaet
+     */
+    public void setPrioritaet(Integer prioritaet) {
+        switch(prioritaet)
         {
             case 0:
-                this.prioritaet = prioritaet.Prioritaet_1;
+                this.prioritaet = this.prioritaet.Prioritaet_1;
                 break;
             case 1:
-                this.prioritaet = prioritaet.Prioritaet_2;
+                this.prioritaet = this.prioritaet.Prioritaet_2;
                 break;
             case 2:
-                this.prioritaet = prioritaet.Prioritaet_3;
+                this.prioritaet = this.prioritaet.Prioritaet_3;
                 break;
             case 3:
-                this.prioritaet = prioritaet.Prioritaet_4;
+                this.prioritaet = this.prioritaet.Prioritaet_4;
                 break;
             case 4:
-                this.prioritaet = prioritaet.Prioritaet_5;
+                this.prioritaet = this.prioritaet.Prioritaet_5;
                 break;
             default:
-                this.prioritaet = prioritaet.Maximal;
+                this.prioritaet = this.prioritaet.Maximal;
                 break;
 
         }
     }
 
-    public int getDrawable() {
+    /**
+     * Laden des Grossen Icons für die Kategorisierung des Kontakts
+     * @return
+     */
+    public int getBild() {
         switch (getIcon())
         {
             case Schutzengel:
@@ -97,17 +111,22 @@ public class NotfallKontakt {
                 return R.drawable.person;
             case Institution:
                 return R.drawable.institution;
-            case Hospital:
-                return R.drawable.hospital;
-            case Police:
-                return R.drawable.police;
-            case FireFighter:
-                return R.drawable.firefighter;
+            case Krankenhaus:
+                return R.drawable.krankenhaus;
+            case Polizei:
+                return R.drawable.polizei;
+            case Feuerwehr:
+                return R.drawable.feuerwehr;
             default:
                 return 0;
         }
     }
-    public int getSmallDrawable() {
+
+    /**
+     * Laden des kleinen Icons für die Kategorisierung des Kontakts
+     * @return Icon
+     */
+    public int getkleinesBild() {
         switch (getIcon())
         {
             case Schutzengel:
@@ -116,25 +135,37 @@ public class NotfallKontakt {
                 return R.drawable.person_32;
             case Institution:
                 return R.drawable.institution_32;
-            case Hospital:
-                return R.drawable.hospital_32;
-            case Police:
-                return R.drawable.police_32;
-            case FireFighter:
-                return R.drawable.firefighter_32;
+            case Krankenhaus:
+                return R.drawable.krankenhaus_32;
+            case Polizei:
+                return R.drawable.polizei_32;
+            case Feuerwehr:
+                return R.drawable.feuerwehr_32;
             default:
                 return 0;
         }
     }
 
+    /**
+     * Holen des Icons
+     * @return icon
+     */
     public Icon getIcon() {
         return this.icon;
     }
 
+    /**
+     * Setzen des Icons
+     * @param icon
+     */
     public void setIcon(Icon icon) {
         this.icon = icon;
     }
 
+    /**
+     * Setzen des Icons anhand eines Integer Wertes
+     * @param icon
+     */
     public void setIcon(Integer icon) {
         switch(icon)
         {
@@ -148,30 +179,46 @@ public class NotfallKontakt {
                 this.icon = Icon.Institution;
                 break;
             case 3:
-                this.icon = Icon.Hospital;
+                this.icon = Icon.Krankenhaus;
                 break;
             case 4:
-                this.icon = Icon.Police;
+                this.icon = Icon.Polizei;
                 break;
             default:
-                this.icon = Icon.FireFighter;
+                this.icon = Icon.Feuerwehr;
                 break;
 
         }
     }
 
+    /**
+     * Holen der Beschreibung
+     * @return Beschreibung
+     */
     public String getBeschreibung() {
         return this.beschreibung;
     }
 
+    /**
+     * Setzen der Beschreibung
+     * @param beschreibung
+     */
     public void setBeschreibung(String beschreibung) {
         this.beschreibung = beschreibung;
     }
 
+    /**
+     * Holen der Telefonnummer
+     * @return Telefonnummer
+     */
     public String getAlarmTelefonNummer() {
         return this.alarmTelefonNummer;
     }
 
+    /**
+     * Setzen der Telefonnummer
+     * @param alarmTelefonNummer
+     */
     public void setAlarmTelefonNummer(String alarmTelefonNummer) {
         this.alarmTelefonNummer = alarmTelefonNummer;
     }

@@ -1,23 +1,22 @@
 package schutzengel.com.safelifemonitor;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class ApplikationEinstellungen {
-    public static final String tableName = "Application";
+    public static final String TabellenName = "AnwendungsEinstellungen";
     public static final String col_Schwellwert= "SchwellwertBewegungssensor";
     public static final String col_MaxInactive = "MaximaleAnzahlInaktiveBewegungen";
     public static final String col_Intervall = "MonitorServiceIntervalInMillisekunden";
     public static final String col_MonitorEnabled = "MonitorEnabled";
-    public static final String col_Time1From = "Time1From";
-    public static final String col_Time2From = "Time2From";
-    public static final String col_Time3From = "Time3From";
-    public static final String col_Time4From = "Time4From";
-    public static final String col_Time1To = "Time1To";
-    public static final String col_Time2To = "Time2To";
-    public static final String col_Time3To = "Time3To";
-    public static final String col_Time4To = "Time4To";
-    public static final String col_UserName = "UserName";
+    public static final String col_Zeit1Von = "Zeit1Von";
+    public static final String col_Zeit2Von = "Zeit2Von";
+    public static final String col_Zeit3Von = "Zeit3Von";
+    public static final String col_Zeit4Von = "Zeit4Von";
+    public static final String col_Zeit1Bis = "Zeit1Bis";
+    public static final String col_Zeit2Bis = "Zeit2Bis";
+    public static final String col_Zeit3Bis = "Zeit3Bis";
+    public static final String col_Zeit4Bis = "Zeit4Bis";
+    public static final String col_BenutzerName = "BenutzerName";
     protected int schwellwertBewegungssensor = 1;
     protected int maximaleAnzahlInaktiveBewegungen = 1800000; // nach 30 min geht der alarm los
     protected int monitorServiceIntervalInMillisekunden = 1000; // jede sekunde
@@ -25,42 +24,86 @@ public class ApplikationEinstellungen {
     protected  Boolean istMonitorAktiv = true;
     protected ArrayList <String> zeiten = new ArrayList<>();
     protected ArrayList <Integer> zeitenInSekunden = new ArrayList<>();
-    protected String userName = "Rüstiger Rentner";
+    protected String benutzerName = "Rüstiger Rentner";
 
+    /**
+     * HOlen des Schwellwerts des Bewegungssensors
+     * @return schwellwert
+     */
     public int getSchwellwertBewegungssensor() {
         return this.schwellwertBewegungssensor;
     }
 
+    /**
+     *  Setzen des Schwellwerts des Bewegungssensors
+     * @param schwellwert
+     */
     public void setSchwellwertBewegungssensor(int schwellwert) {
         this.schwellwertBewegungssensor = schwellwert;
     }
 
+    /**
+     * Holen des Werts für die Maximale Anzahl Inaktiver Bewegungen
+     * @return Maximale Anzahl Inaktiver Bewegungen
+     */
     public int getMaximaleAnzahlInaktiveBewegungen() {
         return this.maximaleAnzahlInaktiveBewegungen;
     }
 
+    /**
+     * Setzen des WErts für die Maximale Anzahl Inaktiver Bewegungen
+     * @param anzahl
+     */
     public void setMaximaleAnzahlInaktiveBewegungen(int anzahl) {
         this.maximaleAnzahlInaktiveBewegungen = anzahl;
     }
 
+    /**
+     * Holen des Werts für den ServiceIntervall in Millisekunden (Standard 1 Sekunde / 1000ms)
+     * @return Monitor Service Intervall
+     */
     public int getMonitorServiceInterval() {
         return this.monitorServiceIntervalInMillisekunden;
     }
 
-    public void setMonitorServiceInterval(int milliseconds) {
-        this.monitorServiceIntervalInMillisekunden = milliseconds;
+    /**
+     * Setzen des Monitor Service Intervalls in Millisekunden
+     * @param millisekunden
+     */
+    public void setMonitorServiceInterval(int millisekunden) {
+        this.monitorServiceIntervalInMillisekunden = millisekunden;
     }
 
-    public String getUserName() {
-        return this.userName;
+    /**
+     * Holen des Benutzernamens
+     * @return Benutzername
+     */
+    public String getBenutzerName() {
+        return this.benutzerName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    /**
+     * Setzen des Benutzernamens
+     * @param BenutzerName
+     */
+    public void setBenutzerName(String BenutzerName) {
+        this.benutzerName = BenutzerName;
     }
-	
-    public void setZeiten(ArrayList<String> zeiten)
+
+    /**
+     * Holen der Eingebenenen Überwachungszeiten
+     * @return Überwachungszeiten
+     */
+    public ArrayList<String> getZeiten()
     {
+        return this.zeiten;
+    }
+
+    /**
+     * Setzen der Überwachungszeiten
+     * @param zeiten
+     */
+    public void setZeiten(ArrayList<String> zeiten)    {
         this.zeiten = zeiten;
         this.zeitenInSekunden.clear();
         for (String zeit : this.zeiten) {
@@ -71,16 +114,20 @@ public class ApplikationEinstellungen {
         }
     }
 
-    public ArrayList<String> getZeiten()
-    {
-        return this.zeiten;
-    }
-
-    public Boolean istMonitorAktiv() {
+    /**
+     * Holen des Wertes, ob das Überwachen Aktiv ist
+     * @return Monitor Aktiv?
+     */
+    public Boolean getMonitorAktiv() {
         return this.istMonitorAktiv;
     }
-    public void setMonitorEnabled(int enabled) {
-        if(enabled == 1) {
+
+    /**
+     * Setzen des Wertes, ob das Überwachen Aktiv ist
+     * @param aktiv
+     */
+    public void setMonitorAktiv(int aktiv) {
+        if(aktiv == 1) {
             this.istMonitorAktiv = true;
         }
         else
@@ -88,53 +135,91 @@ public class ApplikationEinstellungen {
             this.istMonitorAktiv = false;
         }
     }
-    
-    public int getSekundenTime1From() {
+
+    /**
+     * Hole Sekunden der Zeit 1 (Von)
+     * @return Sekunden Zeit 1 (Von)
+     */
+    public int getSekundenZeit1Von() {
         return this.zeitenInSekunden.get(0);
     }
-
-    public  int getSekundenTime1To() {
+    /**
+     * Hole Sekunden der Zeit 1 (Bis)
+     * @return Sekunden Zeit 1 (Bis)
+     */
+    public  int getSekundenZeit1Bis() {
         return this.zeitenInSekunden.get(1);
     }
-
-    public  int getSekundenTime2From() {
+    /**
+     * Hole Sekunden der Zeit 2 (Von)
+     * @return Sekunden Zeit 2 (Von)
+     */
+    public  int getSekundenZeit2Von() {
         return this.zeitenInSekunden.get(2);
     }
-
-    public  int getSekundenTime2To() {
+    /**
+     * Hole Sekunden der Zeit 2 (Bis)
+     * @return Sekunden Zeit 2 (Bis)
+     */
+    public  int getSekundenZeit2Bis() {
         return this.zeitenInSekunden.get(3);
     }
-
-    public  int getSekundenTime3From() {
+    /**
+     * Hole Sekunden der Zeit 3 (Von)
+     * @return Sekunden Zeit 3 (Von)
+     */
+    public  int getSekundenZeit3Von() {
         return this.zeitenInSekunden.get(4);
     }
-
-    public  int getSekundenTime3To() {
+    /**
+     * Hole Sekunden der Zeit 3 (Bis)
+     * @return Sekunden Zeit 3 (Bis)
+     */
+    public  int getSekundenZeit3Bis() {
         return this.zeitenInSekunden.get(5);
     }
-
-    public  int getSekundenTime4From() {
+    /**
+     * Hole Sekunden der Zeit 4 (Von)
+     * @return Sekunden Zeit 4 (Von)
+     */
+    public  int getSekundenZeit4Von() {
         return this.zeitenInSekunden.get(6);
     }
-
-    public  int getSekundenTime4To() {
+    /**
+     * Hole Sekunden der Zeit 4 (Bis)
+     * @return Sekunden Zeit 4 (Bis)
+     */
+    public  int getSekundenZeit4Bis() {
         return this.zeitenInSekunden.get(7);
     }
 
+    /**
+     * Holen des Wertes für den Intervall der SMS Benachrichtigungen
+     * @return Intervall der SMS Benachrichtigungen
+     */
     public int getIntervallSmsBenachrichtigung() {
         return intervallSmsBenachrichtigungInMillisekunden;
     }
-    public void setIntervallSmsBenachrichtigung(int milliseconds) {
-        this.intervallSmsBenachrichtigungInMillisekunden = milliseconds;
+
+    /**
+     * Setzen des WErtes für den Intervall der SMS Benachrichtigungen
+     * @param Millisekunden
+     */
+    public void setIntervallSmsBenachrichtigung(int Millisekunden) {
+        this.intervallSmsBenachrichtigungInMillisekunden = Millisekunden;
     }
 
+    /**
+     * Abrufen des Textes, der als SMS verschickt werden Soll
+     * @return SMS Text
+     */
     public String getSmsBenachrichtigungText() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("SafeLife konnte keine Verbindung zu ");
-        builder.append(this.userName);
-        builder.append(" herstellen. Du bist bei SafeLife als sein Notfallkontakt eingetragen. Bitte kümmere dich um ");
-        builder.append(this.userName);
-        builder.append(" . Falls du diese Nachricht siehst, antworte mit 'OK'.");
-        return builder.toString();
+        StringBuilder Benachrichtigung = new StringBuilder();
+        Benachrichtigung.append("SafeLife konnte keine Verbindung zu ");
+        Benachrichtigung.append(this.benutzerName);
+        Benachrichtigung.append(" herstellen. Du bist bei SafeLife als sein Notfallkontakt eingetragen. Bitte kümmere dich um ");
+        Benachrichtigung.append(this.benutzerName);
+        Benachrichtigung.append(" . Falls du diese Nachricht siehst, antworte mit 'OK'.");
+        return Benachrichtigung.toString();
     }
 }
