@@ -30,14 +30,27 @@ public class NotfallKontakt {
     }
     private Icon icon = Icon.Schutzengel;
 
+    /**
+     * Holen der Priorität
+     * @return Priorität
+     */
     public Prioritaet getPrioritaet() {
         return this.prioritaet;
     }
 
+    /**
+     * Setzen der Priorität
+     * @param prioritaet
+     */
     public void setPrioritaet(Prioritaet prioritaet) {
         this.prioritaet = prioritaet;
     }
 
+    /**
+     * Integer Wert zu Enum Wert
+     * @param prioritaet
+     * @return Priorität
+     */
     public static Prioritaet toPriority(Integer prioritaet) {
         switch (prioritaet) {
             case 0:
@@ -56,6 +69,10 @@ public class NotfallKontakt {
         return Prioritaet.Maximal;
     }
 
+    /**
+     * Setze die Priorität anhand eines Integer Wertes
+     * @param prioritaet
+     */
     public void setPrioritaet(Integer prioritaet) {
         switch(prioritaet)
         {
@@ -81,6 +98,10 @@ public class NotfallKontakt {
         }
     }
 
+    /**
+     * Laden des Grossen Icons für die Kategorisierung des Kontakts
+     * @return
+     */
     public int getBild() {
         switch (getIcon())
         {
@@ -100,6 +121,11 @@ public class NotfallKontakt {
                 return 0;
         }
     }
+
+    /**
+     * Laden des kleinen Icons für die Kategorisierung des Kontakts
+     * @return Icon
+     */
     public int getkleinesBild() {
         switch (getIcon())
         {
@@ -120,14 +146,26 @@ public class NotfallKontakt {
         }
     }
 
+    /**
+     * Holen des Icons
+     * @return icon
+     */
     public Icon getIcon() {
         return this.icon;
     }
 
+    /**
+     * Setzen des Icons
+     * @param icon
+     */
     public void setIcon(Icon icon) {
         this.icon = icon;
     }
 
+    /**
+     * Setzen des Icons anhand eines Integer Wertes
+     * @param icon
+     */
     public void setIcon(Integer icon) {
         switch(icon)
         {
@@ -153,18 +191,34 @@ public class NotfallKontakt {
         }
     }
 
+    /**
+     * Holen der Beschreibung
+     * @return Beschreibung
+     */
     public String getBeschreibung() {
         return this.beschreibung;
     }
 
+    /**
+     * Setzen der Beschreibung
+     * @param beschreibung
+     */
     public void setBeschreibung(String beschreibung) {
         this.beschreibung = beschreibung;
     }
 
+    /**
+     * Holen der Telefonnummer
+     * @return Telefonnummer
+     */
     public String getAlarmTelefonNummer() {
         return this.alarmTelefonNummer;
     }
 
+    /**
+     * Setzen der Telefonnummer
+     * @param alarmTelefonNummer
+     */
     public void setAlarmTelefonNummer(String alarmTelefonNummer) {
         this.alarmTelefonNummer = alarmTelefonNummer;
     }

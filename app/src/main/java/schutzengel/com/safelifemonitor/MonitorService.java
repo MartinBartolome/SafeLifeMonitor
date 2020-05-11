@@ -35,6 +35,9 @@ public class MonitorService extends Service {
         }
     }
 
+    /**
+     * Objekte werden Initialisiert beim Erstellen des Services
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -43,6 +46,9 @@ public class MonitorService extends Service {
         this.bewegungssensor = new Bewegungssensor(this);
     }
 
+    /**
+     * Objekte werden zerstört beim Zerstören des Services
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -52,6 +58,13 @@ public class MonitorService extends Service {
         this.timer = null;
     }
 
+    /**
+     * Beim Start werden die Einstellungen geladen, der Status auf Überrwachen gesetzt und die Tickrate des Timers gesetzt
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
@@ -63,11 +76,19 @@ public class MonitorService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    /**
+     * Monitor Service wird gebunden
+     * @param intent
+     * @return
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return this.binder;
     }
 
+    /**
+     * Der Alarm wird ausgelöst und ein Ereignis gesendet
+     */
     private void alarmAusloesen() {
         transitionAlarmieren();
         EreignisAlarmAusloesen ereignis = new EreignisAlarmAusloesen();
@@ -75,6 +96,9 @@ public class MonitorService extends Service {
         Log.d("MonitorService","Alarm wurde ausgelöst");
     }
 
+    /**
+     * Der Alarm wird aufgehoben und ein Ereignis gesendet
+     */
     private void alarmAufheben() {
         transitionUeberwachen();
         EreignisAlarmAufheben ereignis = new EreignisAlarmAufheben();
@@ -82,6 +106,10 @@ public class MonitorService extends Service {
         Log.d("MonitorService","Alarm wurde aufgehoben");
     }
 
+    /**
+     * Ein Ereignis wird gesendet
+     * @param ereignis
+     */
     private void sende(Ereignis ereignis) {
         try {
             this.messenger.send(ereignis.toMessage());
@@ -90,6 +118,9 @@ public class MonitorService extends Service {
         }
     }
 
+    /**
+     * Diese methode wird bei jedem Tick aufgerufen und anhand des Zustandes wird eine Bestimmte Methode aufgerufen
+     */
     private class TimerTask extends java.util.TimerTask {
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void run() {
@@ -108,18 +139,29 @@ public class MonitorService extends Service {
         }
     }
 
+    /**
+     * Der Zustand wird auf Überwachen gewechselt
+     */
     private void transitionUeberwachen() {
         this.zustand = Zustand.Ueberwachen;
         this.anzahlInaktiveBewegungen = 0;
         this.tickZaehler = 0;
     }
 
+    /**
+     * Der Zustand wird auf Alarmieren gesetzt.
+     */
     private void transitionAlarmieren() {
         this.zustand = Zustand.Alarmieren;
         this.tickZaehler = 0;
         this.prioritaetNotfallkontakt = NotfallKontakt.Prioritaet.Prioritaet_1;
     }
 
+    /**
+     * Beim Überwachen werden zuerst die ApplikationsEinstellungen neu geladen (es könnte sich etwas geändert haben)
+     * Anschliessend wird geprüft, ob sich das Gerät grade erst bewegt hat. Wenn dies nicht der Fall war, wird geschaut, ob sich dieses eine halbe stunde lang nicht
+     * mehr Bewegt hat. Wenn das der Fall ist, wird der Alarm ausgelöst
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onUeberwachen() {
         this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
@@ -139,6 +181,10 @@ public class MonitorService extends Service {
         }
     }
 
+    /**
+     * Überprüfung, ob die Aktuelle Zeit im Festgelegten Monitorzeitraum ist.
+     * @return
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Boolean istInMoitorZeitraum()
     {
@@ -157,6 +203,14 @@ public class MonitorService extends Service {
             !istImMonitorZeitraum(mitternacht, jetzt, this.applikationsEinstellungen.getSekundenZeit4Von(), this.applikationsEinstellungen.getSekundenZeit4Bis()));
     }
 
+    /**
+     * Überprüfung ob die übergebene Zeit im Monitor zeitraum ist
+     * @param mitternachtInSekunden
+     * @param jetztSekunden
+     * @param zeitraumVonSekunden
+     * @param zeitraumBisSekunden
+     * @return
+     */
     private Boolean istImMonitorZeitraum(final long mitternachtInSekunden, final long jetztSekunden, final long zeitraumVonSekunden, final long zeitraumBisSekunden) {
         int anzahlTage = 1;
         if (zeitraumVonSekunden <= zeitraumBisSekunden) {
@@ -165,6 +219,11 @@ public class MonitorService extends Service {
         return ((jetztSekunden >= (mitternachtInSekunden - (anzahlTage * this.tagInSekunden) + zeitraumVonSekunden)) && (jetztSekunden <= (mitternachtInSekunden - this.tagInSekunden + zeitraumBisSekunden)));
     }
 
+    /**
+     * Wenn der Zustand auf Alarmieren gesetzt wurde, dann wird geschaut, ob die 5 Minuten zum versenden der SMS abgelaufen sind.
+     * Ist dies der Fall, wird eine SMS an den jeweiligen Notfallkontakt versendet.
+     * Während der 5 minuten, wird geprüft, ob das Gerät bewegt wurde.
+     */
     private void onAlarmieren() {
         this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
         // SMS senden?
@@ -195,6 +254,10 @@ public class MonitorService extends Service {
         }
     }
 
+    /**
+     * Permanente prüfung mit dem Server wird 2021 eingefügt, wenn Infrastruktur bereit steht.
+     * @return
+     */
     private Boolean funktionsPruefungServer() {
         // #MAIAL 21-APR-2020: Funkktion wird implementiert, sobald Server Teil bereit ist
         return true;

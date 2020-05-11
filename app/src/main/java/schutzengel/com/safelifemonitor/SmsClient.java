@@ -14,6 +14,11 @@ public class SmsClient extends BroadcastReceiver {
     public SmsClient() {
     }
 
+    /**
+     * Senden einer Sms and eine Telefonnummer
+     * @param telefonNummer
+     * @param text
+     */
     public static synchronized void senden(String telefonNummer, String text) {
         try
         {
@@ -26,12 +31,21 @@ public class SmsClient extends BroadcastReceiver {
         }
     }
 
+    /**
+     * Abfrage, ob SMS Empfangen wurde
+     * @return
+     */
     public static synchronized boolean wurdeEmpfangen() {
         final Boolean benachrichtigungEmpfangen = wurdeEmpfangen;
         wurdeEmpfangen = false;
         return benachrichtigungEmpfangen;
     }
 
+    /**
+     * Wenn eine SMS Empfangen wurde, wird geprüft, ob diese von einem Notfallkontakt stammt
+     * @param context
+     * @param intent
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         try {

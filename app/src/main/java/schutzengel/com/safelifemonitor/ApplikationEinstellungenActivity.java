@@ -37,7 +37,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.application_properties);
+        setContentView(R.layout.applikations_eigenschaften);
         // Read the data
         ApplikationEinstellungen applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
 
@@ -63,7 +63,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         Zeit2Von.setOnFocusChangeListener(onFocusChangeListener);
         Zeit2Bis = findViewById(R.id.Zeit2_Bis);
         Zeit2Bis.setOnFocusChangeListener(onFocusChangeListener);
-        Zeit3Von = findViewById(R.id.Zeit1_Von);
+        Zeit3Von = findViewById(R.id.Zeit3_Von);
         Zeit3Von.setOnFocusChangeListener(onFocusChangeListener);
         Zeit3Bis = findViewById(R.id.Zeit3_Bis);
         Zeit3Bis.setOnFocusChangeListener(onFocusChangeListener);

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class HauptActivity extends AppCompatActivity {
     private MonitorService monitorService = null;
     public static Context context;
     private boolean istalarmgestartet = false;
-    private MediaPlayer mediapPlayer;
+    private MediaPlayer mediaPlayer;
 
     private ServiceConnection monitorServiceConnection = new ServiceConnection() {
         @Override
@@ -51,6 +52,9 @@ public class HauptActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Beim Zerstören der App wird der monitorservice gestoppt
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -65,6 +69,9 @@ public class HauptActivity extends AppCompatActivity {
         this.monitorServiceConnection = null;
     }
 
+    /**
+     * Observer für Alarm.
+     */
     protected Handler observer = new Handler() {
         public void handleMessage(Message message) {
             switch (Ereignis.EventIdentifierMap[message.what]) {
@@ -81,6 +88,9 @@ public class HauptActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Beim Start der App werden die Kontakte Gesetzt
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onStart() {
@@ -90,6 +100,10 @@ public class HauptActivity extends AppCompatActivity {
         Log.i("HauptActivity","wurde gestartet");
     }
 
+    /**
+     * Beim erstellen der App wird dar Content gesetzt und der MonitorService gestartet
+     * @param savedInstanceState
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,28 +122,46 @@ public class HauptActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * der MediaPlayer wird gestopt
+     * @param ereignisAlarmAufheben
+     */
     private void onEvent(EreignisAlarmAufheben ereignisAlarmAufheben) {
         if(istalarmgestartet) {
-            mediapPlayer.stop();
+            mediaPlayer.stop();
             istalarmgestartet = false;
             Log.i("HauptActivity","Alarm wurde aufgehoben");
         }
     }
 
+    /**
+     * Der Mediaplayer wird gestartet und der Sound wird auf Laut gestellt.
+     * @param event
+     */
     private void onEvent(EreignisAlarmAusloesen event) {
         if(!istalarmgestartet) {
-            mediapPlayer = MediaPlayer.create(context, R.raw.alarm);
-            mediapPlayer.setLooping(true);
-            mediapPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            mediaPlayer = MediaPlayer.create(context, R.raw.alarm);
+            AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            for(int i = 0;i<=20;i++) {
+                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+            }
+            mediaPlayer.setLooping(true);
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 public void onPrepared(MediaPlayer player)
                 {
-                    mediapPlayer.start();
+                    mediaPlayer.start();
                 }
             });
             istalarmgestartet = true;
             Log.i("HauptActivity","Alarm wurde ausgelöst");
         }
     }
+
+    /**
+     * Das Optionsmenü wird erstellt
+     * @param menu
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -137,6 +169,11 @@ public class HauptActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Starten der Activitys aus dem Optionsmenü
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -156,6 +193,9 @@ public class HauptActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Setzen der Kontakte
+     */
     private void SetzeKontakte() {
         ArrayList<NotfallKontakt> Kontakte = Datenbank.getInstanz().getNotfallKontakte();
         if (Kontakte != null) {
@@ -187,7 +227,11 @@ public class HauptActivity extends AppCompatActivity {
         Log.i("HauptActivity","Kontakte wurde gesetzt");
     }
 
-    // Function to check and request permission
+    /**
+     * Prüfen der Berechtigungen
+     * @param permission
+     * @param requestCode
+     */
     public void checkPermission(String permission, int requestCode)
     {
         // Checking if permission is not granted
@@ -197,6 +241,12 @@ public class HauptActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Prüfen ob die Berechtigung zugelassen wurde
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {

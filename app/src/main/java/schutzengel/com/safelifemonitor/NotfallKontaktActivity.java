@@ -19,6 +19,10 @@ public class NotfallKontaktActivity extends AppCompatActivity {
     EditText TelefonEditor = null;
     ImageView IconBild = null;
 
+    /**
+     * Beim Erstellen werden die Editoren Initialisiert
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,10 @@ public class NotfallKontaktActivity extends AppCompatActivity {
         IconBild.setImageResource(Kontakte.get(gewaehlterKontaktIndex).getBild());
     }
 
+    /**
+     * Die Daten werden zusammengefasst und gespeichert
+     * @param view
+     */
     public void onWritePersistent(View view)
     {
         Kontakte.get(gewaehlterKontaktIndex).setAlarmTelefonNummer(TelefonEditor.getText().toString());
@@ -44,15 +52,27 @@ public class NotfallKontaktActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Das Bild wird nach Links verschoben
+     * @param view
+     */
     public void LeftImage(View view)
     {
         ChangeImage(-1);
     }
+    /**
+     * Das Bild wird nach Rechts verschoben
+     * @param view
+     */
     public void RightImage(View view)
     {
         ChangeImage(1);
     }
 
+    /**
+     * Das Bild des Kontaktes wird in eine Richtung verändert
+     * @param direction
+     */
     private void ChangeImage(int direction)
     {
         try {
@@ -71,6 +91,10 @@ public class NotfallKontaktActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Der Angezeigt Kontakt wird anhand der Priorität geändert
+     * @param view
+     */
     public void ChangeContact(View view)
     {
         try {
