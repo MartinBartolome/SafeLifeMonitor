@@ -18,6 +18,7 @@ public class NotfallKontakt {
         // This must be last definition
         Maximal
     }
+
     private Prioritaet prioritaet = Prioritaet.Prioritaet_1;
 
     public enum Icon {
@@ -28,10 +29,12 @@ public class NotfallKontakt {
         Polizei,
         Feuerwehr
     }
+
     private Icon icon = Icon.Schutzengel;
 
     /**
      * Holen der Priorität
+     *
      * @return Priorität
      */
     public Prioritaet getPrioritaet() {
@@ -40,6 +43,7 @@ public class NotfallKontakt {
 
     /**
      * Setzen der Priorität
+     *
      * @param prioritaet
      */
     public void setPrioritaet(Prioritaet prioritaet) {
@@ -48,6 +52,7 @@ public class NotfallKontakt {
 
     /**
      * Integer Wert zu Enum Wert
+     *
      * @param prioritaet
      * @return Priorität
      */
@@ -71,11 +76,11 @@ public class NotfallKontakt {
 
     /**
      * Setze die Priorität anhand eines Integer Wertes
+     *
      * @param prioritaet
      */
     public void setPrioritaet(Integer prioritaet) {
-        switch(prioritaet)
-        {
+        switch (prioritaet) {
             case 0:
                 this.prioritaet = this.prioritaet.Prioritaet_1;
                 break;
@@ -94,17 +99,16 @@ public class NotfallKontakt {
             default:
                 this.prioritaet = this.prioritaet.Maximal;
                 break;
-
         }
     }
 
     /**
      * Laden des Grossen Icons für die Kategorisierung des Kontakts
+     *
      * @return
      */
     public int getBild() {
-        switch (getIcon())
-        {
+        switch (getIcon()) {
             case Schutzengel:
                 return R.drawable.schutzengel;
             case Person:
@@ -124,11 +128,11 @@ public class NotfallKontakt {
 
     /**
      * Laden des kleinen Icons für die Kategorisierung des Kontakts
+     *
      * @return Icon
      */
     public int getkleinesBild() {
-        switch (getIcon())
-        {
+        switch (getIcon()) {
             case Schutzengel:
                 return R.drawable.schutzengel_32;
             case Person:
@@ -148,6 +152,7 @@ public class NotfallKontakt {
 
     /**
      * Holen des Icons
+     *
      * @return icon
      */
     public Icon getIcon() {
@@ -156,6 +161,7 @@ public class NotfallKontakt {
 
     /**
      * Setzen des Icons
+     *
      * @param icon
      */
     public void setIcon(Icon icon) {
@@ -164,11 +170,11 @@ public class NotfallKontakt {
 
     /**
      * Setzen des Icons anhand eines Integer Wertes
+     *
      * @param icon
      */
     public void setIcon(Integer icon) {
-        switch(icon)
-        {
+        switch (icon) {
             case 0:
                 this.icon = Icon.Schutzengel;
                 break;
@@ -187,12 +193,12 @@ public class NotfallKontakt {
             default:
                 this.icon = Icon.Feuerwehr;
                 break;
-
         }
     }
 
     /**
      * Holen der Beschreibung
+     *
      * @return Beschreibung
      */
     public String getBeschreibung() {
@@ -201,6 +207,7 @@ public class NotfallKontakt {
 
     /**
      * Setzen der Beschreibung
+     *
      * @param beschreibung
      */
     public void setBeschreibung(String beschreibung) {
@@ -209,6 +216,7 @@ public class NotfallKontakt {
 
     /**
      * Holen der Telefonnummer
+     *
      * @return Telefonnummer
      */
     public String getAlarmTelefonNummer() {
@@ -217,11 +225,10 @@ public class NotfallKontakt {
 
     /**
      * Setzen der Telefonnummer
+     *
      * @param alarmTelefonNummer
      */
     public void setAlarmTelefonNummer(String alarmTelefonNummer) {
         this.alarmTelefonNummer = alarmTelefonNummer;
     }
-
-
 }

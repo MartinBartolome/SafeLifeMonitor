@@ -11,18 +11,22 @@ import android.util.Log;
 public class SmsClient extends BroadcastReceiver {
     protected static Boolean wurdeEmpfangen = false;
 
+    /**
+     * Default Konstruktor
+     */
     public SmsClient() {
     }
 
     /**
      * Senden einer Sms and eine Telefonnummer
+     *
      * @param telefonNummer
      * @param text
      */
     public static synchronized void senden(String telefonNummer, String text) {
         try
         {
-            wurdeEmpfangen = false;
+            this.wurdeEmpfangen = false;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendMultipartTextMessage(telefonNummer, null, smsManager.divideMessage(text), null, null);
             Log.i("SmsClient","Sms wurde gesendet");
@@ -36,8 +40,8 @@ public class SmsClient extends BroadcastReceiver {
      * @return
      */
     public static synchronized boolean wurdeEmpfangen() {
-        final Boolean benachrichtigungEmpfangen = wurdeEmpfangen;
-        wurdeEmpfangen = false;
+        final Boolean benachrichtigungEmpfangen = this.wurdeEmpfangen;
+        this.wurdeEmpfangen = false;
         return benachrichtigungEmpfangen;
     }
 
@@ -51,20 +55,17 @@ public class SmsClient extends BroadcastReceiver {
         try {
             if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
                 Bundle data = intent.getExtras();
-
                 Object[] pdus = (Object[]) data.get("pdus");
-
-                for (int i = 0; i < pdus.length; i++) {
-                    SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
-
+                for (int index = 0; index < pdus.length; index++) {
+                    SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[index]);
                     String sender = smsMessage.getDisplayOriginatingAddress();
-                    for (NotfallKontakt n : Datenbank.getInstanz().getNotfallKontakte()) {
-                        if (n.getAlarmTelefonNummer().equals(sender)) {
-                            wurdeEmpfangen = true;
+                    for (NotfallKontakt notfallKontakt : Datenbank.getInstanz().getNotfallKontakte()) {
+                        if (notfallKontakt.getAlarmTelefonNummer().equals(sender)) {
+                            this.wurdeEmpfangen = true;
                             Log.i("SmsClient", "Sms wurde von " + sender + " empfangen");
                         }
                     }
-                    if (!wurdeEmpfangen) {
+                    if (!this.wurdeEmpfangen) {
                         Log.i("SmsClient", "Sms wurde von empfangen, aber von keinem Notfallkontakt");
                     }
                 }
