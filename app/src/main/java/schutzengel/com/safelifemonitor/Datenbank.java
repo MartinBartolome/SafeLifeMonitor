@@ -82,7 +82,7 @@ public class Datenbank extends SQLiteOpenHelper {
                 ApplikationEinstellungen.col_Zeit4Bis
             };
 
-            Cursor c = sqLiteDatenbank.query(ApplikationEinstellungen.TabellenName, Tabellenspalten, null, null,
+            Cursor c = sqLiteDatenbank.query(ApplikationEinstellungen.TabellenName, tabellenspalten, null, null,
                     null, null, null);
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 this.applikationsEinstellungen.setMonitorAktiv(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_MonitorEnabled)));
@@ -165,6 +165,10 @@ public class Datenbank extends SQLiteOpenHelper {
             Log.d("Datenbank","Schreiben Datenbank, Applikations-Tabelle: " + Einstellungen.toString());
 
         }
+        catch (Exception e)
+        {
+            Log.e("Datenbank","Fehler beim setzen der Applikationseinstellungen. Fehlermeldung:" +e.getMessage());
+        }
     }
 
     /**
@@ -184,7 +188,7 @@ public class Datenbank extends SQLiteOpenHelper {
             }
             this.sqLiteDatenbank.execSQL(ERSTELLE_TABELLE_APPLIKATION);
             Log.i("Datenbank", "Applikationsdatenbank erstellt");
-            this..execSQL("INSERT INTO " + ApplikationEinstellungen.TabellenName + " VALUES (0,'Rüstiger Rentner',1," + applikationsEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + "," + applikationsEinstellungen.getMonitorServiceInterval() + ",'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
+            this.sqLiteDatenbank.execSQL("INSERT INTO " + ApplikationEinstellungen.TabellenName + " VALUES (0,'Rüstiger Rentner',1," + applikationsEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + "," + applikationsEinstellungen.getMonitorServiceInterval() + ",'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
             Log.i("Datenbank", "Eintrag eingefügt");
         } catch (Exception e) {
             Log.e("Datenbank", "Fehler beim Erstellen der Datenbanken. Fehlermeldung:" + e.getMessage());
@@ -213,7 +217,7 @@ public class Datenbank extends SQLiteOpenHelper {
      */
     public void set(NotfallKontakt kontakt) {
         try {
-            if (this.sqLiteDatenbank == null || this.sqLiteDatenbank.isReadOnly() {
+            if (this.sqLiteDatenbank == null || this.sqLiteDatenbank.isReadOnly()) {
                 this.sqLiteDatenbank = getWritableDatabase();
             }
             ContentValues contentValue = new ContentValues();
@@ -231,6 +235,10 @@ public class Datenbank extends SQLiteOpenHelper {
                 kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
                 Log.d("Datenbank", "Aktualisiere Notfallkontakt, " + kontaktstring.toString());
             }
+        }
+        catch(Exception e)
+        {
+            Log.e("Datenbank","Fehler beim Setzen des Kontaktes. Fehlermeldung:" + e.getMessage());
         }
     }
 
@@ -251,7 +259,7 @@ public class Datenbank extends SQLiteOpenHelper {
      * @return Notfallkontakte
      */
     public ArrayList<NotfallKontakt> getNotfallKontakte() {
-        if (this.sqLiteDatenbank == null {
+        if (this.sqLiteDatenbank == null ){
             sqLiteDatenbank = getReadableDatabase();
         }
         ArrayList<NotfallKontakt> kontakte = new ArrayList<NotfallKontakt>();
@@ -261,10 +269,10 @@ public class Datenbank extends SQLiteOpenHelper {
             if (cursor != null) {
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                     NotfallKontakt kontakt = new NotfallKontakt();
-                    kontakt.setPrioritaet(c.getInt(c.getColumnIndex(NotfallKontakt.col_Prioritaet)));
-                    kontakt.setIcon(c.getInt(c.getColumnIndex(NotfallKontakt.col_Icon)));
-                    kontakt.setBeschreibung(c.getString(c.getColumnIndex(NotfallKontakt.col_Beschreibung)));
-                    kontakt.setAlarmTelefonNummer(c.getString(c.getColumnIndex(NotfallKontakt.col_Telefon)));
+                    kontakt.setPrioritaet(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Prioritaet)));
+                    kontakt.setIcon(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Icon)));
+                    kontakt.setBeschreibung(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Beschreibung)));
+                    kontakt.setAlarmTelefonNummer(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Telefon)));
 
                     if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
                             (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
@@ -274,7 +282,7 @@ public class Datenbank extends SQLiteOpenHelper {
                         kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
                         Log.d("Datenbank", "Notfallkontakt gelesen: " + kontaktstring.toString());
                     }
-                    Kontakte.add(kontakt);
+                    kontakte.add(kontakt);
                 }
             }
         } catch (Exception e) {
@@ -299,10 +307,10 @@ public class Datenbank extends SQLiteOpenHelper {
             Cursor cursor = sqLiteDatenbank.query(NotfallKontakt.TabellenName, tableColumns, NotfallKontakt.col_Prioritaet + "=" + prioritaet.ordinal(), null, null, null, null);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 NotfallKontakt kontakt = new NotfallKontakt();
-                kontakt.setPrioritaet(c.getInt(c.getColumnIndex(NotfallKontakt.col_Prioritaet)));
-                kontakt.setIcon(c.getInt(c.getColumnIndex(NotfallKontakt.col_Icon)));
-                kontakt.setBeschreibung(c.getString(c.getColumnIndex(NotfallKontakt.col_Beschreibung)));
-                kontakt.setAlarmTelefonNummer(c.getString(c.getColumnIndex(NotfallKontakt.col_Telefon)));
+                kontakt.setPrioritaet(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Prioritaet)));
+                kontakt.setIcon(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Icon)));
+                kontakt.setBeschreibung(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Beschreibung)));
+                kontakt.setAlarmTelefonNummer(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Telefon)));
 
                 if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
                         (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
