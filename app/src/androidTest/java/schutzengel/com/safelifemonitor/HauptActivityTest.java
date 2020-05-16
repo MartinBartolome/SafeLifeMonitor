@@ -48,7 +48,7 @@ public class HauptActivityTest {
                     "android.permission.READ_PHONE_STATE");
 
     @Test
-    public void HauptActivityTest() {
+    public void T1_T2() {
         ViewInteraction overflowMenuButton = onView(
                 allOf(withContentDescription("Weitere Optionen"),
                         childAtPosition(
@@ -87,6 +87,39 @@ public class HauptActivityTest {
         Assert.assertEquals(Datenbank.getInstanz().getNotfallKontakte().get(2).getBeschreibung(),"Yara");
         Assert.assertEquals(Datenbank.getInstanz().getNotfallKontakte().get(2).getAlarmTelefonNummer(),"0792222222");
         Assert.assertEquals(Datenbank.getInstanz().getNotfallKontakte().get(2).getPrioritaet(), NotfallKontakt.Prioritaet.Prioritaet_3);
+    }
+
+    @Test
+    public void T4()
+    {
+
+        ViewInteraction overflowMenuButton = onView(
+                allOf(withContentDescription("Weitere Optionen"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.action_bar),
+                                        1),
+                                0),
+                        isDisplayed()));
+        overflowMenuButton.perform(click());
+
+        ViewInteraction appCompatTextView = onView(
+                allOf(withId(R.id.title), withText("Einstellungen"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatTextView.perform(click());
+
+        onView(withId(R.id.AktiviereMonitoring)).perform(click());
+        onView(withId(R.id.Zeit1_Von)).perform(replaceText("06:00"),closeSoftKeyboard());
+        onView(withId(R.id.Zeit1_Bis)).perform(replaceText("17:00"),closeSoftKeyboard());
+        onView(withId(R.id.ButtonSave)).perform(click());
+
+        Assert.assertEquals(Datenbank.getInstanz().getApplikationsEinstellungen().getZeiten().get(0),"06:00");
+        Assert.assertEquals(Datenbank.getInstanz().getApplikationsEinstellungen().getZeiten().get(1),"17:00");
     }
 
     private static Matcher<View> childAtPosition(
