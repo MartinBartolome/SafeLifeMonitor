@@ -47,10 +47,10 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean hasFocus) {
                 ResetTimePicker();
                 if (hasFocus) {
-                    this.zeitSetzer = (EditText) view;
-                    this.zeitPickerDialog.show();
+                    zeitSetzer = (EditText) view;
+                    zeitPickerDialog.show();
                 } else
-                    this.zeitPickerDialog.hide();
+                    zeitPickerDialog.hide();
             }
         };
         this.zeit1Von = findViewById(R.id.Zeit1_Von);
@@ -87,8 +87,8 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         this.zeitPickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker tpView, int hourOfDay, int minute) {
-                this.zeitSetzer.setText(String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute));
-                this.zeitPickerDialog.updateTime(0, 0);
+                zeitSetzer.setText(String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute));
+                zeitPickerDialog.updateTime(0, 0);
             }
         }, 0, 0, true);
     }
@@ -112,7 +112,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         zeiten.add(this.zeit4Bis.getText().toString());
         applikationEinstellungen.setZeiten(zeiten);
         applikationEinstellungen.setSchwellwertBewegungssensor(this.seekbarSchwellwert.getProgress());
-        applikationEinstellungen.setIntervallSmsBenachrichtigung(Integer.parseInt(smsIntervthis.all.getText().toString()) * 60 * 1000);
+        applikationEinstellungen.setIntervallSmsBenachrichtigung(Integer.parseInt(smsIntervall.getText().toString()) * 60 * 1000);
         applikationEinstellungen.setMonitorAktiv(this.monitorAktiv.isChecked() ? 1 : 0);
         applikationEinstellungen.setBenutzerName(this.benutzerName.getText().toString());
         // Write persistent

@@ -44,7 +44,7 @@ public class HauptActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             MonitorService.Binder binder = (MonitorService.Binder) (service);
-            this.monitorService = binder.getMonitorService();
+            monitorService = binder.getMonitorService();
             checkPermission(Manifest.permission.RECEIVE_SMS, SMS_RECEIVE_PERMISSION_CODE);
         }
 

@@ -49,7 +49,7 @@ public class Bewegungssensor implements SensorEventListener {
         try {
             long aktuelleBewegungX = (long)(event.values[0] * this.schwellwert);
             long aktuelleBewegungY = (long)(event.values[1] * this.schwellwert);
-            this.wurdeBewegt = ((this.letzteBewegungX != this.aktuelleBewegungX) || (this.letzteBewegungY != this.aktuelleBewegungY));
+            this.wurdeBewegt = ((this.letzteBewegungX != aktuelleBewegungX) || (this.letzteBewegungY != aktuelleBewegungY));
             this.letzteBewegungX = (long)(event.values[0] * this.schwellwert);
             this.letzteBewegungY = (long)(event.values[1] * this.schwellwert);
         } catch (Exception e) {
