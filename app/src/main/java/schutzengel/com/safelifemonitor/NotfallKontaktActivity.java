@@ -11,16 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class NotfallKontaktActivity extends AppCompatActivity {
-
     private ArrayList<NotfallKontakt> Kontakte = null;
     private int gewaehlterKontaktIndex = 0;
-
-    EditText BeschreibungsEditor = null;
-    EditText TelefonEditor = null;
-    ImageView IconBild = null;
+    private EditText BeschreibungsEditor = null;
+    private EditText TelefonEditor = null;
+    private ImageView IconBild = null;
 
     /**
      * Beim Erstellen werden die Editoren Initialisiert
+     *
      * @param savedInstanceState
      */
     @Override
@@ -41,40 +40,40 @@ public class NotfallKontaktActivity extends AppCompatActivity {
 
     /**
      * Die Daten werden zusammengefasst und gespeichert
+     *
      * @param view
      */
-    public void onWritePersistent(View view)
-    {
+    public void onWritePersistent(View view) {
         Kontakte.get(gewaehlterKontaktIndex).setAlarmTelefonNummer(TelefonEditor.getText().toString());
         Kontakte.get(gewaehlterKontaktIndex).setBeschreibung(BeschreibungsEditor.getText().toString());
-
         Datenbank.getInstanz().set(Kontakte);
         finish();
     }
 
     /**
      * Das Bild wird nach Links verschoben
+     *
      * @param view
      */
-    public void LeftImage(View view)
-    {
+    public void LeftImage(View view) {
         ChangeImage(-1);
     }
+
     /**
      * Das Bild wird nach Rechts verschoben
+     *
      * @param view
      */
-    public void RightImage(View view)
-    {
+    public void RightImage(View view) {
         ChangeImage(1);
     }
 
     /**
      * Das Bild des Kontaktes wird in eine Richtung verändert
+     *
      * @param direction
      */
-    private void ChangeImage(int direction)
-    {
+    private void ChangeImage(int direction) {
         try {
             if (Kontakte.get(gewaehlterKontaktIndex).getIcon().ordinal() == 0 && direction == -1) {
                 Kontakte.get(gewaehlterKontaktIndex).setIcon(NotfallKontakt.Icon.values().length - 1);
@@ -84,23 +83,20 @@ public class NotfallKontaktActivity extends AppCompatActivity {
                 Kontakte.get(gewaehlterKontaktIndex).setIcon(Kontakte.get(gewaehlterKontaktIndex).getIcon().ordinal() + direction);
             }
             IconBild.setImageResource(Kontakte.get(gewaehlterKontaktIndex).getBild());
-        }
-        catch (Exception e)
-        {
-            Log.e("NotfallKontaktActivity","Bild konnte nicht geändert werden. Fehlermeldung: " + e.getMessage());
+        } catch (Exception e) {
+            Log.e("NotfallKontaktActivity", "Bild konnte nicht geändert werden. Fehlermeldung: " + e.getMessage());
         }
     }
 
     /**
      * Der Angezeigt Kontakt wird anhand der Priorität geändert
+     *
      * @param view
      */
-    public void ChangeContact(View view)
-    {
+    public void ChangeContact(View view) {
         try {
             Kontakte.get(gewaehlterKontaktIndex).setAlarmTelefonNummer(TelefonEditor.getText().toString());
             Kontakte.get(gewaehlterKontaktIndex).setBeschreibung(BeschreibungsEditor.getText().toString());
-
             int Prioritaet = 0;
             switch (view.getId()) {
                 case R.id.BildPrioritaet1:
@@ -119,24 +115,20 @@ public class NotfallKontaktActivity extends AppCompatActivity {
                     Prioritaet = NotfallKontakt.Prioritaet.Prioritaet_5.ordinal();
                     break;
             }
-
             for (NotfallKontakt k : Kontakte) {
                 if (k.getPrioritaet().ordinal() == Prioritaet) {
                     gewaehlterKontaktIndex = Kontakte.indexOf(k);
                 }
             }
-
             BeschreibungsEditor.setText(Kontakte.get(gewaehlterKontaktIndex).getBeschreibung());
             TelefonEditor.setText(Kontakte.get(gewaehlterKontaktIndex).getAlarmTelefonNummer());
             IconBild.setImageResource(Kontakte.get(gewaehlterKontaktIndex).getBild());
-        }
-        catch (Exception e)
-        {
-            Log.e("NotfallKontaktActivity","Kontakt konnte nicht geändert werden. Fehlermeldung: " + e.getMessage());
+        } catch (Exception e) {
+            Log.e("NotfallKontaktActivity", "Kontakt konnte nicht geändert werden. Fehlermeldung: " + e.getMessage());
         }
     }
-    public void Close(View view)
-    {
+
+    public void Close(View view) {
         finish();
     }
 }

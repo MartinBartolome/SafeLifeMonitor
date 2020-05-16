@@ -17,16 +17,18 @@ public class Bewegungssensor implements SensorEventListener {
 
     /**
      * Initialisieren des Bewegungssensors
+     *
      * @param context
      */
     public Bewegungssensor(Context context) {
-        SensorManager sensorManager = (SensorManager)(context.getSystemService(Context.SENSOR_SERVICE));
+        SensorManager sensorManager = (SensorManager) (context.getSystemService(Context.SENSOR_SERVICE));
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(TYPE_ACCELEROMETER), sensorManager.SENSOR_DELAY_NORMAL);
-        Log.i("Bewegungssensor","Sensor Listener wurde registriert");
+        Log.i("Bewegungssensor", "Sensor Listener wurde registriert");
     }
 
     /**
      * Abfrage, ob das Gerät in der zwischenzeit Bewegt wurde
+     *
      * @param schwellwert
      * @return Wurde das gerät bewegt?
      */
@@ -39,6 +41,7 @@ public class Bewegungssensor implements SensorEventListener {
 
     /**
      * Wenn der Sensor sich verändert hat, wird mithilfe des Schwellwerts überprüft, ob Das Gerät bewegt hat.
+     *
      * @param event
      */
     @Override
@@ -46,15 +49,21 @@ public class Bewegungssensor implements SensorEventListener {
         try {
             long aktuelleBewegungX = (long)(event.values[0] * this.schwellwert);
             long aktuelleBewegungY = (long)(event.values[1] * this.schwellwert);
-            this.wurdeBewegt = ((letzteBewegungX != aktuelleBewegungX) || (letzteBewegungY != aktuelleBewegungY));
-            letzteBewegungX = (long)(event.values[0] * this.schwellwert);
-            letzteBewegungY = (long)(event.values[1] * this.schwellwert);
+            this.wurdeBewegt = ((this.letzteBewegungX != this.aktuelleBewegungX) || (this.letzteBewegungY != this.aktuelleBewegungY));
+            this.letzteBewegungX = (long)(event.values[0] * this.schwellwert);
+            this.letzteBewegungY = (long)(event.values[1] * this.schwellwert);
         } catch (Exception e) {
             this.wurdeBewegt = false;
-            Log.e("Bewegungssensor","Berechnung der Bewegung konnte nicht durchgeführt werden. Fehlermeldung: " + e.getMessage());
+            Log.e("Bewegungssensor", "Berechnung der Bewegung konnte nicht durchgeführt werden. Fehlermeldung: " + e.getMessage());
         }
     }
 
+    /**
+     * Die Sensoraufloesung hat geaendert
+     *
+     * @param sensor
+     * @param accuracy
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }

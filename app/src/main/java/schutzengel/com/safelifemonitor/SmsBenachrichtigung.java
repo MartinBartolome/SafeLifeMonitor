@@ -6,6 +6,7 @@ public class SmsBenachrichtigung {
 
     /**
      * Erstellen einer SmsBenachrichtigung
+     *
      * @param telefonNummer
      * @param text
      */
@@ -16,6 +17,7 @@ public class SmsBenachrichtigung {
 
     /**
      * Holen der Telefonnummer
+     *
      * @return Telefonnummer
      */
     public String getTelefonNummer() {
@@ -24,6 +26,7 @@ public class SmsBenachrichtigung {
 
     /**
      * Holen des Textes
+     *
      * @return Text
      */
     public String getText() {

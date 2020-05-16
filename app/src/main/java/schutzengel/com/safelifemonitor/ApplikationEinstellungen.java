@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ApplikationEinstellungen {
     public static final String TabellenName = "AnwendungsEinstellungen";
-    public static final String col_Schwellwert= "SchwellwertBewegungssensor";
+    public static final String col_Schwellwert = "SchwellwertBewegungssensor";
     public static final String col_MaxInactive = "MaximaleAnzahlInaktiveBewegungen";
     public static final String col_Intervall = "MonitorServiceIntervalInMillisekunden";
     public static final String col_MonitorEnabled = "MonitorEnabled";
@@ -21,13 +21,14 @@ public class ApplikationEinstellungen {
     protected int maximaleAnzahlInaktiveBewegungen = 1800; // nach 30 min geht der alarm los
     protected int monitorServiceIntervalInMillisekunden = 1000; // jede sekunde
     protected int intervallSmsBenachrichtigungInMillisekunden = 300000; // nach 5 min wird der nächste Kontakt benachrichtigt
-    protected  Boolean istMonitorAktiv = true;
-    protected ArrayList <String> zeiten = new ArrayList<>();
-    protected ArrayList <Integer> zeitenInSekunden = new ArrayList<>();
+    protected Boolean istMonitorAktiv = true;
+    protected ArrayList<String> zeiten = new ArrayList<>();
+    protected ArrayList<Integer> zeitenInSekunden = new ArrayList<>();
     protected String benutzerName = "Rüstiger Rentner";
 
     /**
-     * HOlen des Schwellwerts des Bewegungssensors
+     * Holen des Schwellwerts des Bewegungssensors
+     *
      * @return schwellwert
      */
     public int getSchwellwertBewegungssensor() {
@@ -35,7 +36,8 @@ public class ApplikationEinstellungen {
     }
 
     /**
-     *  Setzen des Schwellwerts des Bewegungssensors
+     * Setzen des Schwellwerts des Bewegungssensors
+     *
      * @param schwellwert
      */
     public void setSchwellwertBewegungssensor(int schwellwert) {
@@ -44,6 +46,7 @@ public class ApplikationEinstellungen {
 
     /**
      * Holen des Werts für die Maximale Anzahl Inaktiver Bewegungen
+     *
      * @return Maximale Anzahl Inaktiver Bewegungen
      */
     public int getMaximaleAnzahlInaktiveBewegungen() {
@@ -52,6 +55,7 @@ public class ApplikationEinstellungen {
 
     /**
      * Setzen des WErts für die Maximale Anzahl Inaktiver Bewegungen
+     *
      * @param anzahl
      */
     public void setMaximaleAnzahlInaktiveBewegungen(int anzahl) {
@@ -60,6 +64,7 @@ public class ApplikationEinstellungen {
 
     /**
      * Holen des Werts für den ServiceIntervall in Millisekunden (Standard 1 Sekunde / 1000ms)
+     *
      * @return Monitor Service Intervall
      */
     public int getMonitorServiceInterval() {
@@ -68,6 +73,7 @@ public class ApplikationEinstellungen {
 
     /**
      * Setzen des Monitor Service Intervalls in Millisekunden
+     *
      * @param millisekunden
      */
     public void setMonitorServiceInterval(int millisekunden) {
@@ -76,6 +82,7 @@ public class ApplikationEinstellungen {
 
     /**
      * Holen des Benutzernamens
+     *
      * @return Benutzername
      */
     public String getBenutzerName() {
@@ -84,6 +91,7 @@ public class ApplikationEinstellungen {
 
     /**
      * Setzen des Benutzernamens
+     *
      * @param BenutzerName
      */
     public void setBenutzerName(String BenutzerName) {
@@ -92,18 +100,19 @@ public class ApplikationEinstellungen {
 
     /**
      * Holen der Eingebenenen Überwachungszeiten
+     *
      * @return Überwachungszeiten
      */
-    public ArrayList<String> getZeiten()
-    {
+    public ArrayList<String> getZeiten() {
         return this.zeiten;
     }
 
     /**
      * Setzen der Überwachungszeiten
+     *
      * @param zeiten
      */
-    public void setZeiten(ArrayList<String> zeiten)    {
+    public void setZeiten(ArrayList<String> zeiten) {
         this.zeiten = zeiten;
         this.zeitenInSekunden.clear();
         for (String zeit : this.zeiten) {
@@ -116,6 +125,7 @@ public class ApplikationEinstellungen {
 
     /**
      * Holen des Wertes, ob das Überwachen Aktiv ist
+     *
      * @return Monitor Aktiv?
      */
     public Boolean getMonitorAktiv() {
@@ -124,77 +134,92 @@ public class ApplikationEinstellungen {
 
     /**
      * Setzen des Wertes, ob das Überwachen Aktiv ist
+     *
      * @param aktiv
      */
     public void setMonitorAktiv(int aktiv) {
-        if(aktiv == 1) {
+        if (aktiv == 1) {
             this.istMonitorAktiv = true;
-        }
-        else
-        {
+        } else {
             this.istMonitorAktiv = false;
         }
     }
 
     /**
      * Hole Sekunden der Zeit 1 (Von)
+     *
      * @return Sekunden Zeit 1 (Von)
      */
     public int getSekundenZeit1Von() {
         return this.zeitenInSekunden.get(0);
     }
+
     /**
      * Hole Sekunden der Zeit 1 (Bis)
+     *
      * @return Sekunden Zeit 1 (Bis)
      */
-    public  int getSekundenZeit1Bis() {
+    public int getSekundenZeit1Bis() {
         return this.zeitenInSekunden.get(1);
     }
+
     /**
      * Hole Sekunden der Zeit 2 (Von)
+     *
      * @return Sekunden Zeit 2 (Von)
      */
-    public  int getSekundenZeit2Von() {
+    public int getSekundenZeit2Von() {
         return this.zeitenInSekunden.get(2);
     }
+
     /**
      * Hole Sekunden der Zeit 2 (Bis)
+     *
      * @return Sekunden Zeit 2 (Bis)
      */
-    public  int getSekundenZeit2Bis() {
+    public int getSekundenZeit2Bis() {
         return this.zeitenInSekunden.get(3);
     }
+
     /**
      * Hole Sekunden der Zeit 3 (Von)
+     *
      * @return Sekunden Zeit 3 (Von)
      */
-    public  int getSekundenZeit3Von() {
+    public int getSekundenZeit3Von() {
         return this.zeitenInSekunden.get(4);
     }
+
     /**
      * Hole Sekunden der Zeit 3 (Bis)
+     *
      * @return Sekunden Zeit 3 (Bis)
      */
-    public  int getSekundenZeit3Bis() {
+    public int getSekundenZeit3Bis() {
         return this.zeitenInSekunden.get(5);
     }
+
     /**
      * Hole Sekunden der Zeit 4 (Von)
+     *
      * @return Sekunden Zeit 4 (Von)
      */
-    public  int getSekundenZeit4Von() {
+    public int getSekundenZeit4Von() {
         return this.zeitenInSekunden.get(6);
     }
+
     /**
      * Hole Sekunden der Zeit 4 (Bis)
+     *
      * @return Sekunden Zeit 4 (Bis)
      */
-    public  int getSekundenZeit4Bis() {
+    public int getSekundenZeit4Bis() {
         return this.zeitenInSekunden.get(7);
     }
 
     /**
      * Holen des Wertes für den Intervall der SMS Benachrichtigungen
+     *
      * @return Intervall der SMS Benachrichtigungen
      */
     public int getIntervallSmsBenachrichtigung() {
@@ -203,6 +228,7 @@ public class ApplikationEinstellungen {
 
     /**
      * Setzen des WErtes für den Intervall der SMS Benachrichtigungen
+     *
      * @param Millisekunden
      */
     public void setIntervallSmsBenachrichtigung(int Millisekunden) {
@@ -211,6 +237,7 @@ public class ApplikationEinstellungen {
 
     /**
      * Abrufen des Textes, der als SMS verschickt werden Soll
+     *
      * @return SMS Text
      */
     public String getSmsBenachrichtigungText() {

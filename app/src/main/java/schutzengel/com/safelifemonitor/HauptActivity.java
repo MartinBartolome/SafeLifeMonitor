@@ -25,6 +25,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import java.util.ArrayList;
 
 public class HauptActivity extends AppCompatActivity {
@@ -35,15 +36,15 @@ public class HauptActivity extends AppCompatActivity {
     private static final int READ_PHONE_STATE = 103;
     private Intent monitorServiceIntent = null;
     private MonitorService monitorService = null;
-    public static Context context;
-    private boolean istalarmgestartet = false;
-    private MediaPlayer mediaPlayer;
+    public static Context context = null;
+    private boolean istAlarmGestartet = false;
+    private MediaPlayer mediaPlayer = null;
 
     private ServiceConnection monitorServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             MonitorService.Binder binder = (MonitorService.Binder) (service);
-            monitorService = binder.getMonitorService();
+            this.monitorService = binder.getMonitorService();
             checkPermission(Manifest.permission.RECEIVE_SMS, SMS_RECEIVE_PERMISSION_CODE);
         }
 
@@ -97,11 +98,12 @@ public class HauptActivity extends AppCompatActivity {
         super.onStart();
         context = this;
         SetzeKontakte();
-        Log.i("HauptActivity","wurde gestartet");
+        Log.i("HauptActivity", "wurde gestartet");
     }
 
     /**
      * Beim erstellen der App wird dar Content gesetzt und der MonitorService gestartet
+     *
      * @param savedInstanceState
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -116,49 +118,51 @@ public class HauptActivity extends AppCompatActivity {
             this.monitorServiceIntent.putExtra("Messenger", new Messenger(this.observer));
             bindService(this.monitorServiceIntent, this.monitorServiceConnection, BIND_AUTO_CREATE);
             startService(this.monitorServiceIntent);
-            Log.i("HauptActivity","wurde erstellt");
+            Log.i("HauptActivity", "wurde erstellt");
         } catch (Exception e) {
-            Log.e("HauptActivity","Fehler beim erstellen. Fehlermeldung: " + e.getMessage());
+            Log.e("HauptActivity", "Fehler beim erstellen. Fehlermeldung: " + e.getMessage());
         }
     }
 
     /**
      * der MediaPlayer wird gestopt
+     *
      * @param ereignisAlarmAufheben
      */
     private void onEvent(EreignisAlarmAufheben ereignisAlarmAufheben) {
-        if(istalarmgestartet) {
-            mediaPlayer.stop();
-            istalarmgestartet = false;
-            Log.i("HauptActivity","Alarm wurde aufgehoben");
+        if (this.istAlarmGestartet) {
+            this.mediaPlayer.stop();
+            this.istAlarmGestartet = false;
+            Log.i("HauptActivity", "Alarm wurde aufgehoben");
         }
     }
 
     /**
      * Der Mediaplayer wird gestartet und der Sound wird auf Laut gestellt.
+     *
      * @param event
      */
     private void onEvent(EreignisAlarmAusloesen event) {
-        if(!istalarmgestartet) {
-            mediaPlayer = MediaPlayer.create(context, R.raw.alarm);
+        if (!this.istAlarmGestartet) {
+            this.mediaPlayer = MediaPlayer.create(context, R.raw.alarm);
             AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            for(int i = 0;i<=20;i++) {
+            for (int index = 0; index <= 20; index++) {
                 audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
             }
-            mediaPlayer.setLooping(true);
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer player)
-                {
+            this.mediaPlayer.setLooping(true);
+            this.mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                public void onPrepared(MediaPlayer player) {
                     mediaPlayer.start();
                 }
             });
-            istalarmgestartet = true;
-            Log.i("HauptActivity","Alarm wurde ausgelöst");
+            this.istAlarmGestartet = true;
+            Log.i("HauptActivity", "Alarm wurde ausgelöst");
         }
     }
 
     /**
      * Das Optionsmenü wird erstellt
+     *
      * @param menu
      * @return true
      */
@@ -171,6 +175,7 @@ public class HauptActivity extends AppCompatActivity {
 
     /**
      * Starten der Activitys aus dem Optionsmenü
+     *
      * @param item
      * @return
      */
@@ -181,12 +186,12 @@ public class HauptActivity extends AppCompatActivity {
             case R.id.Kontakt_Einstellungen:
                 Intent KontaktEinstellungen = new Intent(this, schutzengel.com.safelifemonitor.NotfallKontaktActivity.class);
                 this.startActivity(KontaktEinstellungen);
-                Log.i("HauptActivity","Notfall Kontakt Aktivität wurde gestartet");
+                Log.i("HauptActivity", "Notfall Kontakt Aktivität wurde gestartet");
                 return true;
             case R.id.Applikations_Einstellungen:
                 Intent ApplikationsEinstellungen = new Intent(this, schutzengel.com.safelifemonitor.ApplikationEinstellungenActivity.class);
                 this.startActivity(ApplikationsEinstellungen);
-                Log.i("HauptActivity","Applikations Einstellungen Aktivität wurde gestartet");
+                Log.i("HauptActivity", "Applikations Einstellungen Aktivität wurde gestartet");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -197,9 +202,9 @@ public class HauptActivity extends AppCompatActivity {
      * Setzen der Kontakte
      */
     private void SetzeKontakte() {
-        ArrayList<NotfallKontakt> Kontakte = Datenbank.getInstanz().getNotfallKontakte();
-        if (Kontakte != null) {
-            for (NotfallKontakt kontakt : Kontakte) {
+        ArrayList<NotfallKontakt> kontakte = Datenbank.getInstanz().getNotfallKontakte();
+        if (kontakte != null) {
+            for (NotfallKontakt kontakt : kontakte) {
                 TextView TextViewKontakt;
                 switch (kontakt.getPrioritaet()) {
                     case Prioritaet_1:
@@ -224,70 +229,64 @@ public class HauptActivity extends AppCompatActivity {
                 TextViewKontakt.setCompoundDrawablesWithIntrinsicBounds(kontakt.getkleinesBild(), 0, 0, 0);
             }
         }
-        Log.i("HauptActivity","Kontakte wurde gesetzt");
+        Log.i("HauptActivity", "Kontakte wurde gesetzt");
     }
 
     /**
      * Prüfen der Berechtigungen
+     *
      * @param permission
      * @param requestCode
      */
-    public void checkPermission(String permission, int requestCode)
-    {
+    public void checkPermission(String permission, int requestCode) {
         // Checking if permission is not granted
         if (ContextCompat.checkSelfPermission(monitorService, permission) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(HauptActivity.this, new String[] { permission }, requestCode);
+            ActivityCompat.requestPermissions(HauptActivity.this, new String[]{permission}, requestCode);
+            Log.d("HauptActivity", "Berechtigung " + permission + " mit Code: " + requestCode + "wurde angefragt");
         }
     }
 
     /**
      * Prüfen ob die Berechtigung zugelassen wurde
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == SMS_READ_PERMISSION_CODE) {
             // Checking whether user granted the permission or not.
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde erteilt!" );
+                Log.i("HauptActivity", "Berechtigung mit dem code: " + requestCode + "wurde erteilt!");
                 checkPermission(Manifest.permission.SEND_SMS, SMS_SEND_PERMISSION_CODE);
+            } else {
+                Log.w("HauptActivity", "Berechtigung mit dem code: " + requestCode + "wurde nicht erteilt!");
             }
-            else {
-                Log.w("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde nicht erteilt!" );
-            }
-        }
-        else if (requestCode == SMS_RECEIVE_PERMISSION_CODE) {
+        } else if (requestCode == SMS_RECEIVE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde erteilt!" );
+                Log.i("HauptActivity", "Berechtigung mit dem code: " + requestCode + "wurde erteilt!");
                 checkPermission(Manifest.permission.READ_SMS, SMS_READ_PERMISSION_CODE);
+            } else {
+                Log.w("HauptActivity", "Berechtigung mit dem code: " + requestCode + "wurde nicht erteilt!");
             }
-            else {
-                Log.w("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde nicht erteilt!" );
-            }
-        }
-        else if (requestCode == SMS_SEND_PERMISSION_CODE) {
+        } else if (requestCode == SMS_SEND_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde erteilt!" );
+                Log.i("HauptActivity", "Berechtigung mit dem code: " + requestCode + "wurde erteilt!");
                 checkPermission(Manifest.permission.READ_PHONE_STATE, READ_PHONE_STATE);
+            } else {
+                Log.w("HauptActivity", "Berechtigung mit dem code: " + requestCode + "wurde nicht erteilt!");
             }
-            else {
-                Log.w("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde nicht erteilt!" );
-            }
-        }
-        else if (requestCode == READ_PHONE_STATE) {
+        } else if (requestCode == READ_PHONE_STATE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde erteilt!" );
-            }
-            else {
-                Log.w("HauptActivity","Berechtigung mit dem code: " +requestCode + "wurde nicht erteilt!" );
+                Log.i("HauptActivity", "Berechtigung mit dem code: " + requestCode + "wurde erteilt!");
+            } else {
+                Log.w("HauptActivity", "Berechtigung mit dem code: " + requestCode + "wurde nicht erteilt!");
             }
         }
     }
