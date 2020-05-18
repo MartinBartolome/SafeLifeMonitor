@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.GUI;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -11,6 +11,10 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+
+import schutzengel.com.safelifemonitor.Datenbank.ApplikationEinstellungen;
+import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.R;
 
 public class ApplikationEinstellungenActivity extends AppCompatActivity {
     private EditText zeitSetzer;

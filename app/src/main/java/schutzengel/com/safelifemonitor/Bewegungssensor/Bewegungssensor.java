@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.Bewegungssensor;
 
 import android.content.Context;
 import android.hardware.Sensor;

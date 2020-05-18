@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.SMSClient;
 
 public class SmsBenachrichtigung {
     private String telefonNummer = "";

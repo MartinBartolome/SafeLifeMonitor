@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.Datenbank;
 
 import java.util.ArrayList;
 

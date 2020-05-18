@@ -14,17 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".MonitorService"
+            android:name=".Service.MonitorService"
             android:enabled="true"
             android:exported="false"/>
-        <receiver android:name=".SmsClient"  android:exported="true">
+        <receiver android:name=".SMSClient.SmsClient"  android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
-        <activity android:name=".ApplikationEinstellungenActivity" />
-        <activity android:name=".NotfallKontaktActivity" />
-        <activity android:name=".HauptActivity">
+        <activity android:name=".GUI.ApplikationEinstellungenActivity" />
+        <activity android:name=".GUI.NotfallKontaktActivity" />
+        <activity android:name=".GUI.HauptActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

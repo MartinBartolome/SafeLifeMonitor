@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.Datenbank;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+
+import schutzengel.com.safelifemonitor.GUI.HauptActivity;
 
 public class Datenbank extends SQLiteOpenHelper {
     private SQLiteDatabase sqLiteDatenbank = null;

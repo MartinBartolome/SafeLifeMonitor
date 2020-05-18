@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.SMSClient;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
+
+import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
 
 public class SmsClient extends BroadcastReceiver {
     protected static Boolean wurdeEmpfangen = false;
