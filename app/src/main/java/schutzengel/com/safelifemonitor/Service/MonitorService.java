@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.Service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -11,8 +11,14 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import java.util.Calendar;
 import java.util.Timer;
+
+import schutzengel.com.safelifemonitor.Bewegungssensor.Bewegungssensor;
+import schutzengel.com.safelifemonitor.Datenbank.ApplikationEinstellungen;
+import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
+import schutzengel.com.safelifemonitor.SMSClient.SmsClient;
+import schutzengel.com.safelifemonitor.Tools.DateTime;
 
 public class MonitorService extends Service {
     public enum Zustand {
