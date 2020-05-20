@@ -35,7 +35,7 @@ public class MonitorService extends Service {
     private IBinder binder = null;
     private Bewegungssensor bewegungssensor = null;
     private ApplikationEinstellungen applikationsEinstellungen = null;
-    private Zustand zustand = Zustand.Undefiniert;
+    public Zustand zustand = Zustand.Undefiniert;
     private final int tagInSekunden = 86400;
 
     public class Binder extends android.os.Binder {
