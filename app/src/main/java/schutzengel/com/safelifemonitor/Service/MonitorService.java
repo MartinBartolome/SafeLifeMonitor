@@ -11,6 +11,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.Calendar;
 import java.util.Timer;
 
 import schutzengel.com.safelifemonitor.Bewegungssensor.Bewegungssensor;
@@ -27,7 +28,7 @@ public class MonitorService extends Service {
         Alarmieren
     }
 
-    private int anzahlInaktiveBewegungen = 0;
+    public int anzahlInaktiveBewegungen = 0;
     private int tickZaehler = 0;
     private NotfallKontakt.Prioritaet prioritaetNotfallkontakt = NotfallKontakt.Prioritaet.Prioritaet_1;
     private Timer timer = null;
@@ -210,29 +211,27 @@ public class MonitorService extends Service {
         if (0 == (this.tickZaehler % 30)) {
             return false;
         }
-        final long jetzt = DateTime.getEpochTimestamp();
-        final long mitternacht = DateTime.getTodayMidnightEpochTimestamp();
-        return (!istImMonitorZeitraum(mitternacht, jetzt, this.applikationsEinstellungen.getSekundenZeit1Von(), this.applikationsEinstellungen.getSekundenZeit1Bis()) ||
-                !istImMonitorZeitraum(mitternacht, jetzt, this.applikationsEinstellungen.getSekundenZeit2Von(), this.applikationsEinstellungen.getSekundenZeit2Bis()) ||
-                !istImMonitorZeitraum(mitternacht, jetzt, this.applikationsEinstellungen.getSekundenZeit3Von(), this.applikationsEinstellungen.getSekundenZeit3Bis()) ||
-                !istImMonitorZeitraum(mitternacht, jetzt, this.applikationsEinstellungen.getSekundenZeit4Von(), this.applikationsEinstellungen.getSekundenZeit4Bis()));
+        return (istImMonitorZeitraum(this.applikationsEinstellungen.getSekundenZeit1Von(), this.applikationsEinstellungen.getSekundenZeit1Bis()) |
+                istImMonitorZeitraum(this.applikationsEinstellungen.getSekundenZeit2Von(), this.applikationsEinstellungen.getSekundenZeit2Bis()) |
+                istImMonitorZeitraum(this.applikationsEinstellungen.getSekundenZeit3Von(), this.applikationsEinstellungen.getSekundenZeit3Bis()) |
+                istImMonitorZeitraum(this.applikationsEinstellungen.getSekundenZeit4Von(), this.applikationsEinstellungen.getSekundenZeit4Bis()));
     }
 
     /**
      * Überprüfung ob die übergebene Zeit im Monitor zeitraum ist
      *
-     * @param mitternachtInSekunden
-     * @param jetztSekunden
      * @param zeitraumVonSekunden
      * @param zeitraumBisSekunden
      * @return
      */
-    private Boolean istImMonitorZeitraum(final long mitternachtInSekunden, final long jetztSekunden, final long zeitraumVonSekunden, final long zeitraumBisSekunden) {
-        int anzahlTage = 1;
-        if (zeitraumVonSekunden <= zeitraumBisSekunden) {
-            anzahlTage = 2;
-        }
-        return ((jetztSekunden >= (mitternachtInSekunden - (anzahlTage * this.tagInSekunden) + zeitraumVonSekunden)) && (jetztSekunden <= (mitternachtInSekunden - this.tagInSekunden + zeitraumBisSekunden)));
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Boolean istImMonitorZeitraum(final long zeitraumVonSekunden, final long zeitraumBisSekunden) {
+        Calendar calendar = Calendar.getInstance();
+        final long jetzt = calendar.getTimeInMillis();
+        boolean case1 = zeitraumVonSekunden < jetzt;
+        boolean case2 = zeitraumBisSekunden > jetzt;
+        boolean ergebnis = case1 & case2;
+        return ergebnis;
     }
 
     /**
