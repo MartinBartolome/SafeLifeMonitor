@@ -202,7 +202,7 @@ public class MonitorService extends Service {
      * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private Boolean istInMoitorZeitraum() {
+    public Boolean istInMoitorZeitraum() {
         if (!this.applikationsEinstellungen.getMonitorAktiv()) {
             return false;
         }

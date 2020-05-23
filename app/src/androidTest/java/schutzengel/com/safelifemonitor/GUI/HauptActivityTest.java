@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.GUI;
 
 
 import android.Manifest;
@@ -31,15 +31,27 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.sql.Array;
+import java.sql.Time;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
 import schutzengel.com.safelifemonitor.GUI.HauptActivity;
 import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
+import schutzengel.com.safelifemonitor.R;
 import schutzengel.com.safelifemonitor.Service.Ereignis;
 import schutzengel.com.safelifemonitor.Service.EreignisAlarmAufheben;
 import schutzengel.com.safelifemonitor.Service.EreignisAlarmAusloesen;
 import schutzengel.com.safelifemonitor.Service.MonitorService;
+import schutzengel.com.safelifemonitor.Tools.DateTime;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 import static androidx.test.espresso.Espresso.onView;
@@ -74,7 +86,7 @@ public class HauptActivityTest {
     @Test
     public void T1_T2() {
         ViewInteraction overflowMenuButton = onView(
-                allOf(withContentDescription("Weitere Optionen"),
+                allOf(withContentDescription("More options"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.action_bar),
@@ -118,7 +130,7 @@ public class HauptActivityTest {
     {
 
         ViewInteraction overflowMenuButton = onView(
-                allOf(withContentDescription("Weitere Optionen"),
+                allOf(withContentDescription("More options"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.action_bar),
@@ -142,69 +154,41 @@ public class HauptActivityTest {
         onView(withId(R.id.Zeit1_Bis)).perform(replaceText("17:00"),closeSoftKeyboard());
         onView(withId(R.id.ButtonSave)).perform(click());
 
+        Assert.assertEquals(Datenbank.getInstanz().getApplikationsEinstellungen().getMonitorAktiv(),true);
         Assert.assertEquals(Datenbank.getInstanz().getApplikationsEinstellungen().getZeiten().get(0),"06:00");
         Assert.assertEquals(Datenbank.getInstanz().getApplikationsEinstellungen().getZeiten().get(1),"17:00");
-    }
-
-    private Intent monitorServiceIntent = null;
-    private MonitorService monitorService = null;
-
-    private ServiceConnection monitorServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            MonitorService.Binder binder = (MonitorService.Binder) (service);
-            monitorService = binder.getMonitorService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-        }
-    };
-
-    protected Handler observer = new Handler() {
-        public void handleMessage(Message message) {
-            switch (Ereignis.EventIdentifierMap[message.what]) {
-                case AlarmAufheben:
-                    onEvent(new EreignisAlarmAufheben());
-                    break;
-                case AlarmAusloesen:
-                    onEvent(new EreignisAlarmAusloesen());
-                    break;
-                default:
-                    break;
-            }
-            super.handleMessage(message);
-        }
-    };
-
-    /**
-     * der MediaPlayer wird gestopt
-     *
-     * @param ereignisAlarmAufheben
-     */
-    private void onEvent(EreignisAlarmAufheben ereignisAlarmAufheben) {
-
-    }
-
-    private void onEvent(EreignisAlarmAusloesen event) {
-
     }
 
     @Test
     public void T5() throws TimeoutException {
         // Create the service Intent.
-        monitorServiceIntent =
+        Intent monitorServiceIntent =
                 new Intent(ApplicationProvider.getApplicationContext(),
                         MonitorService.class);
 
-        // Data can be passed to the service via the Intent.
-        monitorServiceIntent.putExtra("Messenger", new Messenger(this.observer));
 
         // Bind the service and grab a reference to the binder.
-        IBinder binder = serviceRule.bindService(this.monitorServiceIntent, this.monitorServiceConnection, BIND_AUTO_CREATE);
+        IBinder binder = serviceRule.bindService(monitorServiceIntent);
+
+        MonitorService monitorService = ((MonitorService.Binder)binder).getMonitorService();
+
+        if(Datenbank.getInstanz().getApplikationsEinstellungen().getMonitorAktiv() == false)
+            Assert.fail();
+        if(Datenbank.getInstanz().getApplikationsEinstellungen().getSekundenZeit1Von() != 21600)
+            Assert.fail();
+        if(Datenbank.getInstanz().getApplikationsEinstellungen().getSekundenZeit1Bis() != 61200)
+            Assert.fail();
+
+        int local = LocalDateTime.now().getHour();
+        List<Integer> timearray = Arrays.asList(6,7,8,9,10,11,12,13,14,15,16);
 
         // Verify that the service is working correctly.
-        Assert.assertEquals(monitorService.zustand, MonitorService.Zustand.Ueberwachen);
+        if(timearray.contains(LocalDateTime.now().getHour())) {
+            Assert.assertEquals(monitorService.istInMoitorZeitraum(), true);
+        }
+        else{
+            Assert.assertEquals(monitorService.istInMoitorZeitraum(), false);
+        }
     }
 
     private static Matcher<View> childAtPosition(
