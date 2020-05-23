@@ -80,7 +80,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         FuelleZeiten(applikationsEinstellungen.getZeiten());
         this.seekbarSchwellwert.setProgress(applikationsEinstellungen.getSchwellwertBewegungssensor());
         this.smsIntervall.setText(Integer.toString(applikationsEinstellungen.getIntervallSmsBenachrichtigung() / 1000 / 60));
-        this.monitorAktiv.setActivated(applikationsEinstellungen.getMonitorAktiv());
+        this.monitorAktiv.setChecked(applikationsEinstellungen.getMonitorAktiv());
         this.benutzerName.setText(applikationsEinstellungen.getBenutzerName());
     }
 
