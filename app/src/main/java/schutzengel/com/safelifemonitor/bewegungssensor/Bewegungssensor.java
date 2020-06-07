@@ -37,6 +37,7 @@ public class Bewegungssensor implements SensorEventListener {
         this.schwellwert = schwellwert;
         Boolean wurdeBewegt = this.wurdeBewegt;
         this.wurdeBewegt = false;
+        Log.d("Bewegungssensor","wurde bewegt = " + wurdeBewegt);
         return wurdeBewegt;
     }
 

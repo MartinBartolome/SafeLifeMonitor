@@ -133,7 +133,7 @@ public class HauptActivity extends AppCompatActivity {
             if (this.istAlarmGestartet) {
                 this.mediaPlayer.stop();
                 this.istAlarmGestartet = false;
-                Log.i("HauptActivity", "Alarm wurde aufgehoben");
+                Log.i("HauptActivity", "Alarmsound aufgehoben");
             }
         }
         else if(e == Ereignis.EventIdentifier.AlarmAusloesen)
@@ -152,7 +152,7 @@ public class HauptActivity extends AppCompatActivity {
                     }
                 });
                 this.istAlarmGestartet = true;
-                Log.i("HauptActivity", "Alarm wurde ausgelöst");
+                Log.i("HauptActivity", "Alarm Sound gestartet");
             }
         }
     }

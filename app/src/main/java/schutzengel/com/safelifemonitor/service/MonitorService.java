@@ -135,6 +135,7 @@ public class MonitorService extends Service {
     private class TimerTask extends java.util.TimerTask {
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void run() {
+            Log.d("MonitorService","Zustand = " + zustand);
             switch (zustand) {
                 case Alarmieren:
                     onAlarmieren();
@@ -145,6 +146,7 @@ public class MonitorService extends Service {
                 default:
                     break;
             }
+
             tickZaehler++;
         }
     }
