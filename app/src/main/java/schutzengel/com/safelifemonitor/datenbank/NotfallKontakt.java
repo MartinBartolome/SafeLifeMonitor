@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor.Datenbank;
+package schutzengel.com.safelifemonitor.datenbank;
 
 import schutzengel.com.safelifemonitor.R;
 
@@ -44,18 +44,9 @@ public class NotfallKontakt {
     }
 
     /**
-     * Setzen der Priorität
-     *
-     * @param prioritaet
-     */
-    public void setPrioritaet(Prioritaet prioritaet) {
-        this.prioritaet = prioritaet;
-    }
-
-    /**
      * Integer Wert zu Enum Wert
      *
-     * @param prioritaet
+     * @param prioritaet Priorität
      * @return Priorität
      */
     public static Prioritaet toPriority(Integer prioritaet) {
@@ -79,27 +70,27 @@ public class NotfallKontakt {
     /**
      * Setze die Priorität anhand eines Integer Wertes
      *
-     * @param prioritaet
+     * @param prioritaet Priorität
      */
     public void setPrioritaet(Integer prioritaet) {
         switch (prioritaet) {
             case 0:
-                this.prioritaet = this.prioritaet.Prioritaet_1;
+                this.prioritaet = Prioritaet.Prioritaet_1;
                 break;
             case 1:
-                this.prioritaet = this.prioritaet.Prioritaet_2;
+                this.prioritaet = Prioritaet.Prioritaet_2;
                 break;
             case 2:
-                this.prioritaet = this.prioritaet.Prioritaet_3;
+                this.prioritaet = Prioritaet.Prioritaet_3;
                 break;
             case 3:
-                this.prioritaet = this.prioritaet.Prioritaet_4;
+                this.prioritaet = Prioritaet.Prioritaet_4;
                 break;
             case 4:
-                this.prioritaet = this.prioritaet.Prioritaet_5;
+                this.prioritaet = Prioritaet.Prioritaet_5;
                 break;
             default:
-                this.prioritaet = this.prioritaet.Maximal;
+                this.prioritaet = Prioritaet.Maximal;
                 break;
         }
     }
@@ -107,7 +98,7 @@ public class NotfallKontakt {
     /**
      * Laden des Grossen Icons für die Kategorisierung des Kontakts
      *
-     * @return
+     * @return bild
      */
     public int getBild() {
         switch (getIcon()) {
@@ -162,18 +153,9 @@ public class NotfallKontakt {
     }
 
     /**
-     * Setzen des Icons
-     *
-     * @param icon
-     */
-    public void setIcon(Icon icon) {
-        this.icon = icon;
-    }
-
-    /**
      * Setzen des Icons anhand eines Integer Wertes
      *
-     * @param icon
+     * @param icon Setzen des Bildes
      */
     public void setIcon(Integer icon) {
         switch (icon) {
@@ -210,7 +192,7 @@ public class NotfallKontakt {
     /**
      * Setzen der Beschreibung
      *
-     * @param beschreibung
+     * @param beschreibung setzen der Beschreibung
      */
     public void setBeschreibung(String beschreibung) {
         this.beschreibung = beschreibung;
@@ -228,7 +210,7 @@ public class NotfallKontakt {
     /**
      * Setzen der Telefonnummer
      *
-     * @param alarmTelefonNummer
+     * @param alarmTelefonNummer setzen der Alarmtelefonnummer
      */
     public void setAlarmTelefonNummer(String alarmTelefonNummer) {
         this.alarmTelefonNummer = alarmTelefonNummer;

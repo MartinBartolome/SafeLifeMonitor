@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GUI.HauptActivity">
+    tools:context=".gui.HauptActivity">
 
 
     <LinearLayout
@@ -23,10 +23,11 @@
             android:layout_marginTop="50dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="0"
-            android:drawableLeft="@drawable/schutzengel_32"
+            android:drawableStart="@drawable/schutzengel"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:paddingLeft="50dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
             android:textSize="36sp" />
 
         <TextView
@@ -36,10 +37,11 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="0"
-            android:drawableLeft="@drawable/institution_32"
+            android:drawableStart="@drawable/institution"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:paddingLeft="50dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
             android:textSize="36sp" />
 
         <TextView
@@ -49,10 +51,11 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="0"
-            android:drawableLeft="@drawable/krankenhaus_32"
+            android:drawableStart="@drawable/krankenhaus"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:paddingLeft="50dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
             android:textSize="36sp" />
 
         <TextView
@@ -61,10 +64,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:drawableLeft="@drawable/polizei_32"
+            android:drawableStart="@drawable/polizei"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:paddingLeft="50dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
             android:textSize="36sp" />
 
         <TextView
@@ -74,10 +78,11 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="0"
-            android:drawableLeft="@drawable/feuerwehr_32"
+            android:drawableStart="@drawable/feuerwehr"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:paddingLeft="50dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
             android:textSize="36sp" />
 
     </LinearLayout>

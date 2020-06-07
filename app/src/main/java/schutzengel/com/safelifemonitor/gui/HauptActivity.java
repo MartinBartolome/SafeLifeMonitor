@@ -1,6 +1,7 @@
-package schutzengel.com.safelifemonitor.GUI;
+package schutzengel.com.safelifemonitor.gui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -28,13 +29,11 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
-import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
-import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
-import schutzengel.com.safelifemonitor.Service.MonitorService;
+import schutzengel.com.safelifemonitor.datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.datenbank.NotfallKontakt;
+import schutzengel.com.safelifemonitor.service.MonitorService;
 import schutzengel.com.safelifemonitor.R;
-import schutzengel.com.safelifemonitor.Service.Ereignis;
-import schutzengel.com.safelifemonitor.Service.EreignisAlarmAufheben;
-import schutzengel.com.safelifemonitor.Service.EreignisAlarmAusloesen;
+import schutzengel.com.safelifemonitor.service.Ereignis;
 
 public class HauptActivity extends AppCompatActivity {
 
@@ -44,7 +43,7 @@ public class HauptActivity extends AppCompatActivity {
     private static final int READ_PHONE_STATE = 103;
     private Intent monitorServiceIntent = null;
     private MonitorService monitorService = null;
-    public static Context context = null;
+    public Context context = null;
     private boolean istAlarmGestartet = false;
     private MediaPlayer mediaPlayer = null;
 
@@ -81,18 +80,10 @@ public class HauptActivity extends AppCompatActivity {
     /**
      * Observer für Alarm.
      */
-    protected Handler observer = new Handler() {
+    @SuppressLint("HandlerLeak")
+    protected final Handler observer = new Handler() {
         public void handleMessage(Message message) {
-            switch (Ereignis.EventIdentifierMap[message.what]) {
-                case AlarmAufheben:
-                    onEvent(new EreignisAlarmAufheben());
-                    break;
-                case AlarmAusloesen:
-                    onEvent(new EreignisAlarmAusloesen());
-                    break;
-                default:
-                    break;
-            }
+            onEvent((Ereignis.EventIdentifierMap[message.what]));
             super.handleMessage(message);
         }
     };
@@ -112,7 +103,7 @@ public class HauptActivity extends AppCompatActivity {
     /**
      * Beim erstellen der App wird dar Content gesetzt und der MonitorService gestartet
      *
-     * @param savedInstanceState
+     * @param savedInstanceState Gespeicherter Instanz Status
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -133,45 +124,43 @@ public class HauptActivity extends AppCompatActivity {
     }
 
     /**
-     * der MediaPlayer wird gestopt
+     * Der Mediaplayer wird gestartet oder gestoppt und der Sound wird auf Laut gestellt.
      *
-     * @param ereignisAlarmAufheben
      */
-    private void onEvent(EreignisAlarmAufheben ereignisAlarmAufheben) {
-        if (this.istAlarmGestartet) {
-            this.mediaPlayer.stop();
-            this.istAlarmGestartet = false;
-            Log.i("HauptActivity", "Alarm wurde aufgehoben");
-        }
-    }
-
-    /**
-     * Der Mediaplayer wird gestartet und der Sound wird auf Laut gestellt.
-     *
-     * @param event
-     */
-    private void onEvent(EreignisAlarmAusloesen event) {
-        if (!this.istAlarmGestartet) {
-            this.mediaPlayer = MediaPlayer.create(context, R.raw.alarm);
-            AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            for (int index = 0; index <= 20; index++) {
-                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+    private void onEvent(Ereignis.EventIdentifier e) {
+        if(e == Ereignis.EventIdentifier.AlarmAufheben)
+        {
+            if (this.istAlarmGestartet) {
+                this.mediaPlayer.stop();
+                this.istAlarmGestartet = false;
+                Log.i("HauptActivity", "Alarm wurde aufgehoben");
             }
-            this.mediaPlayer.setLooping(true);
-            this.mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer player) {
-                    mediaPlayer.start();
+        }
+        else if(e == Ereignis.EventIdentifier.AlarmAusloesen)
+        {
+            if (!this.istAlarmGestartet) {
+                this.mediaPlayer = MediaPlayer.create(context, R.raw.alarm);
+                AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                for (int index = 0; index <= 20; index++) {
+                    assert audio != null;
+                    audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
                 }
-            });
-            this.istAlarmGestartet = true;
-            Log.i("HauptActivity", "Alarm wurde ausgelöst");
+                this.mediaPlayer.setLooping(true);
+                this.mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    public void onPrepared(MediaPlayer player) {
+                        mediaPlayer.start();
+                    }
+                });
+                this.istAlarmGestartet = true;
+                Log.i("HauptActivity", "Alarm wurde ausgelöst");
+            }
         }
     }
 
     /**
      * Das Optionsmenü wird erstellt
      *
-     * @param menu
+     * @param menu Optionsmenü
      * @return true
      */
     @Override
@@ -184,8 +173,8 @@ public class HauptActivity extends AppCompatActivity {
     /**
      * Starten der Activitys aus dem Optionsmenü
      *
-     * @param item
-     * @return
+     * @param item Ausgewähltes optionsmenü
+     * @return ob ein Menüitem ausgewählt wurde
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -210,7 +199,7 @@ public class HauptActivity extends AppCompatActivity {
      * Setzen der Kontakte
      */
     private void SetzeKontakte() {
-        ArrayList<NotfallKontakt> kontakte = Datenbank.getInstanz().getNotfallKontakte();
+        ArrayList<NotfallKontakt> kontakte = Datenbank.getInstanz(getApplicationContext()).getNotfallKontakte();
         if (kontakte != null) {
             for (NotfallKontakt kontakt : kontakte) {
                 TextView TextViewKontakt;
@@ -243,8 +232,8 @@ public class HauptActivity extends AppCompatActivity {
     /**
      * Prüfen der Berechtigungen
      *
-     * @param permission
-     * @param requestCode
+     * @param permission Berechtigung
+     * @param requestCode Berechtigungscode
      */
     public void checkPermission(String permission, int requestCode) {
         // Checking if permission is not granted
@@ -257,9 +246,9 @@ public class HauptActivity extends AppCompatActivity {
     /**
      * Prüfen ob die Berechtigung zugelassen wurde
      *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
+     * @param requestCode Berechtigungscode
+     * @param permissions Berechtigung
+     * @param grantResults gegebene Berechtigungen
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

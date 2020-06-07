@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor.GUI;
+package schutzengel.com.safelifemonitor.gui;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
-import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
+import schutzengel.com.safelifemonitor.datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.datenbank.NotfallKontakt;
 import schutzengel.com.safelifemonitor.R;
 
 public class NotfallKontaktActivity extends AppCompatActivity {
@@ -24,14 +24,14 @@ public class NotfallKontaktActivity extends AppCompatActivity {
     /**
      * Beim Erstellen werden die Editoren Initialisiert
      *
-     * @param savedInstanceState
+     * @param savedInstanceState Gespeicherter Instanz Status
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kontakt_eigenschaften);
 
-        Kontakte = Datenbank.getInstanz().getNotfallKontakte();
+        Kontakte = Datenbank.getInstanz(getApplicationContext()).getNotfallKontakte();
         BeschreibungsEditor = findViewById(R.id.beschreibungseditor);
         TelefonEditor = findViewById(R.id.telefoneditor);
         IconBild = findViewById(R.id.kontaktbild);
@@ -45,37 +45,43 @@ public class NotfallKontaktActivity extends AppCompatActivity {
     /**
      * Die Daten werden zusammengefasst und gespeichert
      *
-     * @param view
+     * @param view View
      */
     public void onWritePersistent(View view) {
-        Kontakte.get(gewaehlterKontaktIndex).setAlarmTelefonNummer(TelefonEditor.getText().toString());
-        Kontakte.get(gewaehlterKontaktIndex).setBeschreibung(BeschreibungsEditor.getText().toString());
-        Datenbank.getInstanz().set(Kontakte);
-        finish();
+        if(view != null) {
+            Kontakte.get(gewaehlterKontaktIndex).setAlarmTelefonNummer(TelefonEditor.getText().toString());
+            Kontakte.get(gewaehlterKontaktIndex).setBeschreibung(BeschreibungsEditor.getText().toString());
+            Datenbank.getInstanz(getApplicationContext()).set(Kontakte);
+            finish();
+        }
     }
 
     /**
      * Das Bild wird nach Links verschoben
      *
-     * @param view
+     * @param view View
      */
     public void LeftImage(View view) {
-        ChangeImage(-1);
+        if(view != null) {
+            ChangeImage(-1);
+        }
     }
 
     /**
      * Das Bild wird nach Rechts verschoben
      *
-     * @param view
+     * @param view View
      */
     public void RightImage(View view) {
-        ChangeImage(1);
+        if(view != null) {
+            ChangeImage(1);
+        }
     }
 
     /**
      * Das Bild des Kontaktes wird in eine Richtung verändert
      *
-     * @param direction
+     * @param direction In welche Richtung das Bild gewechselt werden soll
      */
     private void ChangeImage(int direction) {
         try {
@@ -95,7 +101,7 @@ public class NotfallKontaktActivity extends AppCompatActivity {
     /**
      * Der Angezeigt Kontakt wird anhand der Priorität geändert
      *
-     * @param view
+     * @param view View
      */
     public void ChangeContact(View view) {
         try {
@@ -133,6 +139,8 @@ public class NotfallKontaktActivity extends AppCompatActivity {
     }
 
     public void Close(View view) {
-        finish();
+        if(view != null) {
+            finish();
+        }
     }
 }

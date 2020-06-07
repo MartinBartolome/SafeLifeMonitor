@@ -1,6 +1,4 @@
-package schutzengel.com.safelifemonitor.Service;
-
-import schutzengel.com.safelifemonitor.Service.Ereignis;
+package schutzengel.com.safelifemonitor.service;
 
 public class EreignisAlarmAusloesen extends Ereignis {
     /**
