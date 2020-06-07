@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor.GUI;
+package schutzengel.com.safelifemonitor.gui;
 
 import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import schutzengel.com.safelifemonitor.Datenbank.ApplikationEinstellungen;
-import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.datenbank.ApplikationEinstellungen;
+import schutzengel.com.safelifemonitor.datenbank.Datenbank;
 import schutzengel.com.safelifemonitor.R;
 
 public class ApplikationEinstellungenActivity extends AppCompatActivity {
@@ -33,22 +33,21 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
     private EditText smsIntervall;
     private CheckBox monitorAktiv;
     private EditText benutzerName;
-    private View.OnFocusChangeListener onFocusChangeListener;
 
     /**
      * Erstellen der Aktivität. Dabei werden Die Applikationseinstellungen geladen und für jeden Zeiteditor wird ein Listener gesetzt, dass bei Fokus ein TimePickerDialog geöffnet wird.
      * Dies erlaubt eine bequeme selektion der Zeit für den Benutzer.
      * Anschliessend werden die Einstellungen geladen
      *
-     * @param savedInstanceState
+     * @param savedInstanceState Gespeicherter Instance State
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.applikations_eigenschaften);
         // Read the data
-        ApplikationEinstellungen applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
-        this.onFocusChangeListener = new View.OnFocusChangeListener() {
+        ApplikationEinstellungen applikationsEinstellungen = Datenbank.getInstanz(getApplicationContext()).getApplikationsEinstellungen();
+        View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 ResetTimePicker();
@@ -94,7 +93,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
             @SuppressLint("DefaultLocale")
             @Override
             public void onTimeSet(TimePicker tpView, int hourOfDay, int minute) {
-                zeitSetzer.setText(String.format(HauptActivity.context.getString(R.string.ZeitFormat),hourOfDay,minute));
+                zeitSetzer.setText(String.format(getApplicationContext().getString(R.string.ZeitFormat),hourOfDay,minute));
                 zeitPickerDialog.updateTime(0, 0);
             }
         }, 0, 0, true);
@@ -103,43 +102,45 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
     /**
      * Zusammenfassen der Einstellungen und schreiben in die Datenbank
      *
-     * @param view
      */
     public void onWritePersistent(View view) {
-        // Create and populate the properites
-        ApplikationEinstellungen applikationEinstellungen = new ApplikationEinstellungen();
-        ArrayList<String> zeiten = new ArrayList<String>();
-        zeiten.add(this.zeit1Von.getText().toString());
-        zeiten.add(this.zeit1Bis.getText().toString());
-        zeiten.add(this.zeit2Von.getText().toString());
-        zeiten.add(this.zeit2Bis.getText().toString());
-        zeiten.add(this.zeit3Von.getText().toString());
-        zeiten.add(this.zeit3Bis.getText().toString());
-        zeiten.add(this.zeit4Von.getText().toString());
-        zeiten.add(this.zeit4Bis.getText().toString());
-        applikationEinstellungen.setZeiten(zeiten);
-        applikationEinstellungen.setSchwellwertBewegungssensor(this.seekbarSchwellwert.getProgress());
-        applikationEinstellungen.setIntervallSmsBenachrichtigung(Integer.parseInt(smsIntervall.getText().toString()) * 60 * 1000);
-        applikationEinstellungen.setMonitorAktiv(this.monitorAktiv.isChecked() ? 1 : 0);
-        applikationEinstellungen.setBenutzerName(this.benutzerName.getText().toString());
-        // Write persistent
-        Datenbank.getInstanz().set(applikationEinstellungen);
-        finish();
+        if(view != null) {
+            // Create and populate the properites
+            ApplikationEinstellungen applikationEinstellungen = new ApplikationEinstellungen();
+            ArrayList<String> zeiten = new ArrayList<>();
+            zeiten.add(this.zeit1Von.getText().toString());
+            zeiten.add(this.zeit1Bis.getText().toString());
+            zeiten.add(this.zeit2Von.getText().toString());
+            zeiten.add(this.zeit2Bis.getText().toString());
+            zeiten.add(this.zeit3Von.getText().toString());
+            zeiten.add(this.zeit3Bis.getText().toString());
+            zeiten.add(this.zeit4Von.getText().toString());
+            zeiten.add(this.zeit4Bis.getText().toString());
+            applikationEinstellungen.setZeiten(zeiten);
+            applikationEinstellungen.setSchwellwertBewegungssensor(this.seekbarSchwellwert.getProgress());
+            applikationEinstellungen.setIntervallSmsBenachrichtigung(Integer.parseInt(smsIntervall.getText().toString()) * 60 * 1000);
+            applikationEinstellungen.setMonitorAktiv(this.monitorAktiv.isChecked() ? 1 : 0);
+            applikationEinstellungen.setBenutzerName(this.benutzerName.getText().toString());
+            // Write persistent
+            Datenbank.getInstanz(getApplicationContext()).set(applikationEinstellungen);
+            finish();
+        }
     }
 
     /**
      * Schliessen der Aktivität
      *
-     * @param view
      */
     public void Close(View view) {
-        finish();
+        if(view != null) {
+            finish();
+        }
     }
 
     /**
      * Ausfüllen der Zeiten von der ArrayList in die Editoren.
      *
-     * @param Zeiten
+     * @param Zeiten Array der Zeiten
      */
     private void FuelleZeiten(ArrayList<String> Zeiten) {
         int zaehler = 0;

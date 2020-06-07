@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor.Service;
+package schutzengel.com.safelifemonitor.service;
 
 import android.os.Message;
 
@@ -21,7 +21,7 @@ public abstract class Ereignis {
     /**
      * Mapping der Enumeratoren zu Indexes fuer switch() Abfragen
      */
-    static public EventIdentifier[] EventIdentifierMap = {
+    static public final EventIdentifier[] EventIdentifierMap = {
         EventIdentifier.AlarmAusloesen,
         EventIdentifier.AlarmAufheben,
     };

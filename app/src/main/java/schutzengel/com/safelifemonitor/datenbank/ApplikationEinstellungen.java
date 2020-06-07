@@ -1,10 +1,10 @@
-package schutzengel.com.safelifemonitor.Datenbank;
+package schutzengel.com.safelifemonitor.datenbank;
+
+import android.content.res.Resources;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
-import schutzengel.com.safelifemonitor.GUI.HauptActivity;
 import schutzengel.com.safelifemonitor.R;
 
 public class ApplikationEinstellungen {
@@ -28,8 +28,8 @@ public class ApplikationEinstellungen {
     protected int intervallSmsBenachrichtigungInMillisekunden = 300000; // nach 5 min wird der nächste Kontakt benachrichtigt
     protected Boolean istMonitorAktiv = true;
     protected ArrayList<String> zeiten = new ArrayList<>();
-    protected ArrayList<Long> zeitenInSekunden = new ArrayList<>();
-    protected String benutzerName = HauptActivity.context.getString(R.string.StandardBenutzername);
+    protected final ArrayList<Long> zeitenInSekunden = new ArrayList<>();
+    protected String benutzerName = Resources.getSystem().getString(R.string.StandardBenutzername);
 
     /**
      * Holen des Schwellwerts des Bewegungssensors
@@ -43,7 +43,7 @@ public class ApplikationEinstellungen {
     /**
      * Setzen des Schwellwerts des Bewegungssensors
      *
-     * @param schwellwert
+     * @param schwellwert Schwellwerte des Bewegungssensors
      */
     public void setSchwellwertBewegungssensor(int schwellwert) {
         this.schwellwertBewegungssensor = schwellwert;
@@ -61,7 +61,7 @@ public class ApplikationEinstellungen {
     /**
      * Setzen des WErts für die Maximale Anzahl Inaktiver Bewegungen
      *
-     * @param anzahl
+     * @param anzahl Anzahl der Inaktiven Bewegungen
      */
     public void setMaximaleAnzahlInaktiveBewegungen(int anzahl) {
         this.maximaleAnzahlInaktiveBewegungen = anzahl;
@@ -79,7 +79,7 @@ public class ApplikationEinstellungen {
     /**
      * Setzen des Monitor Service Intervalls in Millisekunden
      *
-     * @param millisekunden
+     * @param millisekunden Festlegen der Millisekunden
      */
     public void setMonitorServiceInterval(int millisekunden) {
         this.monitorServiceIntervalInMillisekunden = millisekunden;
@@ -97,7 +97,7 @@ public class ApplikationEinstellungen {
     /**
      * Setzen des Benutzernamens
      *
-     * @param BenutzerName
+     * @param BenutzerName Setzen des Benutzernamens
      */
     public void setBenutzerName(String BenutzerName) {
         this.benutzerName = BenutzerName;
@@ -115,7 +115,7 @@ public class ApplikationEinstellungen {
     /**
      * Setzen der Überwachungszeiten
      *
-     * @param zeiten
+     * @param zeiten Array der Zeiten
      */
     public void setZeiten(ArrayList<String> zeiten) {
         this.zeiten = zeiten;
@@ -123,13 +123,11 @@ public class ApplikationEinstellungen {
         Calendar calendar = Calendar.getInstance();
         for (String zeit : this.zeiten) {
             String[] elements = zeit.split(":", 2);
-            Integer hours = Integer.parseInt(elements[0]);
-            Integer minutes = Integer.parseInt(elements[1]);
-            Date today = new Date();
-            today.setHours(hours);
-            today.setMinutes(minutes);
-            today.setSeconds(0);
-            calendar.setTime(today);
+            int hours = Integer.parseInt(elements[0]);
+            int minutes = Integer.parseInt(elements[1]);
+            calendar.set(Calendar.HOUR_OF_DAY,hours);
+            calendar.set(Calendar.MINUTE,minutes);
+            calendar.set(Calendar.SECOND,0);
             this.zeitenInSekunden.add(calendar.getTimeInMillis());
         }
     }
@@ -146,14 +144,10 @@ public class ApplikationEinstellungen {
     /**
      * Setzen des Wertes, ob das Überwachen Aktiv ist
      *
-     * @param aktiv
+     * @param aktiv Aktiv setzen der Überwachung
      */
     public void setMonitorAktiv(int aktiv) {
-        if (aktiv == 1) {
-            this.istMonitorAktiv = true;
-        } else {
-            this.istMonitorAktiv = false;
-        }
+        this.istMonitorAktiv = aktiv == 1;
     }
 
     /**
@@ -240,7 +234,7 @@ public class ApplikationEinstellungen {
     /**
      * Setzen des WErtes für den Intervall der SMS Benachrichtigungen
      *
-     * @param Millisekunden
+     * @param Millisekunden Setzen des Intervalls für benachrichtigungen
      */
     public void setIntervallSmsBenachrichtigung(int Millisekunden) {
         this.intervallSmsBenachrichtigungInMillisekunden = Millisekunden;
@@ -252,12 +246,10 @@ public class ApplikationEinstellungen {
      * @return SMS Text
      */
     public String getSmsBenachrichtigungText() {
-        StringBuilder Benachrichtigung = new StringBuilder();
-        Benachrichtigung.append("SafeLife konnte keine Verbindung zu ");
-        Benachrichtigung.append(this.benutzerName);
-        Benachrichtigung.append(" herstellen. Du bist bei SafeLife als sein Notfallkontakt eingetragen. Bitte kümmere dich um ");
-        Benachrichtigung.append(this.benutzerName);
-        Benachrichtigung.append(" . Falls du diese Nachricht siehst, antworte mit 'OK'.");
-        return Benachrichtigung.toString();
+        return "SafeLife konnte keine Verbindung zu " +
+                this.benutzerName +
+                " herstellen. Du bist bei SafeLife als sein Notfallkontakt eingetragen. Bitte kümmere dich um " +
+                this.benutzerName +
+                " . Falls du diese Nachricht siehst, antworte mit 'OK'.";
     }
 }

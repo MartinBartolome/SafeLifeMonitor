@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor.Service;
+package schutzengel.com.safelifemonitor.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -14,12 +14,13 @@ import androidx.annotation.RequiresApi;
 import java.util.Calendar;
 import java.util.Timer;
 
-import schutzengel.com.safelifemonitor.Bewegungssensor.Bewegungssensor;
-import schutzengel.com.safelifemonitor.Datenbank.ApplikationEinstellungen;
-import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
-import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
-import schutzengel.com.safelifemonitor.SMSClient.SmsClient;
+import schutzengel.com.safelifemonitor.bewegungssensor.Bewegungssensor;
+import schutzengel.com.safelifemonitor.datenbank.ApplikationEinstellungen;
+import schutzengel.com.safelifemonitor.datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.datenbank.NotfallKontakt;
+import schutzengel.com.safelifemonitor.smsclient.SmsClient;
 
+@SuppressWarnings({"ALL", "SameReturnValue"})
 public class MonitorService extends Service {
     public enum Zustand {
         Undefiniert,
@@ -36,7 +37,6 @@ public class MonitorService extends Service {
     private Bewegungssensor bewegungssensor = null;
     private ApplikationEinstellungen applikationsEinstellungen = null;
     public Zustand zustand = Zustand.Undefiniert;
-    private final int tagInSekunden = 86400;
 
     public class Binder extends android.os.Binder {
         public MonitorService getMonitorService() {
@@ -79,9 +79,9 @@ public class MonitorService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = intent.getExtras();
         this.messenger = (Messenger) (extras.get("Messenger"));
-        this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
+        this.applikationsEinstellungen = Datenbank.getInstanz(getApplicationContext()).getApplikationsEinstellungen();
         transitionUeberwachen();
-        this.timer.scheduleAtFixedRate(new TimerTask(), 0, Datenbank.getInstanz().getApplikationsEinstellungen().getMonitorServiceInterval());
+        this.timer.scheduleAtFixedRate(new TimerTask(), 0, Datenbank.getInstanz(getApplicationContext()).getApplikationsEinstellungen().getMonitorServiceInterval());
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -177,7 +177,7 @@ public class MonitorService extends Service {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onUeberwachen() {
-        this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
+        this.applikationsEinstellungen = Datenbank.getInstanz(getApplicationContext()).getApplikationsEinstellungen();
 
         Log.d("MonitorService","istInMonitorZeitraum = " +istInMoitorZeitraum());
         // Wurde Geraet bewegt?
@@ -229,8 +229,7 @@ public class MonitorService extends Service {
         final long jetzt = calendar.getTimeInMillis();
         boolean case1 = zeitraumVonSekunden < jetzt;
         boolean case2 = zeitraumBisSekunden > jetzt;
-        boolean ergebnis = case1 & case2;
-        return ergebnis;
+        return case1 & case2;
     }
 
     /**
@@ -239,12 +238,12 @@ public class MonitorService extends Service {
      * Während der 5 minuten, wird geprüft, ob das Gerät bewegt wurde.
      */
     private void onAlarmieren() {
-        this.applikationsEinstellungen = Datenbank.getInstanz().getApplikationsEinstellungen();
+        this.applikationsEinstellungen = Datenbank.getInstanz(getApplicationContext()).getApplikationsEinstellungen();
         // SMS senden?
         Log.d("MonitorService", "Aktueller Tick:" + this.tickZaehler);
         if ((this.applikationsEinstellungen.getIntervallSmsBenachrichtigung() / this.applikationsEinstellungen.getMonitorServiceInterval()) == this.tickZaehler) {
             this.tickZaehler = 0;
-            NotfallKontakt notfallKontakt = Datenbank.getInstanz().getNotfallKontakt(this.prioritaetNotfallkontakt);
+            NotfallKontakt notfallKontakt = Datenbank.getInstanz(getApplicationContext()).getNotfallKontakt(this.prioritaetNotfallkontakt);
             if (null != notfallKontakt) {
                 SmsClient.senden(notfallKontakt.getAlarmTelefonNummer(), applikationsEinstellungen.getSmsBenachrichtigungText());
                 this.prioritaetNotfallkontakt = NotfallKontakt.toPriority(this.prioritaetNotfallkontakt.ordinal() + 1);

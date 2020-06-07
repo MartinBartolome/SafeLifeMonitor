@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor.Bewegungssensor;
+package schutzengel.com.safelifemonitor.bewegungssensor;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -18,18 +18,19 @@ public class Bewegungssensor implements SensorEventListener {
     /**
      * Initialisieren des Bewegungssensors
      *
-     * @param context
+     * @param context Applicationscontext
      */
     public Bewegungssensor(Context context) {
         SensorManager sensorManager = (SensorManager) (context.getSystemService(Context.SENSOR_SERVICE));
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(TYPE_ACCELEROMETER), sensorManager.SENSOR_DELAY_NORMAL);
+        assert sensorManager != null;
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         Log.i("Bewegungssensor", "Sensor Listener wurde registriert");
     }
 
     /**
      * Abfrage, ob das Gerät in der zwischenzeit Bewegt wurde
      *
-     * @param schwellwert
+     * @param schwellwert schwellwert des Bewegungssensors
      * @return Wurde das gerät bewegt?
      */
     public synchronized Boolean wurdeBewegt(final long schwellwert) {
@@ -42,7 +43,7 @@ public class Bewegungssensor implements SensorEventListener {
     /**
      * Wenn der Sensor sich verändert hat, wird mithilfe des Schwellwerts überprüft, ob Das Gerät bewegt hat.
      *
-     * @param event
+     * @param event SensorEvent
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -61,8 +62,8 @@ public class Bewegungssensor implements SensorEventListener {
     /**
      * Die Sensoraufloesung hat geaendert
      *
-     * @param sensor
-     * @param accuracy
+     * @param sensor Sensor
+     * @param accuracy Genauigkeit
      */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

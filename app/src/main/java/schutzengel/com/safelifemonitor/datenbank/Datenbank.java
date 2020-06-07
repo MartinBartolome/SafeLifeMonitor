@@ -1,14 +1,13 @@
-package schutzengel.com.safelifemonitor.Datenbank;
+package schutzengel.com.safelifemonitor.datenbank;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
-
-import schutzengel.com.safelifemonitor.GUI.HauptActivity;
 
 public class Datenbank extends SQLiteOpenHelper {
     private SQLiteDatabase sqLiteDatenbank = null;
@@ -36,16 +35,16 @@ public class Datenbank extends SQLiteOpenHelper {
             ApplikationEinstellungen.col_Zeit4Bis + " TEXT );";
     private static final String LOESCHE_TABELLE_APPLIKATION = "DROP TABLE IF EXISTS " + ApplikationEinstellungen.TabellenName;
     private static Datenbank instanz = null;
-    private ApplikationEinstellungen applikationsEinstellungen = null;
+    private ApplikationEinstellungen applikationsEinstellungen;
 
     /**
      * Laden einer Datenbank Instanz
      *
      * @return Datenbank Instanz
      */
-    public static Datenbank getInstanz() {
+    public static Datenbank getInstanz(Context context) {
         if (null == instanz) {
-            instanz = new Datenbank();
+            instanz = new Datenbank(context);
         }
         return instanz;
     }
@@ -53,8 +52,8 @@ public class Datenbank extends SQLiteOpenHelper {
     /**
      * Konstruktor der Datenbank Klasse
      */
-    public Datenbank() {
-        super(HauptActivity.context, DB_NAME, null, DB_VERSION);
+    public Datenbank(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
         this.applikationsEinstellungen = new ApplikationEinstellungen();
     }
 
@@ -114,7 +113,7 @@ public class Datenbank extends SQLiteOpenHelper {
     /**
      * Setzen der Applikationseinstellungen
      *
-     * @param applikationsEinstellungen
+     * @param applikationsEinstellungen Setzen der Applikationseinstellungen
      */
     public void set(ApplikationEinstellungen applikationsEinstellungen) {
         try {
@@ -161,11 +160,9 @@ public class Datenbank extends SQLiteOpenHelper {
             this.applikationsEinstellungen = applikationsEinstellungen;
 
 
-            StringBuilder Einstellungen = new StringBuilder();
-            Einstellungen.append("Monitoring Erlaubt? " + this.applikationsEinstellungen.getMonitorAktiv() + System.getProperty("line.separator"));
-            Einstellungen.append("Zeit1 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(0) + "-" + this.applikationsEinstellungen.getZeiten().get(1) + System.getProperty("line.separator"));
-
-            Log.d("Datenbank","Schreiben Datenbank, Applikations-Tabelle: " + Einstellungen.toString());
+            String Einstellungen = "Monitoring Erlaubt? " + this.applikationsEinstellungen.getMonitorAktiv() + System.getProperty("line.separator") +
+                    "Zeit1 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(0) + "-" + this.applikationsEinstellungen.getZeiten().get(1) + System.getProperty("line.separator");
+            Log.d("Datenbank","Schreiben Datenbank, Applikations-Tabelle: " + Einstellungen);
 
         }
         catch (Exception e)
@@ -177,7 +174,7 @@ public class Datenbank extends SQLiteOpenHelper {
     /**
      * Erstellen der Tabelle für die Kontakte und der Applikationseinstellungen, sowie füllen der Tabellen mit Daten
      *
-     * @param database
+     * @param database Datenbank
      */
     @Override
     public void onCreate(SQLiteDatabase database) {
@@ -201,9 +198,9 @@ public class Datenbank extends SQLiteOpenHelper {
     /**
      * Bei Upgrade der Datenbank werden die Tabellen gelöscht und neu erstellt
      *
-     * @param database
-     * @param oldVersion
-     * @param newVersion
+     * @param database Datenbank
+     * @param oldVersion alte Version der Datenbank
+     * @param newVersion neue Version der Datenbank
      */
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
@@ -216,7 +213,7 @@ public class Datenbank extends SQLiteOpenHelper {
     /**
      * Updaten eines Kontaktes in der Datenbank anhand der Prioritaet
      *
-     * @param kontakt
+     * @param kontakt Setzen der Kontakte
      */
     public void set(NotfallKontakt kontakt) {
         try {
@@ -230,13 +227,12 @@ public class Datenbank extends SQLiteOpenHelper {
             contentValue.put(NotfallKontakt.col_Telefon, kontakt.getAlarmTelefonNummer());
             sqLiteDatenbank.update(NotfallKontakt.TabellenName, contentValue, NotfallKontakt.col_Prioritaet + "= ?", new String[]{String.valueOf(kontakt.getPrioritaet().ordinal())});
 
-            if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
-                    (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
-                StringBuilder kontaktstring = new StringBuilder();
-                kontaktstring.append("Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
-                kontaktstring.append("Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
-                kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
-                Log.d("Datenbank", "Aktualisiere Notfallkontakt, " + kontaktstring.toString());
+            if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung().equals("Tino") && kontakt.getAlarmTelefonNummer().equals("0791111111")) ||
+                    (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung().equals("Yara") && kontakt.getAlarmTelefonNummer().equals("0792222222"))) {
+                String kontaktstring = "Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator") +
+                        "Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator") +
+                        "Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator");
+                Log.d("Datenbank", "Aktualisiere Notfallkontakt, " + kontaktstring);
             }
         }
         catch(Exception e)
@@ -248,7 +244,7 @@ public class Datenbank extends SQLiteOpenHelper {
     /**
      * Setzen aller Kontakte
      *
-     * @param notfallKontakte
+     * @param notfallKontakte setzen aller Kontakte
      */
     public void set(ArrayList<NotfallKontakt> notfallKontakte) {
         for (NotfallKontakt notfallKontakt : notfallKontakte) {
@@ -265,7 +261,7 @@ public class Datenbank extends SQLiteOpenHelper {
         if (this.sqLiteDatenbank == null ){
             sqLiteDatenbank = getReadableDatabase();
         }
-        ArrayList<NotfallKontakt> kontakte = new ArrayList<NotfallKontakt>();
+        ArrayList<NotfallKontakt> kontakte = new ArrayList<>();
         String[] tableColumns = new String[] { NotfallKontakt.col_Prioritaet, NotfallKontakt.col_Icon, NotfallKontakt.col_Beschreibung, NotfallKontakt.col_Telefon};
         try {
             Cursor cursor = this.sqLiteDatenbank.query(NotfallKontakt.TabellenName, tableColumns, null, null, null, null, null);
@@ -277,13 +273,12 @@ public class Datenbank extends SQLiteOpenHelper {
                     kontakt.setBeschreibung(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Beschreibung)));
                     kontakt.setAlarmTelefonNummer(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Telefon)));
 
-                    if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
-                            (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
-                        StringBuilder kontaktstring = new StringBuilder();
-                        kontaktstring.append("Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
-                        kontaktstring.append("Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
-                        kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
-                        Log.d("Datenbank", "Notfallkontakt gelesen: " + kontaktstring.toString());
+                    if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung().equals("Tino") && kontakt.getAlarmTelefonNummer().equals("0791111111")) ||
+                            (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung().equals("Yara") && kontakt.getAlarmTelefonNummer().equals("0792222222"))) {
+                        String kontaktstring = "Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator") +
+                                "Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator") +
+                                "Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator");
+                        Log.d("Datenbank", "Notfallkontakt gelesen: " + kontaktstring);
                     }
                     kontakte.add(kontakt);
                 }
@@ -299,7 +294,7 @@ public class Datenbank extends SQLiteOpenHelper {
     /**
      * Holen eines Notfallkontakts anhand der Prioritaet
      *
-     * @param prioritaet
+     * @param prioritaet Priorität
      * @return Notfallkontakt
      */
     public NotfallKontakt getNotfallKontakt(NotfallKontakt.Prioritaet prioritaet) {
@@ -307,32 +302,28 @@ public class Datenbank extends SQLiteOpenHelper {
             if (sqLiteDatenbank == null) {
                 sqLiteDatenbank = getReadableDatabase();
             }
-            String[] tableColumns = new String[] { NotfallKontakt.col_Prioritaet, NotfallKontakt.col_Icon, NotfallKontakt.col_Beschreibung, NotfallKontakt.col_Telefon};
+            String[] tableColumns = new String[]{NotfallKontakt.col_Prioritaet, NotfallKontakt.col_Icon, NotfallKontakt.col_Beschreibung, NotfallKontakt.col_Telefon};
             Cursor cursor = sqLiteDatenbank.query(NotfallKontakt.TabellenName, tableColumns, NotfallKontakt.col_Prioritaet + "=" + prioritaet.ordinal(), null, null, null, null);
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                NotfallKontakt kontakt = new NotfallKontakt();
-                kontakt.setPrioritaet(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Prioritaet)));
-                kontakt.setIcon(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Icon)));
-                kontakt.setBeschreibung(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Beschreibung)));
-                kontakt.setAlarmTelefonNummer(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Telefon)));
+            cursor.moveToFirst();
+            NotfallKontakt kontakt = new NotfallKontakt();
+            kontakt.setPrioritaet(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Prioritaet)));
+            kontakt.setIcon(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Icon)));
+            kontakt.setBeschreibung(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Beschreibung)));
+            kontakt.setAlarmTelefonNummer(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Telefon)));
 
-                if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
-                        (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
-                    StringBuilder kontaktstring = new StringBuilder();
-                    kontaktstring.append("Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
-                    kontaktstring.append("Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
-                    kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
-                    Log.d("Datenbank", "Notfallkontakt gelesen: " + kontaktstring.toString());
-                }
-
-                return kontakt;
+            if ((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung().equals("Tino") && kontakt.getAlarmTelefonNummer().equals("0791111111")) ||
+                    (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung().equals("Yara") && kontakt.getAlarmTelefonNummer().equals("0792222222"))) {
+                String kontaktstring = "Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator") +
+                        "Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator") +
+                        "Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator");
+                Log.d("Datenbank", "Notfallkontakt gelesen: " + kontaktstring);
             }
             cursor.close();
+            return kontakt;
         } catch (Exception e) {
             Log.e("Datenbank", "Fehler beim Laden eines Notfallkontakts. Fehlermeldung: " + e.getMessage());
             return null;
         }
-        return null;
     }
 }
 
