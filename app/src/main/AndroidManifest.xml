@@ -15,18 +15,18 @@
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
         <service
-            android:name=".Service.MonitorService"
+            android:name=".service.MonitorService"
             android:enabled="true"
             android:exported="false"/>
-        <receiver android:name=".SMSClient.SmsClient"  android:exported="true"
+        <receiver android:name=".smsclient.SmsClient"  android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
-        <activity android:name=".GUI.ApplikationEinstellungenActivity" />
-        <activity android:name=".GUI.NotfallKontaktActivity" />
-        <activity android:name=".GUI.HauptActivity">
+        <activity android:name=".gui.ApplikationEinstellungenActivity" />
+        <activity android:name=".gui.NotfallKontaktActivity" />
+        <activity android:name=".gui.HauptActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
