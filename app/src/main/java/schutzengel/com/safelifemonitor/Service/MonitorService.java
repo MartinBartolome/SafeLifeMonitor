@@ -19,7 +19,6 @@ import schutzengel.com.safelifemonitor.Datenbank.ApplikationEinstellungen;
 import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
 import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
 import schutzengel.com.safelifemonitor.SMSClient.SmsClient;
-import schutzengel.com.safelifemonitor.Tools.DateTime;
 
 public class MonitorService extends Service {
     public enum Zustand {

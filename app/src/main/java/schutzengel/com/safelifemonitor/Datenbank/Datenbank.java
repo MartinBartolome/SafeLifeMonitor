@@ -102,6 +102,7 @@ public class Datenbank extends SQLiteOpenHelper {
                 Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit4Von))));
                 Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit4Bis))));
                 this.applikationsEinstellungen.setZeiten(Zeiten);
+                c.close();
             }
         } catch (Exception e) {
             Log.e("Datenbank", "Fehler beim Lesen der Applikationseinstellungen. Fehlermeldung: " + e.getMessage());
@@ -286,6 +287,7 @@ public class Datenbank extends SQLiteOpenHelper {
                     }
                     kontakte.add(kontakt);
                 }
+                cursor.close();
             }
         } catch (Exception e) {
             Log.e("Datenbank", "Fehler beim Laden der Notfallkontakte. Fehlermeldung: " + e.getMessage());
@@ -325,6 +327,7 @@ public class Datenbank extends SQLiteOpenHelper {
 
                 return kontakt;
             }
+            cursor.close();
         } catch (Exception e) {
             Log.e("Datenbank", "Fehler beim Laden eines Notfallkontakts. Fehlermeldung: " + e.getMessage());
             return null;

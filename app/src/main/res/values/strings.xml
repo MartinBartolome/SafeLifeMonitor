@@ -2,8 +2,6 @@
     <string name="app_name">SafeLifeMonitor</string>
     <string name="Einstellungen_Applikation">Einstellungen</string>
     <string name="Einstellungen_Kontakt">Kontakt-Einstellungen</string>
-    <string name="AlarmButtonBeschreibung">Alarm aufheben</string>
-    <string name="ButtonSchliessen">Abbrechen</string>
     <string name="KontaktEigenschaftenNummer">Nummer:</string>
     <string name="KontaktEigenschaftenBeschreibung">Anzeige:</string>
     <string name="KontaktEigenschaftenPrioritaet">Priorität:</string>
@@ -15,4 +13,19 @@
     <string name="ApplikationsEigenschaftenSensivitaet">Sensivität Sensor:</string>
     <string name="BenutzerName">Benutzername:</string>
     <string name="MinutenAbkuerzung">Minuten</string>
+    <string name="Name">Name</string>
+    <string name="ZeitVon">Zeit von</string>
+    <string name="ZeitBis">Zeit bis</string>
+    <string name="Wartezeit">Wartezeit</string>
+    <string name="Kontaktname">Kontaktname</string>
+    <string name="Kontaktnummer">Kontaktnummer</string>
+    <string name="StandardBenutzername">Rüstiger Rentner</string>
+    <string name="KontaktBild">KontaktBild</string>
+    <string name="BildPrioritaet1">Bild Priorität 1</string>
+    <string name="BildPrioritaet2">Bild Priorität 2</string>
+    <string name="BildPrioritaet3">Bild Priorität 3</string>
+    <string name="BildPrioritaet4">Bild Priorität 4</string>
+    <string name="BildPrioritaet5">Bild Priorität 5</string>
+    <string name="ZeitFormat">%02d:%02d</string>
+    <string name="Abbrechen">Abbrechen</string>
 </resources>

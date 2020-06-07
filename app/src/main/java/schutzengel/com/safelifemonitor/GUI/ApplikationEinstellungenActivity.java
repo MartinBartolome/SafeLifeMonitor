@@ -1,5 +1,6 @@
 package schutzengel.com.safelifemonitor.GUI;
 
+import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import schutzengel.com.safelifemonitor.Datenbank.ApplikationEinstellungen;
 import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
@@ -79,7 +81,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
         this.benutzerName = findViewById(R.id.BenutzerName);
         FuelleZeiten(applikationsEinstellungen.getZeiten());
         this.seekbarSchwellwert.setProgress(applikationsEinstellungen.getSchwellwertBewegungssensor());
-        this.smsIntervall.setText(Integer.toString(applikationsEinstellungen.getIntervallSmsBenachrichtigung() / 1000 / 60));
+        this.smsIntervall.setText(String.format(Locale.GERMAN,"%d", applikationsEinstellungen.getIntervallSmsBenachrichtigung() / 1000 / 60));
         this.monitorAktiv.setChecked(applikationsEinstellungen.getMonitorAktiv());
         this.benutzerName.setText(applikationsEinstellungen.getBenutzerName());
     }
@@ -89,9 +91,10 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
      */
     private void ResetTimePicker() {
         this.zeitPickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onTimeSet(TimePicker tpView, int hourOfDay, int minute) {
-                zeitSetzer.setText(String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute));
+                zeitSetzer.setText(String.format(HauptActivity.context.getString(R.string.ZeitFormat),hourOfDay,minute));
                 zeitPickerDialog.updateTime(0, 0);
             }
         }, 0, 0, true);

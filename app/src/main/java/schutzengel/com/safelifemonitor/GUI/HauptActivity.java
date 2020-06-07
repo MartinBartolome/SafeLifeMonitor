@@ -44,7 +44,7 @@ public class HauptActivity extends AppCompatActivity {
     private static final int READ_PHONE_STATE = 103;
     private Intent monitorServiceIntent = null;
     private MonitorService monitorService = null;
-    public static Context context = null;
+    public Context context = null;
     private boolean istAlarmGestartet = false;
     private MediaPlayer mediaPlayer = null;
 

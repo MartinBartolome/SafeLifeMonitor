@@ -25,7 +25,6 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/ButtonLeft"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:foreground="@drawable/nav_links"
@@ -40,12 +39,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
+                android:contentDescription="@string/KontaktBild"
                 app:srcCompat="@drawable/feuerwehr"
                 tools:layout_editor_absoluteX="116dp"
                 tools:layout_editor_absoluteY="385dp" />
 
             <Button
-                android:id="@+id/ButtonRight"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:foreground="@drawable/nav_rechts"
@@ -64,7 +63,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
@@ -77,6 +75,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/BildPrioritaet1"
+                android:focusable="auto"
                 android:onClick="ChangeContact"
                 app:srcCompat="@drawable/prioritaet1" />
 
@@ -86,6 +86,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/BildPrioritaet2"
+                android:focusable="auto"
                 android:onClick="ChangeContact"
                 app:srcCompat="@drawable/prioritaet2" />
 
@@ -95,6 +97,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/BildPrioritaet3"
+                android:focusable="auto"
                 android:onClick="ChangeContact"
                 app:srcCompat="@drawable/prioritaet3" />
 
@@ -104,6 +108,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/BildPrioritaet4"
+                android:focusable="auto"
                 android:onClick="ChangeContact"
                 app:srcCompat="@drawable/prioritaet4" />
 
@@ -113,6 +119,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:contentDescription="@string/BildPrioritaet5"
+                android:focusable="auto"
                 android:onClick="ChangeContact"
                 app:srcCompat="@drawable/prioritaet5" />
         </LinearLayout>
@@ -126,8 +134,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView2"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:gravity="center"
@@ -138,7 +145,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:hint="@string/Kontaktname"
+                android:inputType="textPersonName"
+                android:importantForAutofill="no" />
 
         </LinearLayout>
 
@@ -151,8 +160,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:gravity="center"
@@ -163,7 +171,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="phone" />
+                android:hint="@string/Kontaktnummer"
+                android:inputType="phone"
+                android:importantForAutofill="no" />
 
         </LinearLayout>
 
@@ -176,25 +186,24 @@
             android:orientation="horizontal">
 
             <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="Close"
+                android:text="@string/Abbrechen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
                 android:id="@+id/ButtonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onWritePersistent"
                 android:text="@android:string/ok"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/ButtonClose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="Close"
-                android:text="@string/ButtonSchliessen"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>

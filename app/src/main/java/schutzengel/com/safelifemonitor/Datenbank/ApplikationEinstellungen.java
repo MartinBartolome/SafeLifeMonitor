@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import schutzengel.com.safelifemonitor.GUI.HauptActivity;
+import schutzengel.com.safelifemonitor.R;
+
 public class ApplikationEinstellungen {
     public static final String TabellenName = "AnwendungsEinstellungen";
     public static final String col_Schwellwert = "SchwellwertBewegungssensor";
@@ -26,7 +29,7 @@ public class ApplikationEinstellungen {
     protected Boolean istMonitorAktiv = true;
     protected ArrayList<String> zeiten = new ArrayList<>();
     protected ArrayList<Long> zeitenInSekunden = new ArrayList<>();
-    protected String benutzerName = "Rüstiger Rentner";
+    protected String benutzerName = HauptActivity.context.getString(R.string.StandardBenutzername);
 
     /**
      * Holen des Schwellwerts des Bewegungssensors
