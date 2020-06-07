@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.SMSClient;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
+
+import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
 
 public class SmsClient extends BroadcastReceiver {
     protected static Boolean wurdeEmpfangen = false;
@@ -26,7 +29,7 @@ public class SmsClient extends BroadcastReceiver {
     public static synchronized void senden(String telefonNummer, String text) {
         try
         {
-            this.wurdeEmpfangen = false;
+            wurdeEmpfangen = false;
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendMultipartTextMessage(telefonNummer, null, smsManager.divideMessage(text), null, null);
             Log.i("SmsClient","Sms wurde gesendet");
@@ -40,8 +43,8 @@ public class SmsClient extends BroadcastReceiver {
      * @return
      */
     public static synchronized boolean wurdeEmpfangen() {
-        final Boolean benachrichtigungEmpfangen = this.wurdeEmpfangen;
-        this.wurdeEmpfangen = false;
+        final Boolean benachrichtigungEmpfangen = wurdeEmpfangen;
+        wurdeEmpfangen = false;
         return benachrichtigungEmpfangen;
     }
 

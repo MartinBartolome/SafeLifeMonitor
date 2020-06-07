@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.GUI;
 
 import android.Manifest;
 import android.content.ComponentName;
@@ -28,6 +28,14 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
+import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
+import schutzengel.com.safelifemonitor.Service.MonitorService;
+import schutzengel.com.safelifemonitor.R;
+import schutzengel.com.safelifemonitor.Service.Ereignis;
+import schutzengel.com.safelifemonitor.Service.EreignisAlarmAufheben;
+import schutzengel.com.safelifemonitor.Service.EreignisAlarmAusloesen;
+
 public class HauptActivity extends AppCompatActivity {
 
     private static final int SMS_SEND_PERMISSION_CODE = 100;
@@ -44,7 +52,7 @@ public class HauptActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             MonitorService.Binder binder = (MonitorService.Binder) (service);
-            this.monitorService = binder.getMonitorService();
+            monitorService = binder.getMonitorService();
             checkPermission(Manifest.permission.RECEIVE_SMS, SMS_RECEIVE_PERMISSION_CODE);
         }
 
@@ -184,12 +192,12 @@ public class HauptActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.Kontakt_Einstellungen:
-                Intent KontaktEinstellungen = new Intent(this, schutzengel.com.safelifemonitor.NotfallKontaktActivity.class);
+                Intent KontaktEinstellungen = new Intent(this, NotfallKontaktActivity.class);
                 this.startActivity(KontaktEinstellungen);
                 Log.i("HauptActivity", "Notfall Kontakt Aktivität wurde gestartet");
                 return true;
             case R.id.Applikations_Einstellungen:
-                Intent ApplikationsEinstellungen = new Intent(this, schutzengel.com.safelifemonitor.ApplikationEinstellungenActivity.class);
+                Intent ApplikationsEinstellungen = new Intent(this, ApplikationEinstellungenActivity.class);
                 this.startActivity(ApplikationsEinstellungen);
                 Log.i("HauptActivity", "Applikations Einstellungen Aktivität wurde gestartet");
                 return true;
