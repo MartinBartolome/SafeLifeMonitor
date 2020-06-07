@@ -54,7 +54,7 @@ public class Datenbank extends SQLiteOpenHelper {
      */
     public Datenbank(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        this.applikationsEinstellungen = new ApplikationEinstellungen();
+        this.applikationsEinstellungen = new ApplikationEinstellungen(context);
     }
 
     /**
@@ -183,7 +183,7 @@ public class Datenbank extends SQLiteOpenHelper {
             this.sqLiteDatenbank.execSQL(ERSTELLE_TABELLE_KONTAKT);
             Log.i("Datenbank", "Tabelle Kontakt erstellt");
             for (int index = 0; index < 5; index++) {
-                this.sqLiteDatenbank.execSQL("INSERT INTO " + NotfallKontakt.TabellenName + " VALUES(" + index + ",0,NULL,0123456789);");
+                this.sqLiteDatenbank.execSQL("INSERT INTO " + NotfallKontakt.TabellenName + " VALUES(" + index + ",0,'',0123456789);");
                 Log.i("Datenbank", "Dummy Kontakt erstellt");
             }
             this.sqLiteDatenbank.execSQL(ERSTELLE_TABELLE_APPLIKATION);

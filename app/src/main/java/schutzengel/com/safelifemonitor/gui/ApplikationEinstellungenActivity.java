@@ -106,7 +106,7 @@ public class ApplikationEinstellungenActivity extends AppCompatActivity {
     public void onWritePersistent(View view) {
         if(view != null) {
             // Create and populate the properites
-            ApplikationEinstellungen applikationEinstellungen = new ApplikationEinstellungen();
+            ApplikationEinstellungen applikationEinstellungen = new ApplikationEinstellungen(getApplicationContext());
             ArrayList<String> zeiten = new ArrayList<>();
             zeiten.add(this.zeit1Von.getText().toString());
             zeiten.add(this.zeit1Bis.getText().toString());

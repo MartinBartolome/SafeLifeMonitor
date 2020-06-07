@@ -1,6 +1,6 @@
 package schutzengel.com.safelifemonitor.datenbank;
 
-import android.content.res.Resources;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,8 +29,13 @@ public class ApplikationEinstellungen {
     protected Boolean istMonitorAktiv = true;
     protected ArrayList<String> zeiten = new ArrayList<>();
     protected final ArrayList<Long> zeitenInSekunden = new ArrayList<>();
-    protected String benutzerName = Resources.getSystem().getString(R.string.StandardBenutzername);
+    protected String benutzerName;
 
+
+    public ApplikationEinstellungen(Context context)
+    {
+        benutzerName = context.getString(R.string.StandardBenutzername);
+    }
     /**
      * Holen des Schwellwerts des Bewegungssensors
      *
