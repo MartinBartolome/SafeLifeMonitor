@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.Datenbank;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+
+import schutzengel.com.safelifemonitor.GUI.HauptActivity;
 
 public class Datenbank extends SQLiteOpenHelper {
     private SQLiteDatabase sqLiteDatenbank = null;
@@ -81,34 +83,25 @@ public class Datenbank extends SQLiteOpenHelper {
                 ApplikationEinstellungen.col_Zeit4Von,
                 ApplikationEinstellungen.col_Zeit4Bis
             };
-            Cursor cursors = this.sqLiteDatenbank.query(ApplikationEinstellungen.TabellenName, tabellenspalten, null, null, null, null, null);
-            for (cursors.moveToFirst(); !cursors.isAfterLast(); cursors.moveToNext()) {
-                this.applikationsEinstellungen.setMonitorAktiv(cursors.getInt(cursors.getColumnIndex(ApplikationEinstellungen.col_MonitorEnabled)));
-                this.applikationsEinstellungen.setBenutzerName(cursors.getString(cursors.getColumnIndex(ApplikationEinstellungen.col_BenutzerName)));
-                this.applikationsEinstellungen.setSchwellwertBewegungssensor(cursors.getInt(cursors.getColumnIndex(ApplikationEinstellungen.col_Schwellwert)));
-                this.applikationsEinstellungen.setMaximaleAnzahlInaktiveBewegungen(cursors.getInt(cursors.getColumnIndex(ApplikationEinstellungen.col_MaxInactive)));
-                this.applikationsEinstellungen.setMonitorServiceInterval(cursors.getInt(cursors.getColumnIndex(ApplikationEinstellungen.col_Intervall)));
-                ArrayList<String> zeiten = new ArrayList<>();
-                zeiten.add((cursors.getString(cursors.getColumnIndex(ApplikationEinstellungen.col_Zeit1Von))));
-                zeiten.add((cursors.getString(cursors.getColumnIndex(ApplikationEinstellungen.col_Zeit1Bis))));
-                zeiten.add((cursors.getString(cursors.getColumnIndex(ApplikationEinstellungen.col_Zeit2Von))));
-                zeiten.add((cursors.getString(cursors.getColumnIndex(ApplikationEinstellungen.col_Zeit2Bis))));
-                zeiten.add((cursors.getString(cursors.getColumnIndex(ApplikationEinstellungen.col_Zeit3Von))));
-                zeiten.add((cursors.getString(cursors.getColumnIndex(ApplikationEinstellungen.col_Zeit3Bis))));
-                zeiten.add((cursors.getString(cursors.getColumnIndex(ApplikationEinstellungen.col_Zeit4Von))));
-                zeiten.add((cursors.getString(cursors.getColumnIndex(ApplikationEinstellungen.col_Zeit4Bis))));
-                this.applikationsEinstellungen.setZeiten(zeiten);
-                StringBuilder einstellungen = new StringBuilder();
-                einstellungen.append("Monitoring Erlaubt? " + this.applikationsEinstellungen.getMonitorAktiv() + System.getProperty("line.separator"));
-                einstellungen.append("Username: " + this.applikationsEinstellungen.getBenutzerName() + System.getProperty("line.separator"));
-                einstellungen.append("Schwellwert: " + this.applikationsEinstellungen.getSchwellwertBewegungssensor() + System.getProperty("line.separator"));
-                einstellungen.append("Maximale Anzahl Inaktive Bewegungen: " + this.applikationsEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + System.getProperty("line.separator"));
-                einstellungen.append("MonitorServiceInterval: " + this.applikationsEinstellungen.getMonitorServiceInterval() + System.getProperty("line.separator"));
-                einstellungen.append("Zeit1 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(0) + "-" + this.applikationsEinstellungen.getZeiten().get(1) + System.getProperty("line.separator"));
-                einstellungen.append("Zeit2 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(2) + "-" + this.applikationsEinstellungen.getZeiten().get(3) + System.getProperty("line.separator"));
-                einstellungen.append("Zeit3 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(4) + "-" + this.applikationsEinstellungen.getZeiten().get(5) + System.getProperty("line.separator"));
-                einstellungen.append("Zeit4 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(6) + "-" + this.applikationsEinstellungen.getZeiten().get(7) + System.getProperty("line.separator"));
-                Log.d("Datenbank", "Lesen von der Datenbank: " + einstellungen.toString());
+
+            Cursor c = sqLiteDatenbank.query(ApplikationEinstellungen.TabellenName, tabellenspalten, null, null,
+                    null, null, null);
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                this.applikationsEinstellungen.setMonitorAktiv(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_MonitorEnabled)));
+                this.applikationsEinstellungen.setBenutzerName(c.getString(c.getColumnIndex(ApplikationEinstellungen.col_BenutzerName)));
+                this.applikationsEinstellungen.setSchwellwertBewegungssensor(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_Schwellwert)));
+                this.applikationsEinstellungen.setMaximaleAnzahlInaktiveBewegungen(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_MaxInactive)));
+                this.applikationsEinstellungen.setMonitorServiceInterval(c.getInt(c.getColumnIndex(ApplikationEinstellungen.col_Intervall)));
+                ArrayList<String> Zeiten = new ArrayList<>();
+                Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit1Von))));
+                Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit1Bis))));
+                Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit2Von))));
+                Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit2Bis))));
+                Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit3Von))));
+                Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit3Bis))));
+                Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit4Von))));
+                Zeiten.add((c.getString(c.getColumnIndex(ApplikationEinstellungen.col_Zeit4Bis))));
+                this.applikationsEinstellungen.setZeiten(Zeiten);
             }
         } catch (Exception e) {
             Log.e("Datenbank", "Fehler beim Lesen der Applikationseinstellungen. Fehlermeldung: " + e.getMessage());
@@ -165,19 +158,18 @@ public class Datenbank extends SQLiteOpenHelper {
             }
             this.sqLiteDatenbank.update(ApplikationEinstellungen.TabellenName, contentValue, null, null);
             this.applikationsEinstellungen = applikationsEinstellungen;
-            StringBuilder einstellungen = new StringBuilder();
-            einstellungen.append("Monitoring Erlaubt? " + this.applikationsEinstellungen.getMonitorAktiv() + System.getProperty("line.separator"));
-            einstellungen.append("Username: " + this.applikationsEinstellungen.getBenutzerName() + System.getProperty("line.separator"));
-            einstellungen.append("Schwellwert: " + this.applikationsEinstellungen.getSchwellwertBewegungssensor() + System.getProperty("line.separator"));
-            einstellungen.append("Maximale Anzahl Inaktive Bewegungen: " + this.applikationsEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + System.getProperty("line.separator"));
-            einstellungen.append("MonitorServiceInterval: " + this.applikationsEinstellungen.getMonitorServiceInterval() + System.getProperty("line.separator"));
-            einstellungen.append("Zeit1 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(0) + "-" + this.applikationsEinstellungen.getZeiten().get(1) + System.getProperty("line.separator"));
-            einstellungen.append("Zeit2 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(2) + "-" + this.applikationsEinstellungen.getZeiten().get(3) + System.getProperty("line.separator"));
-            einstellungen.append("Zeit3 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(4) + "-" + this.applikationsEinstellungen.getZeiten().get(5) + System.getProperty("line.separator"));
-            einstellungen.append("Zeit4 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(6) + "-" + this.applikationsEinstellungen.getZeiten().get(7) + System.getProperty("line.separator"));
-            Log.d("Datenbank", "Schreiben in die Datenbank: " + einstellungen.toString());
-        } catch (Exception e) {
-            Log.e("Datenbank", "Fehler beim schreiben in die Datenbank. Fehlermeldung: " + e.getMessage());
+
+
+            StringBuilder Einstellungen = new StringBuilder();
+            Einstellungen.append("Monitoring Erlaubt? " + this.applikationsEinstellungen.getMonitorAktiv() + System.getProperty("line.separator"));
+            Einstellungen.append("Zeit1 Von-bis: " + this.applikationsEinstellungen.getZeiten().get(0) + "-" + this.applikationsEinstellungen.getZeiten().get(1) + System.getProperty("line.separator"));
+
+            Log.d("Datenbank","Schreiben Datenbank, Applikations-Tabelle: " + Einstellungen.toString());
+
+        }
+        catch (Exception e)
+        {
+            Log.e("Datenbank","Fehler beim setzen der Applikationseinstellungen. Fehlermeldung:" +e.getMessage());
         }
     }
 
@@ -198,7 +190,7 @@ public class Datenbank extends SQLiteOpenHelper {
             }
             this.sqLiteDatenbank.execSQL(ERSTELLE_TABELLE_APPLIKATION);
             Log.i("Datenbank", "Applikationsdatenbank erstellt");
-            this..execSQL("INSERT INTO " + ApplikationEinstellungen.TabellenName + " VALUES (0,'Rüstiger Rentner',1," + applikationsEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + "," + applikationsEinstellungen.getMonitorServiceInterval() + ",'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
+            this.sqLiteDatenbank.execSQL("INSERT INTO " + ApplikationEinstellungen.TabellenName + " VALUES (0,'Rüstiger Rentner',1," + applikationsEinstellungen.getMaximaleAnzahlInaktiveBewegungen() + "," + applikationsEinstellungen.getMonitorServiceInterval() + ",'00:00','00:00','00:00','00:00','00:00','00:00','00:00','00:00' )");
             Log.i("Datenbank", "Eintrag eingefügt");
         } catch (Exception e) {
             Log.e("Datenbank", "Fehler beim Erstellen der Datenbanken. Fehlermeldung:" + e.getMessage());
@@ -227,7 +219,7 @@ public class Datenbank extends SQLiteOpenHelper {
      */
     public void set(NotfallKontakt kontakt) {
         try {
-            if (this.sqLiteDatenbank == null || this.sqLiteDatenbank.isReadOnly() {
+            if (this.sqLiteDatenbank == null || this.sqLiteDatenbank.isReadOnly()) {
                 this.sqLiteDatenbank = getWritableDatabase();
             }
             ContentValues contentValue = new ContentValues();
@@ -235,15 +227,20 @@ public class Datenbank extends SQLiteOpenHelper {
             contentValue.put(NotfallKontakt.col_Icon, kontakt.getIcon().ordinal());
             contentValue.put(NotfallKontakt.col_Beschreibung, kontakt.getBeschreibung());
             contentValue.put(NotfallKontakt.col_Telefon, kontakt.getAlarmTelefonNummer());
-            this.sqLiteDatenbank.update(NotfallKontakt.TabellenName, contentValue, NotfallKontakt.col_Prioritaet + "= ?", new String[]{String.valueOf(kontakt.getPrioritaet().ordinal())});
-            StringBuilder kontaktstring = new StringBuilder();
-            kontaktstring.append("Priorität " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
-            kontaktstring.append("Icon " + kontakt.getIcon() + System.getProperty("line.separator"));
-            kontaktstring.append("Beschreibung " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
-            kontaktstring.append("Telefonnummer " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
-            Log.d("Datenbank", "Kontakt aktualisiert: " + kontaktstring.toString());
-        } catch (Exception e) {
-            Log.e("Datenbank", "Kontakt konnte nicht aktualisiert werden. Fehlermeldung: " + e.getMessage());
+            sqLiteDatenbank.update(NotfallKontakt.TabellenName, contentValue, NotfallKontakt.col_Prioritaet + "= ?", new String[]{String.valueOf(kontakt.getPrioritaet().ordinal())});
+
+            if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
+                    (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
+                StringBuilder kontaktstring = new StringBuilder();
+                kontaktstring.append("Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
+                kontaktstring.append("Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
+                kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+                Log.d("Datenbank", "Aktualisiere Notfallkontakt, " + kontaktstring.toString());
+            }
+        }
+        catch(Exception e)
+        {
+            Log.e("Datenbank","Fehler beim Setzen des Kontaktes. Fehlermeldung:" + e.getMessage());
         }
     }
 
@@ -264,7 +261,7 @@ public class Datenbank extends SQLiteOpenHelper {
      * @return Notfallkontakte
      */
     public ArrayList<NotfallKontakt> getNotfallKontakte() {
-        if (this.sqLiteDatenbank == null {
+        if (this.sqLiteDatenbank == null ){
             sqLiteDatenbank = getReadableDatabase();
         }
         ArrayList<NotfallKontakt> kontakte = new ArrayList<NotfallKontakt>();
@@ -278,12 +275,15 @@ public class Datenbank extends SQLiteOpenHelper {
                     kontakt.setIcon(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Icon)));
                     kontakt.setBeschreibung(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Beschreibung)));
                     kontakt.setAlarmTelefonNummer(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Telefon)));
-                    StringBuilder kontaktstring = new StringBuilder();
-                    kontaktstring.append("Priorität " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
-                    kontaktstring.append("Icon " + kontakt.getIcon() + System.getProperty("line.separator"));
-                    kontaktstring.append("Beschreibung " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
-                    kontaktstring.append("Telefonnummer " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
-                    Log.d("Datenbank", "Kontakt geladen: " + kontaktstring.toString());
+
+                    if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
+                            (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
+                        StringBuilder kontaktstring = new StringBuilder();
+                        kontaktstring.append("Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
+                        kontaktstring.append("Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
+                        kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+                        Log.d("Datenbank", "Notfallkontakt gelesen: " + kontaktstring.toString());
+                    }
                     kontakte.add(kontakt);
                 }
             }
@@ -313,12 +313,16 @@ public class Datenbank extends SQLiteOpenHelper {
                 kontakt.setIcon(cursor.getInt(cursor.getColumnIndex(NotfallKontakt.col_Icon)));
                 kontakt.setBeschreibung(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Beschreibung)));
                 kontakt.setAlarmTelefonNummer(cursor.getString(cursor.getColumnIndex(NotfallKontakt.col_Telefon)));
-                StringBuilder kontaktstring = new StringBuilder();
-                kontaktstring.append("Priorität " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
-                kontaktstring.append("Icon " + kontakt.getIcon() + System.getProperty("line.separator"));
-                kontaktstring.append("Beschreibung " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
-                kontaktstring.append("Telefonnummer " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
-                Log.d("Datenbank", "Einzelner Notfallkontakt geladen: " + kontaktstring.toString());
+
+                if((kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_1 && kontakt.getBeschreibung() == "Tino" && kontakt.getAlarmTelefonNummer() == "0791111111") ||
+                        (kontakt.getPrioritaet() == NotfallKontakt.Prioritaet.Prioritaet_3 && kontakt.getBeschreibung() == "Yara" && kontakt.getAlarmTelefonNummer() == "0792222222")) {
+                    StringBuilder kontaktstring = new StringBuilder();
+                    kontaktstring.append("Priorität = " + kontakt.getPrioritaet() + System.getProperty("line.separator"));
+                    kontaktstring.append("Beschreibung = " + kontakt.getBeschreibung() + System.getProperty("line.separator"));
+                    kontaktstring.append("Telefonnummer = " + kontakt.getAlarmTelefonNummer() + System.getProperty("line.separator"));
+                    Log.d("Datenbank", "Notfallkontakt gelesen: " + kontaktstring.toString());
+                }
+
                 return kontakt;
             }
         } catch (Exception e) {

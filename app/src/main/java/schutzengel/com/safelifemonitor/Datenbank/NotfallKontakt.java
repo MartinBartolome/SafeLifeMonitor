@@ -1,4 +1,6 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.Datenbank;
+
+import schutzengel.com.safelifemonitor.R;
 
 public class NotfallKontakt {
     public static final String TabellenName = "Kontakte";

@@ -1,6 +1,8 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.Datenbank;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ApplikationEinstellungen {
     public static final String TabellenName = "AnwendungsEinstellungen";
@@ -18,12 +20,12 @@ public class ApplikationEinstellungen {
     public static final String col_Zeit4Bis = "Zeit4Bis";
     public static final String col_BenutzerName = "BenutzerName";
     protected int schwellwertBewegungssensor = 1;
-    protected int maximaleAnzahlInaktiveBewegungen = 1800000; // nach 30 min geht der alarm los
+    protected int maximaleAnzahlInaktiveBewegungen = 1800; // nach 30 min geht der alarm los
     protected int monitorServiceIntervalInMillisekunden = 1000; // jede sekunde
     protected int intervallSmsBenachrichtigungInMillisekunden = 300000; // nach 5 min wird der nächste Kontakt benachrichtigt
     protected Boolean istMonitorAktiv = true;
     protected ArrayList<String> zeiten = new ArrayList<>();
-    protected ArrayList<Integer> zeitenInSekunden = new ArrayList<>();
+    protected ArrayList<Long> zeitenInSekunden = new ArrayList<>();
     protected String benutzerName = "Rüstiger Rentner";
 
     /**
@@ -115,11 +117,17 @@ public class ApplikationEinstellungen {
     public void setZeiten(ArrayList<String> zeiten) {
         this.zeiten = zeiten;
         this.zeitenInSekunden.clear();
+        Calendar calendar = Calendar.getInstance();
         for (String zeit : this.zeiten) {
             String[] elements = zeit.split(":", 2);
             Integer hours = Integer.parseInt(elements[0]);
             Integer minutes = Integer.parseInt(elements[1]);
-            this.zeitenInSekunden.add((hours * 60 + minutes) * 60);
+            Date today = new Date();
+            today.setHours(hours);
+            today.setMinutes(minutes);
+            today.setSeconds(0);
+            calendar.setTime(today);
+            this.zeitenInSekunden.add(calendar.getTimeInMillis());
         }
     }
 
@@ -150,7 +158,7 @@ public class ApplikationEinstellungen {
      *
      * @return Sekunden Zeit 1 (Von)
      */
-    public int getSekundenZeit1Von() {
+    public long getSekundenZeit1Von() {
         return this.zeitenInSekunden.get(0);
     }
 
@@ -159,7 +167,7 @@ public class ApplikationEinstellungen {
      *
      * @return Sekunden Zeit 1 (Bis)
      */
-    public int getSekundenZeit1Bis() {
+    public long getSekundenZeit1Bis() {
         return this.zeitenInSekunden.get(1);
     }
 
@@ -168,7 +176,7 @@ public class ApplikationEinstellungen {
      *
      * @return Sekunden Zeit 2 (Von)
      */
-    public int getSekundenZeit2Von() {
+    public long getSekundenZeit2Von() {
         return this.zeitenInSekunden.get(2);
     }
 
@@ -177,7 +185,7 @@ public class ApplikationEinstellungen {
      *
      * @return Sekunden Zeit 2 (Bis)
      */
-    public int getSekundenZeit2Bis() {
+    public long getSekundenZeit2Bis() {
         return this.zeitenInSekunden.get(3);
     }
 
@@ -186,7 +194,7 @@ public class ApplikationEinstellungen {
      *
      * @return Sekunden Zeit 3 (Von)
      */
-    public int getSekundenZeit3Von() {
+    public long getSekundenZeit3Von() {
         return this.zeitenInSekunden.get(4);
     }
 
@@ -195,7 +203,7 @@ public class ApplikationEinstellungen {
      *
      * @return Sekunden Zeit 3 (Bis)
      */
-    public int getSekundenZeit3Bis() {
+    public long getSekundenZeit3Bis() {
         return this.zeitenInSekunden.get(5);
     }
 
@@ -204,7 +212,7 @@ public class ApplikationEinstellungen {
      *
      * @return Sekunden Zeit 4 (Von)
      */
-    public int getSekundenZeit4Von() {
+    public long getSekundenZeit4Von() {
         return this.zeitenInSekunden.get(6);
     }
 
@@ -213,7 +221,7 @@ public class ApplikationEinstellungen {
      *
      * @return Sekunden Zeit 4 (Bis)
      */
-    public int getSekundenZeit4Bis() {
+    public long getSekundenZeit4Bis() {
         return this.zeitenInSekunden.get(7);
     }
 

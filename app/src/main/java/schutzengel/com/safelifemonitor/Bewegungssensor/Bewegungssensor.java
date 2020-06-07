@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.Bewegungssensor;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -46,21 +46,10 @@ public class Bewegungssensor implements SensorEventListener {
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
-/*
-        StringBuilder builder = new StringBuilder();
-        builder.append("onSensorChanged: [");
-        builder.append(event.values[0]);
-        builder.append("],[");
-        builder.append(event.values[1]);
-        builder.append("],[");
-        builder.append(event.values[2]);
-        builder.append("]");
-        Log.d("Bewegungssensor", " " +  builder.toString());
-*/
         try {
             long aktuelleBewegungX = (long)(event.values[0] * this.schwellwert);
             long aktuelleBewegungY = (long)(event.values[1] * this.schwellwert);
-            this.wurdeBewegt = ((this.letzteBewegungX != this.aktuelleBewegungX) || (this.letzteBewegungY != this.aktuelleBewegungY));
+            this.wurdeBewegt = ((this.letzteBewegungX != aktuelleBewegungX) || (this.letzteBewegungY != aktuelleBewegungY));
             this.letzteBewegungX = (long)(event.values[0] * this.schwellwert);
             this.letzteBewegungY = (long)(event.values[1] * this.schwellwert);
         } catch (Exception e) {

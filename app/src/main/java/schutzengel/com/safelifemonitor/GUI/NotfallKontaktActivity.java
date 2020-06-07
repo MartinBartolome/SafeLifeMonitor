@@ -1,4 +1,4 @@
-package schutzengel.com.safelifemonitor;
+package schutzengel.com.safelifemonitor.GUI;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +9,10 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+
+import schutzengel.com.safelifemonitor.Datenbank.Datenbank;
+import schutzengel.com.safelifemonitor.Datenbank.NotfallKontakt;
+import schutzengel.com.safelifemonitor.R;
 
 public class NotfallKontaktActivity extends AppCompatActivity {
     private ArrayList<NotfallKontakt> Kontakte = null;
